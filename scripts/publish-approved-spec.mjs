@@ -13,8 +13,6 @@ import { fileURLToPath } from 'node:url';
 import { isSpecApproved } from './sdlc-execute.mjs';
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const USAGE =
-  'Usage: node scripts/publish-approved-spec.mjs <prepare|commit-push|merge|default-branch> ...';
 
 function fail(reasonCode, extra = {}) {
   process.stdout.write(`${JSON.stringify({ ok: false, reasonCode, ...extra })}\n`);
@@ -265,10 +263,6 @@ function mergeSpec(argv) {
 
 function main(argv = process.argv.slice(2)) {
   const [command, ...rest] = argv;
-  if (command === '--help') {
-    process.stdout.write(`${USAGE}\n`);
-    return;
-  }
   if (command === 'prepare') {
     prepare(rest);
     return;
@@ -285,7 +279,9 @@ function main(argv = process.argv.slice(2)) {
     defaultBranch();
     return;
   }
-  fail('invalid_arguments', { detail: USAGE });
+  fail('invalid_arguments', {
+    detail: 'Usage: node scripts/publish-approved-spec.mjs <prepare|commit-push|merge|default-branch> ...',
+  });
 }
 
 const __filename = fileURLToPath(import.meta.url);
