@@ -1,0 +1,39 @@
+**Issue**: #1
+**Date**: 2026-08-20
+**Status**: Approved
+**Author**: Rich Nunley
+
+# File: specs/1-add-help-to-publish-approved-spec/feature.gherkin
+#
+# Generated from: specs/1-add-help-to-publish-approved-spec/requirements.md
+Feature: Add --help to publish-approved-spec
+  As a developer or maintainer running the approved-spec publisher
+  I want scripts/publish-approved-spec.mjs to accept --help
+  So that I can read the existing usage line without an invalid-arguments failure
+
+  # --- Happy Path ---
+
+  @SCN001
+  Scenario: --help prints usage and succeeds
+    Given scripts/publish-approved-spec.mjs is run with Node
+    When the first argument is --help
+    Then stdout includes the existing usage line Usage: node scripts/publish-approved-spec.mjs <prepare|commit-push|merge|default-branch> ...
+    And the process exits 0
+    And stdout is not the invalid-arguments JSON object
+
+  # --- Alternative Paths ---
+
+  @SCN002
+  Scenario: Known subcommands are unchanged
+    Given the first argument is prepare, commit-push, merge, or default-branch
+    When the script runs with the same remaining arguments as today
+    Then success and failure outcomes are unchanged
+
+  # --- Error Handling ---
+
+  @SCN003
+  Scenario: Unrecognized first arguments still fail as today
+    Given the first argument is neither --help nor a known subcommand
+    When the script runs
+    Then stdout is still the invalid-arguments JSON object whose detail contains that same usage line
+    And the process exits 1
