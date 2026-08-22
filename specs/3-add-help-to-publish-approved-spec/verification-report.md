@@ -44,6 +44,11 @@ The implementation satisfies the approved delivery and regression contracts. `--
 - Local verification: Pass
 - PR evidence: Not required
 
+### Delivery Evidence
+
+- Release artifacts: `VERSION`, `package.json`, and `CHANGELOG.md` are synchronized at `3.5.0` under the enhancement minor-bump policy.
+- Steering alignment: the change follows `steering/product.md` by improving the developer-facing helper, `steering/tech.md` by retaining zero-dependency Node ESM dispatch and applying its version matrix, and `steering/structure.md` by keeping runtime behavior and tests in `scripts/`.
+
 ---
 
 ## Acceptance Criteria Verification
