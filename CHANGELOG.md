@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.5.0] - 2026-08-22
+
+### Changed
+
+- `publish-approved-spec` now supports first-token `--help`, printing the existing usage text and exiting successfully while preserving all other command behavior.
+
 ## [3.4.1] - 2026-08-22
 
 ### Fixed
