@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.5.1] - 2026-08-22
+
+### Fixed
+
+- Added the execute startup retry smoke marker confirming the execute lifecycle completed after a first agent-start failure.
+
 ## [3.5.0] - 2026-08-22
 
 ### Changed
