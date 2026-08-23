@@ -195,6 +195,9 @@ None.
 |------|--------|-------|
 | `scripts/publish-approved-spec.mjs` | 0 | Implementation matches T001 and all functional requirements. |
 | `scripts/__tests__/publish-approved-spec.test.mjs` | 0 | Tests match T002 and preserve existing coverage. |
+| `VERSION` | 0 | Enhancement bump from 3.4.1 to 3.5.0 follows `steering/tech.md` and remains the authoritative version source. |
+| `package.json` | 0 | Manifest version is synchronized to `VERSION` at 3.5.0. |
+| `CHANGELOG.md` | 0 | The empty Unreleased section is retained and the help enhancement is recorded under the 3.5.0 release heading. |
 | `specs/3-add-help-to-publish-approved-spec/requirements.md` | 0 | Approved issue contract. |
 | `specs/3-add-help-to-publish-approved-spec/design.md` | 0 | Approved implementation and testing design. |
 | `specs/3-add-help-to-publish-approved-spec/tasks.md` | 0 | Both tasks complete. |
