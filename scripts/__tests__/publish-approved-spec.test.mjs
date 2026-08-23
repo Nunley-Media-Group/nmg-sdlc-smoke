@@ -128,22 +128,6 @@ describe('publish-approved-spec', () => {
     }
   });
 
-  it('prints usage and succeeds for first-token --help', () => {
-    const result = run(os.tmpdir(), ['--help']);
-    expect(result.status).toBe(0);
-    expect(result.stdout).toContain(
-      'Usage: node scripts/publish-approved-spec.mjs <prepare|commit-push|merge|default-branch> ...',
-    );
-  });
-
-  it('keeps other invalid first arguments unchanged', () => {
-    for (const args of [[], ['-h'], ['nope'], ['prepare', '--help']]) {
-      const result = run(os.tmpdir(), args);
-      expect(result.status).not.toBe(0);
-      expect(parse(result)).toMatchObject({ ok: false, reasonCode: 'invalid_arguments' });
-    }
-  });
-
   it('prepare fails dirty_tree on a dirty other branch', () => {
     const { root, env } = makeRepo();
     fs.writeFileSync(path.join(root, 'dirty.txt'), 'nope\n');

@@ -10,12 +10,6 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
-## [3.5.0] - 2026-08-22
-
-### Changed
-
-- Added `--help` to `publish-approved-spec` so developers can inspect supported commands without triggering an invalid-arguments failure.
-
 ## [3.4.1] - 2026-08-22
 
 ### Fixed
