@@ -144,11 +144,12 @@ No runtime dependencies or dependency edges are added.
 | Gate | Status | Evidence |
 |------|--------|----------|
 | Contract tests | Pass | `cd scripts && npm test` exited 0; 41 suites and 359 tests passed; the sole skipped suite is the intentional opt-in exercise suite |
+| Git hygiene | Pass | `git diff --check` exited 0 with no output |
 | Skill inventory | Not applicable | Implementation commit changes only `LIVE_SMOKE_259_A.txt` |
 | OMP plugin surface | Not applicable | No plugin surface changed |
 | Skill creator validation | Not applicable | No skill-bundled file changed |
 
-**Gate Summary**: 1/1 applicable gates passed, 0 failed, 0 incomplete
+**Gate Summary**: 2/2 applicable gates passed, 0 failed, 0 incomplete
 
 ---
 
