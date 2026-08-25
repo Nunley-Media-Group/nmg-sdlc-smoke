@@ -1,0 +1,48 @@
+**Issue**: #31
+**Date**: 2026-08-25
+**Status**: Approved
+**Author**: NMG
+
+# File: specs/31-add-live-smoke-214-c-success-path-marker/feature.gherkin
+# Generated from: specs/31-add-live-smoke-214-c-success-path-marker/requirements.md
+Feature: Add LIVE_SMOKE_214_C success-path marker
+  As a lifecycle smoke operator
+  I want a repository-root LIVE_SMOKE_214_C success-path marker whose bytes are fixed and known
+  So that a live SDLC run can prove this isolated issue was specified, implemented, verified, and delivered without treating pre-implementation absence as a failure
+
+  @SCN001
+  Scenario: Root marker has exact bytes after implementation
+    Given a repository checkout after this issue is implemented
+    When root LIVE_SMOKE_214_C.txt is read as bytes
+    Then the file exists
+    And its complete byte sequence is "LIVE_SMOKE_214_C" followed by exactly one LF byte and no other bytes
+
+  @SCN002
+  Scenario: Pre-implementation absence is the expected success-path precondition
+    Given a repository checkout before this issue is implemented
+    When root LIVE_SMOKE_214_C.txt is inspected
+    Then the file is absent
+    And that absence is the expected success-path precondition
+    And the absence must not be treated as a failure, defect, or incomplete delivery of this issue
+
+  @SCN003
+  Scenario: Existing verification stays green
+    Given the same implemented checkout
+    When the repository's existing verification suite runs
+    Then those existing checks still pass
+    And existing markers, workflows, agents, extension commands, tests, README, and other product behavior are unchanged
+
+  @SCN004
+  Scenario Outline: Missing or wrong bytes after implementation are incomplete
+    Given this issue is claimed complete but LIVE_SMOKE_214_C.txt is <marker state>
+    When the delivered change is checked against this issue
+    Then the issue is not complete
+    And no substitute path or token satisfies the contract
+
+    Examples:
+      | marker state                                      |
+      | missing                                           |
+      | present with different text                       |
+      | present with extra bytes                          |
+      | present with bytes "LIVE_SMOKE_214_C" and no newline |
+      | present with bytes "LIVE_SMOKE_214_C\n\n"         |
