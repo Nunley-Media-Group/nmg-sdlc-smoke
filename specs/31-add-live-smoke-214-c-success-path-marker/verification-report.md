@@ -28,6 +28,11 @@
 - AC3: Pass — 41 suites and 359 tests passed; one pre-existing opt-in skip.
 - AC4: Pass — direct exact-byte comparison rejects missing or different content.
 
+## Delivery-Owned Paths and Steering Alignment
+
+- `VERSION` and `package.json` are delivery-owned version artifacts required by the repository's open-pr contract; their synchronized semver update is expected and directly supports this issue's exact-head delivery.
+- The isolated root marker aligns with `steering/product.md` evidence-led delivery principles, follows the `steering/tech.md` existing Jest verification gate, and respects `steering/structure.md` by adding no runtime, workflow, agent, or script surface.
+
 ## Verification Gates
 
 - `cd scripts && npm test -- --runInBand`: Pass.
