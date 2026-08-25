@@ -1,0 +1,19 @@
+**Issue**: #30
+**Date**: 2026-08-25
+**Status**: Approved
+**Author**: NMG
+
+Feature: LIVE_SMOKE_214_A success-path marker
+
+  @SCN001
+  Scenario: Marker appears only after implementation
+    Given LIVE_SMOKE_214_A.txt is absent before implementation
+    When issue 30 is implemented
+    Then LIVE_SMOKE_214_A.txt contains LIVE_SMOKE_214_A followed by one LF
+
+  @SCN002
+  Scenario: Existing verification remains green
+    Given the exact marker is implemented
+    When the existing Jest suite runs
+    Then the suite passes
+    And unrelated product behavior is unchanged
