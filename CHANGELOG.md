@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.11.0] - 2026-08-25
+
+### Changed
+
+- Added the disposable byte-exact `LIVE_SMOKE_259_B.txt` controller-remediation lifecycle marker.
+
 ## [3.10.0] - 2026-08-25
 
 ### Changed
