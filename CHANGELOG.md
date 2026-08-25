@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.6.0] - 2026-08-24
+
+### Changed
+
+- Added the byte-stable `LIVE_SMOKE_A.txt` lifecycle verification marker, public documentation, and deterministic contract coverage.
+
 ## [3.5.1] - 2026-08-22
 
 ### Fixed

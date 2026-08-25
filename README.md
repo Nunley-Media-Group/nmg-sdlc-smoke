@@ -160,7 +160,6 @@ Unmatched defaults to minor. Major bumps require an explicit `**Version bump**: 
 
 The root [`LIVE_SMOKE_A.txt`](LIVE_SMOKE_A.txt) lifecycle marker contains exactly `smoke-a-213` followed by one final newline.
 
-
 ## Commands
 
 | Command                      | Invocation                          | Purpose |
