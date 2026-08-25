@@ -160,6 +160,7 @@ Unmatched defaults to minor. Major bumps require an explicit `**Version bump**: 
 
 The root [`LIVE_SMOKE_A.txt`](LIVE_SMOKE_A.txt) lifecycle marker contains exactly `smoke-a-213` followed by one final newline.
 The root [`LIVE_SMOKE_B.txt`](LIVE_SMOKE_B.txt) second serial lifecycle marker contains exactly `smoke-b-213` followed by one final newline.
+The root [`LIVE_SMOKE_C.txt`](LIVE_SMOKE_C.txt) third serial lifecycle smoke marker contains exactly `LIVE_SMOKE_C` followed by one final newline.
 
 ## Commands
 
