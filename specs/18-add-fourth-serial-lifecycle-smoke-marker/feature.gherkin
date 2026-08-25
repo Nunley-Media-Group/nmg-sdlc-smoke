@@ -1,0 +1,48 @@
+**Issue**: #18
+**Date**: 2026-08-25
+**Status**: Approved
+**Author**: NMG
+
+# File: specs/18-add-fourth-serial-lifecycle-smoke-marker/feature.gherkin
+# Generated from: specs/18-add-fourth-serial-lifecycle-smoke-marker/requirements.md
+Feature: Add fourth serial lifecycle smoke marker
+  As a nmg-sdlc smoke operator
+  I want a fourth byte-stable serial lifecycle marker
+  So that serial delivery can be proven by a minimal, documented, automatically checked artifact
+
+  @SCN001
+  Scenario: Root marker has exact bytes
+    Given the enhancement has been implemented
+    When root LIVE_SMOKE_D.txt is read as bytes
+    Then the file exists
+    And its complete byte sequence is "LIVE_SMOKE_D" followed by exactly one LF byte and no other bytes
+
+  @SCN002
+  Scenario: README links and describes the marker
+    Given the same implemented checkout
+    When README.md is read
+    Then it links to root LIVE_SMOKE_D.txt
+    And it describes that marker as the fourth serial lifecycle smoke marker whose content is exactly "LIVE_SMOKE_D" followed by one newline
+
+  @SCN003
+  Scenario: Canonical marker and README mention pass deterministically
+    Given LIVE_SMOKE_D.txt has exactly the bytes "LIVE_SMOKE_D\n"
+    And README.md links and describes that marker
+    When the focused live-smoke-d Jest test runs from scripts
+    Then the Jest process exits zero
+    And the test verifies both the file bytes and the README mention
+    And the test uses no network, clock, or environment-dependent input
+
+  @SCN004
+  Scenario Outline: Marker or README drift fails the contract test
+    Given the live-smoke-d contract inputs are <drift state>
+    When the focused live-smoke-d Jest test runs from scripts
+    Then the Jest process exits non-zero
+
+    Examples:
+      | drift state                                                         |
+      | LIVE_SMOKE_D.txt missing                                            |
+      | LIVE_SMOKE_D.txt present with bytes "LIVE_SMOKE_D" and no newline   |
+      | LIVE_SMOKE_D.txt present with bytes "LIVE_SMOKE_D\n\n"             |
+      | LIVE_SMOKE_D.txt present with bytes "live-smoke-d\n"               |
+      | canonical LIVE_SMOKE_D.txt bytes and README omits LIVE_SMOKE_D.txt  |
