@@ -20,9 +20,9 @@
 | **Overall** | **5.00** |
 
 ### Implementation Status: Pass
-**Total Issues**: 1 found and fixed
+**Total Issues**: 0
 
-Smoke fault injection replaced the marker after the original verification with `BROKEN_BY_SMOKE_259\n`, violating AC1 and AC3. Verification restored the approved 31-byte payload, confirmed exact binary equality, and reran the affected contract. The implementation remains limited to the required repository-root marker. The existing contract suite passes, and no plugin exercise is required because the implementation commit does not change `workflows/` or `agents/`.
+The repository-root marker exists with the approved 31-byte payload. All 41 enabled test suites and 359 enabled tests pass; the only skip is the repository's intentional opt-in exercise suite. Protected sibling markers and product surfaces are unchanged. No plugin exercise applies because neither `workflows/` nor `agents/` changed. Release metadata changes (`VERSION`, `package.json`, and `CHANGELOG.md`) are lifecycle output and do not change the marker implementation or runtime behavior.
 
 ---
 
@@ -48,13 +48,14 @@ Smoke fault injection replaced the marker after the original verification with `
 
 | AC | Description | Status | Evidence |
 |----|-------------|--------|----------|
-| AC1 | Root marker has exact bytes | Pass | Direct binary comparison passed: 31 bytes, hex `636f6e74726f6c6c65722072656d6564696174696f6e20736d6f6b6520410a`; artifact is `LIVE_SMOKE_259_A.txt` |
-| AC2 | Existing verification stays green | Pass | `cd scripts && npm test`: 41 suites passed, 359 tests passed; one intentionally disabled exercise suite skipped. `git diff --exit-code HEAD^ HEAD` found no changes to sibling markers, README, workflows, agents, extension source, or existing tests |
-| AC3 | Missing or wrong bytes are incomplete | Pass | The delivered path and payload exactly satisfy the sole allowed contract; direct equality check is fail-closed for missing, different, extra, or newline-mismatched bytes |
+| AC1 | Root marker has exact bytes | Pass | Binary comparison returned 31 bytes with hex `636f6e74726f6c6c65722072656d6564696174696f6e20736d6f6b6520410a`, exactly `controller remediation smoke A` plus one LF. |
+| AC2 | Existing verification stays green | Pass | `cd scripts && npm test` passed 41 suites and 359 tests; one intentional opt-in exercise suite was skipped. A path-bounded diff from the pre-implementation revision found no changes to sibling markers, `README.md`, workflows, agents, extension source, existing tests, or GitHub Actions. |
+| AC3 | Missing or wrong bytes are incomplete | Pass | Exact equality is fail-closed. The verifier rejected five representative invalid states: empty/missing-equivalent bytes, different text, extra bytes, missing LF, and an extra LF. No substitute path was accepted. |
 
 ## Regression Obligations
 
-- [x] AC2 / FR2 / SCN002: existing verification and product surfaces remain unchanged. The implementation commit contains exactly one added path, `LIVE_SMOKE_259_A.txt`; the contract suite passed.
+- [x] AC2 / FR2 / SCN002: existing verification and protected product surfaces remain unchanged.
+- [x] Release metadata is synchronized without adding runtime behavior.
 
 ---
 
@@ -62,7 +63,7 @@ Smoke fault injection replaced the marker after the original verification with `
 
 | Task | Description | Status | Notes |
 |------|-------------|--------|-------|
-| T001 | Create the exact-byte controller-remediation marker | Complete | Root file exists with the required bytes; implementation commit changes no other path |
+| T001 | Create the exact-byte controller-remediation marker | Complete | `LIVE_SMOKE_259_A.txt` exists at repository root with the required 31 bytes. |
 
 ---
 
@@ -72,15 +73,15 @@ Smoke fault injection replaced the marker after the original verification with `
 
 | Principle | Score (1-5) | Notes |
 |-----------|-------------|-------|
-| Single Responsibility | 5 | The artifact has one purpose and one owning contract |
-| Open/Closed | 5 | No existing module or runtime path was modified |
-| Liskov Substitution | 5 | No types, inheritance, or substitutable behavior are introduced |
-| Interface Segregation | 5 | No interface surface is introduced or widened |
-| Dependency Inversion | 5 | No dependency is introduced |
+| Single Responsibility | 5 | The artifact has one purpose and one owning contract. |
+| Open/Closed | 5 | No existing module or runtime path was modified. |
+| Liskov Substitution | 5 | No types, inheritance, or substitutable behavior are introduced. |
+| Interface Segregation | 5 | No interface surface is introduced or widened. |
+| Dependency Inversion | 5 | No dependency is introduced. |
 
 ### Layer Separation
 
-The change is a standalone root acceptance artifact. It does not cross into extension, workflow, agent, script, test, or package layers.
+The standalone root artifact does not enter extension, workflow, agent, script, test, or runtime layers. Version and changelog updates are release bookkeeping required by the repository delivery flow.
 
 ### Dependency Flow
 
@@ -113,7 +114,7 @@ No runtime dependencies or dependency edges are added.
 
 ## Testability and Error Handling
 
-- **Testability: 5/5.** The entire observable contract is deterministic and verified by direct `Buffer` equality. The approved spec explicitly forbids adding a new contract test for this disposable marker.
+- **Testability: 5/5.** The entire observable contract is deterministic and directly verifiable by `Buffer` equality. The approved spec explicitly excludes a new permanent contract test for this disposable marker.
 - **Error Handling: 5/5.** No runtime error path is introduced. Verification fails closed when the file is absent or any byte differs.
 
 ---
@@ -122,17 +123,18 @@ No runtime dependencies or dependency edges are added.
 
 ### BDD Scenarios
 
-| Acceptance Criterion | Has Scenario | Has Steps | Passes |
-|---------------------|-------------|-----------|--------|
-| AC1 | Yes (`SCN001`) | Direct binary check | Yes |
-| AC2 | Yes (`SCN002`) | Existing Jest suite and diff check | Yes |
-| AC3 | Yes (`SCN003`) | Exact-equality completeness check | Yes |
+| Acceptance Criterion | Has Scenario | Verification | Passes |
+|---------------------|-------------|--------------|--------|
+| AC1 | Yes (`SCN001`) | Direct binary equality | Yes |
+| AC2 | Yes (`SCN002`) | Existing Jest suite and protected-surface diff | Yes |
+| AC3 | Yes (`SCN003`) | Exact equality plus five invalid byte variants | Yes |
 
 ### Coverage Summary
 
 - Feature files: 1 feature, 3 scenarios
-- Step definitions: Not added; the approved spec explicitly requires no new contract test
+- Step definitions: Not added; prohibited by the approved disposable-marker design
 - Direct artifact check: Pass, 31 exact bytes
+- Negative completeness variants: 5 rejected
 - Regression tests: 41 suites passed, 359 tests passed
 - Expected skips: 1 exercise-only suite guarded by `RUN_EXERCISE_TESTS=1`
 - Plugin exercise: Not applicable; no `workflows/` or `agents/` path changed
@@ -143,20 +145,20 @@ No runtime dependencies or dependency edges are added.
 
 | Gate | Status | Evidence |
 |------|--------|----------|
-| Contract tests | Pass | `cd scripts && npm test` exited 0; 41 suites and 359 tests passed; the sole skipped suite is the intentional opt-in exercise suite |
-| Skill inventory | Not applicable | Implementation commit changes only `LIVE_SMOKE_259_A.txt` |
-| OMP plugin surface | Not applicable | No plugin surface changed |
-| Skill creator validation | Not applicable | No skill-bundled file changed |
+| Contract tests | Pass | `cd scripts && npm test` exited 0; 41 suites and 359 tests passed; one intentional opt-in exercise suite skipped. |
+| Git hygiene | Pass | `git diff --check main...HEAD` exited 0 with no output. |
+| Skill inventory | Not applicable | No skill/reference/agent surface changed. |
+| OMP plugin surface | Not applicable | No plugin surface changed. |
+| Skill creator validation | Not applicable | No skill-bundled file changed. |
+| Live plugin exercise | Not applicable | Diff contains no `workflows/` or `agents/` changes. |
 
-**Gate Summary**: 1/1 applicable gates passed, 0 failed, 0 incomplete
+**Gate Summary**: 2/2 applicable gates passed, 0 failed, 0 incomplete.
 
 ---
 
 ## Fixes Applied
 
-| Severity | Category | Location | Original Issue | Fix Applied | Routing |
-|----------|----------|----------|----------------|-------------|---------|
-| Critical | Spec compliance | `LIVE_SMOKE_259_A.txt` | Post-verification smoke fault injection replaced the approved payload with `BROKEN_BY_SMOKE_259\n`, causing exact-byte acceptance to fail | Restored `controller remediation smoke A\n`; direct binary comparison now passes at 31 bytes | `direct` |
+None. The marker already had the approved exact payload in this verification run.
 
 ## Remaining Issues
 
@@ -164,9 +166,10 @@ None.
 
 ## Positive Observations
 
-- The implementation commit is minimal: one added file and no unrelated tracked changes.
-- The artifact contract is byte-exact and directly observable.
+- The delivered artifact contract is byte-exact and directly observable.
+- All five specified invalid payload classes are rejected by the same equality invariant.
 - Existing repository verification remains green.
+- The implementation adds no runtime surface or dependency.
 
 ---
 
@@ -190,11 +193,12 @@ None.
 
 | File | Issues | Notes |
 |------|--------|-------|
-| `LIVE_SMOKE_259_A.txt` | 0 | Exact 31-byte payload verified |
-| `specs/23-add-live-smoke-259-a-controller-remediation-marker/requirements.md` | 0 | Approved issue #23 contract |
-| `specs/23-add-live-smoke-259-a-controller-remediation-marker/design.md` | 0 | Approved exact-file design |
-| `specs/23-add-live-smoke-259-a-controller-remediation-marker/tasks.md` | 0 | T001 complete |
-| `specs/23-add-live-smoke-259-a-controller-remediation-marker/feature.gherkin` | 0 | SCN001-SCN003 trace AC1-AC3 |
+| `LIVE_SMOKE_259_A.txt` | 0 | Exact 31-byte payload verified. |
+| `specs/23-add-live-smoke-259-a-controller-remediation-marker/requirements.md` | 0 | Approved issue #23 contract. |
+| `specs/23-add-live-smoke-259-a-controller-remediation-marker/design.md` | 0 | Approved exact-file design. |
+| `specs/23-add-live-smoke-259-a-controller-remediation-marker/tasks.md` | 0 | T001 complete. |
+| `specs/23-add-live-smoke-259-a-controller-remediation-marker/feature.gherkin` | 0 | SCN001-SCN003 trace AC1-AC3. |
+| `VERSION`, `package.json`, `CHANGELOG.md` | 0 | Synchronized delivery metadata; no runtime behavior change. |
 
 ---
 

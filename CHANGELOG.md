@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.12.0] - 2026-08-25
+
+### Changed
+
+- Refined issue #23 verification evidence after automated review remediation.
+
 ## [3.11.0] - 2026-08-25
 
 ### Changed
