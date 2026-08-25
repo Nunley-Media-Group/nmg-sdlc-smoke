@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.13.0] - 2026-08-25
+
+### Changed
+
+- Add LIVE_SMOKE_214_A managed steering verification marker (#30)
+
 ## [3.12.0] - 2026-08-25
 
 ### Changed
