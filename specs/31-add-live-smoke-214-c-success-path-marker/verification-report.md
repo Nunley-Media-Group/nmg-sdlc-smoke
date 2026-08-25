@@ -28,12 +28,13 @@
 - AC3: Pass — 41 suites and 359 tests passed; one pre-existing opt-in skip.
 - AC4: Pass — direct exact-byte comparison rejects missing or different content.
 
-## Delivery-Owned Paths and Steering Alignment
+## Verification
 
 - `VERSION` and `package.json` are delivery-owned version artifacts required by the repository's open-pr contract; their synchronized semver update is expected and directly supports this issue's exact-head delivery.
 - The isolated root marker aligns with `steering/product.md` evidence-led delivery principles, follows the `steering/tech.md` existing Jest verification gate, and respects `steering/structure.md` by adding no runtime, workflow, agent, or script surface.
+- PR #33 body now carries an unquoted steering-alignment sentence naming `steering/product.md`, `steering/tech.md`, and `steering/structure.md`, while preserving `Closes #31`, the spec path, delivery-owned version paths, and exact verification evidence.
 
-## Verification Gates
+## Verification Commands
 
 - `cd scripts && npm test -- --runInBand`: Pass.
 - `xxd -p LIVE_SMOKE_214_C.txt`: `4c4956455f534d4f4b455f3231345f430a`.
