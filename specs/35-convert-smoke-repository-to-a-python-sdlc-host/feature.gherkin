@@ -1,0 +1,56 @@
+**Issue**: #35
+**Date**: 2026-08-31
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/convert_smoke_repository_to_a_python_sdlc_host.feature
+# Generated from: specs/35-convert-smoke-repository-to-a-python-sdlc-host/requirements.md
+Feature: Convert smoke repository to a Python SDLC host
+  As a nmg-sdlc operator exercising the toolkit against a disposable host repository
+  I want this repository converted from copied Node.js plugin contents into a minimal production-shaped Python project
+  So that the complete nmg-sdlc issue to spec to execute workflow can be run against a deterministic, cross-platform, independently verifiable Python host
+
+  @SCN001
+  Scenario: Installable greeting happy path
+    Given the repository is an installable Python distribution nmg-sdlc-smoke-python with import package nmg_sdlc_smoke requiring Python 3.12+
+    When a caller invokes greet with Ada
+    Then the function returns exactly Hello, Ada
+
+  @SCN002
+  Scenario: Console script happy path
+    Given the distribution is installed with its console script
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+
+  @SCN003
+  Scenario: Blank name is rejected
+    Given a blank or whitespace-only name
+    When greet is called or nmg-smoke is invoked with that name
+    Then the library raises ValueError and the CLI exits non-zero without printing a greeting
+
+  @SCN004
+  Scenario: Independent Python verification
+    Given a clean checkout on macOS, Linux, or Windows
+    When pytest, pytest-bdd features under tests/features/, and Ruff are run
+    Then every acceptance criterion has a Gherkin scenario, those commands exit 0, and results do not depend on machine-specific paths
+
+  @SCN005
+  Scenario: Python CI replaces plugin verification
+    Given a pull request or a push to main
+    When GitHub Actions Python CI is inspected
+    Then it installs the project, runs pytest including tests/features/, and runs Ruff on Python 3.12
+    And the Node plugin workflows nmg-sdlc-verify.yml, skill-inventory-audit.yml, and sync-marketplace-pointer.yml are absent
+
+  @SCN006
+  Scenario: Clean cutover preserves SDLC delivery contracts
+    Given the converted working tree
+    When it is inspected
+    Then copied plugin runtime workflows/, agents/, commands/, Node scripts/, OMP package.json, src/extension.ts, other plugin specs/, and live smoke marker files are gone
+    And LICENSE, 3.x VERSION synced to pyproject.toml, CHANGELOG history, the managed contribution gate, the managed issue form, and the AGENTS.md spec-context markers remain
+
+  @SCN007
+  Scenario: Python-focused steering and contribution guidance
+    Given a contributor opening README, CONTRIBUTING, AGENTS, and steering
+    When they read current guidance
+    Then the documents describe this Python SDLC smoke host with src layout, pytest, pytest-bdd, Ruff, and VERSION synchronized with pyproject.toml
+    And they do not describe an Oh My Pi plugin as the current product
