@@ -1,5 +1,6 @@
 # nmg-sdlc-managed: contribution-gate
 # nmg-sdlc-managed-version: 6
+# This repository is a Python SDLC smoke consumer.
 name: nmg-sdlc contribution gate
 
 on:

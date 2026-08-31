@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nmg-sdlc-smoke-python"
+dynamic = ["version"]
+description = "Disposable Python SDLC smoke host"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+authors = [{ name = "Nunley Media Group LLC" }]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-bdd>=8", "ruff>=0.6"]
+
+[project.scripts]
+nmg-smoke = "nmg_sdlc_smoke.cli:main"
+
+[tool.setuptools.dynamic]
+version = {file = "VERSION"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "SCN001: installable greeting happy path",
+  "SCN002: console script happy path",
+  "SCN003: blank name rejection",
+  "SCN004: independent Python verification",
+  "SCN005: Python CI replacement",
+  "SCN006: clean cutover preservation",
+  "SCN007: Python-focused guidance",
+]
+
+[tool.ruff]
+target-version = "py312"
+src = ["src", "tests"]

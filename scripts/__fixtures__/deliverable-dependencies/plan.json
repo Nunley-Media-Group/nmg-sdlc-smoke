@@ -1,7 +1,0 @@
-{
-  "defaultBranch": "main",
-  "ownerIssue": 122,
-  "consumerIssue": 123,
-  "description": "T054 validated schema/register baseline",
-  "artifactPath": "artifacts/t054-baseline.txt"
-}
