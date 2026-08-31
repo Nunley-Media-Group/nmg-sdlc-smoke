@@ -4,7 +4,7 @@
 
 `nmg-sdlc-smoke-python` is a minimal Python SDLC smoke host. Contributors should preserve its setuptools `src` layout, Python 3.12+ support, pytest and pytest-bdd verification, Ruff checks, and the `VERSION` source synchronized dynamically with `pyproject.toml`.
 
-Before changing code, read `steering/product.md`, `steering/tech.md`, and `steering/structure.md`. Start from a GitHub issue with an approved singular spec under `specs/{N}-{slug}/`. Git history is the archive for superseded behavior.
+Before changing code, read `steering/manifest.json` and the registered project snippets under `steering/snippets/`. Start from a GitHub issue with an approved singular spec under `specs/{N}-{slug}/`. Git history is the archive for superseded behavior.
 
 ## Implementation and Verification
 
@@ -24,7 +24,7 @@ Before requesting review, confirm the pull request is ready for the managed nmg-
 
 - Link the GitHub issue in the PR body or spec frontmatter, using `Closes #N`, `Fixes #N`, or `**Issue**: #N`.
 - Link or update the relevant `specs/{N}-{slug}/` artifacts, including `requirements.md`, `design.md`, `tasks.md`, and `feature.gherkin` (or the matching ADR) when generated.
-- Explain steering alignment against `steering/product.md`, `steering/tech.md`, and `steering/structure.md`.
+- Explain alignment with the registered managed steering runtime in `steering/manifest.json` and `steering/snippets/`.
 - Summarize verification evidence from tests, exercise runs, verification results, or a committed `verification-report.md`.
 - Include reviewer context for known gaps, intentionally deferred work, or follow-up issues.
 

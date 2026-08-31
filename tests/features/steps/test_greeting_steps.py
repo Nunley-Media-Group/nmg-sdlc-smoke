@@ -180,9 +180,10 @@ def contributor_docs(context: dict[str, object]) -> None:
         ROOT / "README.md",
         ROOT / "CONTRIBUTING.md",
         ROOT / "AGENTS.md",
-        ROOT / "steering/product.md",
-        ROOT / "steering/tech.md",
-        ROOT / "steering/structure.md",
+        ROOT / "steering/manifest.json",
+        ROOT / "steering/snippets/project-product.md",
+        ROOT / "steering/snippets/project-tech.md",
+        ROOT / "steering/snippets/project-structure.md",
     ]
     context["docs"] = "\n".join(path.read_text() for path in paths)
 
