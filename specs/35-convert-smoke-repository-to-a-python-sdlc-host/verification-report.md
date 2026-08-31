@@ -9,22 +9,22 @@
 
 ## Executive Summary
 
-The Python cutover is locally complete. The deterministic steering runner passed with complete zero-declaration coverage; 19 pytest tests, all 7 pytest-bdd scenarios, Ruff, and installed-console smoke checks passed. AC5 still requires the Python CI check from a pull-request event, so the qualified overall state is `PR Evidence Pending`.
+The Python runtime cutover is locally healthy, but the implementation does not fully satisfy the approved contract. The deterministic steering runner passed with complete zero-declaration coverage; 19 pytest tests, all 7 pytest-bdd scenarios, Ruff, and installed-console smoke checks passed. However, approved FR8/T010 require the managed contribution gate to remain evaluator version 6, while `.github/workflows/nmg-sdlc-contribution-gate.yml:2` is version 7 with changed steering predicates. This local spec mismatch blocks PR-readiness classification; AC5 PR-event CI evidence is also pending.
 
 | Category | Score (1-5) |
 |----------|-------------|
-| Spec Compliance | 4 |
+| Spec Compliance | 3 |
 | Architecture (SOLID) | 5 |
 | Security | 5 |
 | Performance | 5 |
 | Testability | 5 |
 | Error Handling | 5 |
-| **Overall** | **4.83** |
+| **Overall** | **4.67** |
 
-### Implementation Status: PR Evidence Pending
+### Implementation Status: Partial
 
 **Architecture average**: 5.0/5.0  
-**Local implementation issues**: 0
+**Local implementation issues**: 1
 
 ---
 
@@ -52,12 +52,11 @@ The runner used issue 35, the exact spec directory, base `main`, and controller 
 - Regression: AC []; FR []; scenarios []
 
 <!-- nmg-sdlc-issue-scope: {"issueNumber":35,"specPath":"specs/35-convert-smoke-repository-to-a-python-sdlc-host","status":"implicit_single_issue","delivery":{"acceptanceCriteria":["AC1","AC2","AC3","AC4","AC5","AC6","AC7"],"functionalRequirements":["FR1","FR2","FR3","FR4","FR5","FR6","FR7","FR8","FR9","FR10","FR11"],"tasks":["T001","T002","T003","T004","T005","T006","T007","T008","T009","T010","T011"],"scenarios":["SCN001","SCN002","SCN003","SCN004","SCN005","SCN006","SCN007"]},"regression":{"acceptanceCriteria":[],"functionalRequirements":[],"scenarios":[]}} -->
-<!-- nmg-sdlc-pr-readiness: {"schemaVersion":1,"state":"pr_evidence_pending","issueNumber":35,"specPath":"specs/35-convert-smoke-repository-to-a-python-sdlc-host","local":{"acceptanceCriteria":["AC1","AC2","AC3","AC4","AC5","AC6","AC7"],"functionalRequirements":["FR1","FR2","FR3","FR4","FR5","FR6","FR7","FR8","FR9","FR10","FR11"],"tasks":["T001","T002","T003","T004","T005","T006","T007","T008","T009","T010","T011"],"scenarios":["SCN001","SCN002","SCN003","SCN004","SCN005","SCN006","SCN007"],"regression":{"acceptanceCriteria":[],"functionalRequirements":[],"scenarios":[]},"tests":"pass","steeringGates":"pass"},"pendingEvidence":[{"kind":"check_run","name":"verify","event":"pull_request","acceptanceCriteria":["AC5"]}]} -->
 
 ## Delivery Validation
 
-- Local verification: **Pass**
-- PR evidence: **Pending** — check run `verify` from the `pull_request` event for AC5
+- Local verification: **Not complete** — approved FR8/T010 are not satisfied
+- PR evidence: **Pending but not readiness-qualified** — local compliance must be corrected first
 
 ---
 
@@ -70,7 +69,7 @@ The runner used issue 35, the exact spec directory, base `main`, and controller 
 | AC3 | Blank name is rejected | Pass | `src/nmg_sdlc_smoke/greet.py:3-4`; `src/nmg_sdlc_smoke/cli.py:11-14`; installed CLI with whitespace exited 1, emitted no stdout, and emitted the stable validation error on stderr. |
 | AC4 | Independent Python verification | Pass | Isolated environment: 19 pytest tests passed, 7 feature scenarios passed, and Ruff reported `All checks passed!`; tests use repository-relative `pathlib` paths. |
 | AC5 | Python CI replaces plugin verification | Partial | `.github/workflows/python-ci.yml:3-23` has pull-request and main-push triggers, Python 3.12, editable dev install, pytest, feature pytest, and Ruff. The three named Node workflows are absent. The PR-event check run is pending. |
-| AC6 | Clean cutover preserves SDLC delivery contracts | Pass | Diff records deletion of copied plugin/runtime paths and live markers; only the #35 spec remains. `LICENSE` and `CHANGELOG.md` are unchanged from `main`; the managed gate, issue form, 3.x `VERSION`, and AGENTS markers remain. |
+| AC6 | Clean cutover preserves SDLC delivery contracts | Partial | Diff records deletion of copied plugin/runtime paths and live markers; only the #35 spec remains. `LICENSE` and `CHANGELOG.md` are unchanged from `main`; the issue form, 3.x `VERSION`, and AGENTS markers remain. The contribution gate remains present, but its evaluator changed from approved version 6 to version 7, contrary to FR8/T010. |
 | AC7 | Python-focused guidance | Pass | `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `steering/manifest.json`, and registered snippets describe the Python 3.12+ src-layout host, pytest, pytest-bdd, Ruff, and dynamic VERSION metadata. |
 
 ---
@@ -94,7 +93,7 @@ No separate regression AC, FR, or scenario IDs are declared. Preserved delivery 
 | T007 | Python CI and Ruff; remove Node workflows | Complete locally | Workflow configuration and deletion state verified; Ruff passed. Hosted run remains AC5 PR evidence. |
 | T008 | Remove copied plugin runtime | Complete | Required plugin/runtime paths are deleted; preserved files remain. |
 | T009 | Rewrite docs and steering | Complete | Current guidance and registered steering runtime describe the Python host. |
-| T010 | Rewrite rewrite-contract artifacts and managed gate | Complete | Rewrite artifacts name Python verification. The current managed contribution gate is version 7 and retains the Python-host marker and repository-rewrite enforcement. |
+| T010 | Rewrite rewrite-contract artifacts and managed gate | Incomplete | Rewrite artifacts name Python verification, but the approved task requires the contribution gate to remain version 6 with the same predicates. The implementation changes it to version 7 and replaces legacy steering paths with manifest/module paths. |
 | T011 | Implementation PR evidence | PR evidence pending | Exact PR title/body/head and hosted evidence are controller delivery obligations. |
 
 ---
@@ -187,7 +186,7 @@ The harness completed normally without a wall-clock deadline. It failed closed b
 
 ## Fixes Applied
 
-No code or documentation fixes were required during this verification pass.
+No safe verification-time fix was applied. Restoring only the version marker would mislabel version-7 predicates as version 6; restoring the full version-6 gate would conflict with the mandatory manifest-based steering runtime now present. This requires an approved contract/implementation reconciliation, not a narrative exception.
 
 ---
 
@@ -195,7 +194,8 @@ No code or documentation fixes were required during this verification pass.
 
 | Severity | Category | Location | Issue | Reason Not Fixed |
 |----------|----------|----------|-------|------------------|
-| External evidence | Delivery | GitHub pull request | AC5 requires successful `verify` check-run evidence from the `pull_request` event; T011 requires exact PR title/body/head evidence. | These facts cannot exist before controller-owned pull-request delivery. |
+| High | Spec compliance | `.github/workflows/nmg-sdlc-contribution-gate.yml:2` | Approved FR8/T010 require managed evaluator version 6 and unchanged predicates; the implementation is version 7 with changed steering paths/predicates. | A marker-only downgrade would be false, while restoring the full old evaluator conflicts with the implemented mandatory manifest runtime. Reconcile the approved spec and managed gate implementation together. |
+| External evidence | Delivery | GitHub pull request | AC5 requires successful `verify` check-run evidence from the `pull_request` event; T011 requires exact PR title/body/head evidence. | These facts cannot exist before controller-owned pull-request delivery, and they do not cure the local T010 mismatch. |
 
 ---
 
@@ -214,7 +214,7 @@ No code or documentation fixes were required during this verification pass.
 | Approved spec | `requirements.md`, `design.md`, `tasks.md`, `feature.gherkin` | 0 |
 | Runtime/package | `pyproject.toml`, `VERSION`, `.gitignore`, `src/nmg_sdlc_smoke/*.py` | 0 |
 | Tests | `tests/test_greet.py`, `tests/test_cli.py`, `tests/features/**` | 0 |
-| CI/managed contracts | `.github/workflows/*.yml`, issue form, `AGENTS.md`, `CONTRIBUTING.md` | 0 local defects |
+| CI/managed contracts | `.github/workflows/*.yml`, issue form, `AGENTS.md`, `CONTRIBUTING.md` | 1 high spec-compliance mismatch |
 | Steering | `steering/manifest.json`, modules, snippets, retrospective state | 0 |
 | Rewrite evidence | `references/rewrite-contract.*`, `references/rewrite-verification.md`, changed-path diff | 0 |
 
@@ -222,4 +222,4 @@ No code or documentation fixes were required during this verification pass.
 
 ## Recommendation
 
-**Ready for controlled draft PR evidence.** Local implementation, architecture, tests, installed CLI behavior, exercise safety, and deterministic steering verification pass. The controller must obtain the declared exact PR-event check evidence before delivery can become `Pass`.
+**Needs contract-aligned fixes.** Runtime behavior, architecture, tests, installed CLI behavior, exercise safety, and deterministic steering verification pass, but the managed contribution gate does not match approved FR8/T010. Resolve that local mismatch before controlled PR evidence or delivery.
