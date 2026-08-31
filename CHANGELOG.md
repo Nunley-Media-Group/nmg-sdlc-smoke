@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.15.0] - 2026-08-31
+
+### Changed
+
+- Convert smoke repository to a Python SDLC host (#35)
+
 ## [3.13.0] - 2026-08-25
 
 ### Changed
