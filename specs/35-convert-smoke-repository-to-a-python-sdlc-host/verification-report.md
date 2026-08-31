@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-The repository rewrite satisfies every local obligation in the approved issue #35 contract. The deterministic steering runner passed with complete zero-declaration coverage; the isolated editable install built version 3.14.0; 19 pytest tests, all 7 pytest-bdd scenarios, Ruff, installed-console success and rejection smoke checks, and the required deleted-workflow exercise all passed. The only remaining evidence is bounded to pull-request execution: the Python CI and managed contribution-gate checks must succeed for the exact PR head.
+The repository rewrite satisfies every obligation in the approved issue #35 contract. The deterministic steering runner passed with complete zero-declaration coverage; the isolated editable install built version 3.14.0; 19 pytest tests, all 7 pytest-bdd scenarios, Ruff, installed-console success and rejection smoke checks, and the required deleted-workflow exercise all passed. For draft PR #37 at exact head `2680311b6232becf5048fa72973ec536781b5dac`, the Python CI and managed contribution-gate checks both concluded `SUCCESS`.
 
 | Category | Score (1-5) |
 |----------|-------------|
@@ -21,7 +21,7 @@ The repository rewrite satisfies every local obligation in the approved issue #3
 | Error Handling | 5 |
 | **Overall** | **5.0** |
 
-### Implementation Status: PR Evidence Pending
+### Implementation Status: Pass
 
 **Architecture average**: 5.0/5.0  
 **Local implementation issues**: 0
@@ -52,12 +52,12 @@ The runner used issue 35, the exact spec directory, base `main`, and controller 
 - Regression: AC []; FR []; scenarios []
 
 <!-- nmg-sdlc-issue-scope: {"issueNumber":35,"specPath":"specs/35-convert-smoke-repository-to-a-python-sdlc-host","status":"implicit_single_issue","delivery":{"acceptanceCriteria":["AC1","AC2","AC3","AC4","AC5","AC6","AC7"],"functionalRequirements":["FR1","FR2","FR3","FR4","FR5","FR6","FR7","FR8","FR9","FR10","FR11"],"tasks":["T001","T002","T003","T004","T005","T006","T007","T008","T009","T010","T011"],"scenarios":["SCN001","SCN002","SCN003","SCN004","SCN005","SCN006","SCN007"]},"regression":{"acceptanceCriteria":[],"functionalRequirements":[],"scenarios":[]}} -->
-<!-- nmg-sdlc-pr-readiness: {"schemaVersion":1,"state":"pr_evidence_pending","issueNumber":35,"specPath":"specs/35-convert-smoke-repository-to-a-python-sdlc-host","local":{"acceptanceCriteria":["AC1","AC2","AC3","AC4","AC5","AC6","AC7"],"functionalRequirements":["FR1","FR2","FR3","FR4","FR5","FR6","FR7","FR8","FR9","FR10","FR11"],"tasks":["T001","T002","T003","T004","T005","T006","T007","T008","T009","T010","T011"],"scenarios":["SCN001","SCN002","SCN003","SCN004","SCN005","SCN006","SCN007"],"regression":{"acceptanceCriteria":[],"functionalRequirements":[],"scenarios":[]},"tests":"pass","steeringGates":"pass"},"pendingEvidence":[{"kind":"required_check","name":"Python CI / verify","event":"pull_request","acceptanceCriteria":["AC5"]},{"kind":"required_check","name":"nmg-sdlc contribution gate / Validate nmg-sdlc contribution evidence","event":"pull_request","acceptanceCriteria":["AC6"]}]} -->
+<!-- nmg-sdlc-pr-readiness: {"schemaVersion":1,"state":"pr_evidence_satisfied","issueNumber":35,"specPath":"specs/35-convert-smoke-repository-to-a-python-sdlc-host","local":{"acceptanceCriteria":["AC1","AC2","AC3","AC4","AC5","AC6","AC7"],"functionalRequirements":["FR1","FR2","FR3","FR4","FR5","FR6","FR7","FR8","FR9","FR10","FR11"],"tasks":["T001","T002","T003","T004","T005","T006","T007","T008","T009","T010","T011"],"scenarios":["SCN001","SCN002","SCN003","SCN004","SCN005","SCN006","SCN007"],"regression":{"acceptanceCriteria":[],"functionalRequirements":[],"scenarios":[]},"tests":"pass","steeringGates":"pass"},"evidence":[{"kind":"required_check","name":"Python CI / verify","event":"pull_request","acceptanceCriteria":["AC5"],"headSha":"2680311b6232becf5048fa72973ec536781b5dac","conclusion":"SUCCESS","url":"https://github.com/Nunley-Media-Group/nmg-sdlc-smoke/actions/runs/33374454546/job/99432672548"},{"kind":"required_check","name":"nmg-sdlc contribution gate / Validate nmg-sdlc contribution evidence","event":"pull_request","acceptanceCriteria":["AC6"],"headSha":"2680311b6232becf5048fa72973ec536781b5dac","conclusion":"SUCCESS","url":"https://github.com/Nunley-Media-Group/nmg-sdlc-smoke/actions/runs/33374940956/job/99434202900"}]} -->
 
 ## Delivery Validation
 
 - Local verification: **Pass**
-- PR evidence: **Pending** — exact `pull_request` check results for `Python CI / verify` and `nmg-sdlc contribution gate / Validate nmg-sdlc contribution evidence`
+- PR evidence: **Satisfied** for `2680311b6232becf5048fa72973ec536781b5dac` — `Python CI / verify` and `nmg-sdlc contribution gate / Validate nmg-sdlc contribution evidence` both concluded `SUCCESS`
 
 ---
 
@@ -69,7 +69,7 @@ The runner used issue 35, the exact spec directory, base `main`, and controller 
 | AC2 | Console script happy path | Pass | `pyproject.toml:17-18`; `src/nmg_sdlc_smoke/cli.py:6-17`; installed `nmg-smoke Ada` exited 0 and printed exactly `Hello, Ada\n`. |
 | AC3 | Blank name is rejected | Pass | `src/nmg_sdlc_smoke/greet.py:3-4`; `src/nmg_sdlc_smoke/cli.py:11-14`; installed CLI with whitespace exited 1, emitted no greeting, and printed the stable validation error on stderr. |
 | AC4 | Independent Python verification | Pass | Isolated environment: 19 pytest tests passed, 7 feature scenarios passed, and Ruff reported `All checks passed!`; tests use repository-relative `pathlib` paths. |
-| AC5 | Python CI replaces plugin verification | PR Evidence Pending | `.github/workflows/python-ci.yml:3-23` defines PR and main-push triggers, Python 3.12, editable dev install, pytest, feature pytest, and Ruff. The three named Node workflows are absent. Exact PR-event execution remains pending. |
+| AC5 | Python CI replaces plugin verification | Pass | `.github/workflows/python-ci.yml:3-23` defines PR and main-push triggers, Python 3.12, editable dev install, pytest, feature pytest, and Ruff. The three named Node workflows are absent. `Python CI / verify` concluded `SUCCESS` for exact draft head `2680311b6232becf5048fa72973ec536781b5dac`. |
 | AC6 | Clean cutover preserves SDLC delivery contracts | Pass | Diff records deletion of copied plugin/runtime paths and live markers; only the #35 spec remains. `LICENSE` and `CHANGELOG.md` are unchanged from `main`; `VERSION` is 3.14.0 and dynamically read by `pyproject.toml`; the version-7 contribution gate, issue form, and AGENTS markers remain. |
 | AC7 | Python-focused guidance | Pass | `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `steering/manifest.json`, and registered snippets describe the Python 3.12+ src-layout host, pytest, pytest-bdd, Ruff, and dynamic VERSION metadata rather than a current OMP plugin. |
 
@@ -91,11 +91,11 @@ No separate regression AC, FR, or scenario IDs are declared. Preserved delivery 
 | T004 | Implement nmg-smoke CLI | Complete | Installed success and whitespace-failure paths observed. |
 | T005 | Unit tests | Complete | `tests/test_greet.py` and `tests/test_cli.py`; full suite passed. |
 | T006 | pytest-bdd feature and steps | Complete | SCN001-SCN007 exist with implemented independent steps; all 7 passed. |
-| T007 | Python CI and Ruff; remove Node workflows | Complete locally | Workflow configuration and deletion state verified; Ruff passed. Hosted check remains PR-only evidence. |
+| T007 | Python CI and Ruff; remove Node workflows | Complete | Workflow configuration and deletion state verified; Ruff passed; the hosted Python CI check concluded `SUCCESS` for the exact draft head. |
 | T008 | Remove copied plugin runtime | Complete | Required plugin/runtime paths are deleted; preserved files remain. |
 | T009 | Rewrite docs and steering | Complete | Current guidance and the registered manifest runtime describe the Python host; legacy steering markdown is absent. |
 | T010 | Rewrite rewrite-contract artifacts and managed gate | Complete | Rewrite artifacts name Python verification; contribution gate remains evaluator version 7 with the required manifest/module predicates and host comment. |
-| T011 | Implementation PR evidence | PR Evidence Pending | Required changed paths are present in the diff. Exact PR title/body/head and hosted checks are controller delivery evidence. |
+| T011 | Implementation PR evidence | Complete | Draft PR #37 has the required title/body identity, and both declared hosted checks concluded `SUCCESS` for exact head `2680311b6232becf5048fa72973ec536781b5dac`. |
 
 ---
 
@@ -164,7 +164,7 @@ No error is swallowed. The domain function raises the approved `ValueError`; the
 | AC2 / SCN002 | Yes | Yes | Yes |
 | AC3 / SCN003 | Yes | Yes | Yes |
 | AC4 / SCN004 | Yes | Yes | Yes |
-| AC5 / SCN005 | Yes | Yes | Locally; PR check pending |
+| AC5 / SCN005 | Yes | Yes | Yes; exact-head PR check passed |
 | AC6 / SCN006 | Yes | Yes | Yes |
 | AC7 / SCN007 | Yes | Yes | Yes |
 
@@ -195,9 +195,6 @@ No implementation fix was required. The pre-existing report was regenerated agai
 
 No local implementation, architecture, security, performance, testability, or error-handling issue remains.
 
-| Severity | Category | Location | Issue | Reason Not Fixed |
-|----------|----------|----------|-------|------------------|
-| External evidence | Delivery | GitHub pull request | Exact-head `pull_request` results for `Python CI / verify` and `nmg-sdlc contribution gate / Validate nmg-sdlc contribution evidence`, plus the T011 PR title/body identity, do not yet exist. | These are controller-owned PR-only facts and are the bounded basis for `PR Evidence Pending`. |
 
 ---
 
@@ -216,7 +213,7 @@ No local implementation, architecture, security, performance, testability, or er
 | Approved spec | `requirements.md`, `design.md`, `tasks.md`, `feature.gherkin` | 0 |
 | Runtime/package | `pyproject.toml`, `VERSION`, `.gitignore`, `src/nmg_sdlc_smoke/*.py` | 0 |
 | Tests | `tests/test_greet.py`, `tests/test_cli.py`, `tests/features/**` | 0 |
-| CI/managed contracts | `.github/workflows/*.yml`, issue form, `AGENTS.md`, `CONTRIBUTING.md` | 0 local; PR checks pending |
+| CI/managed contracts | `.github/workflows/*.yml`, issue form, `AGENTS.md`, `CONTRIBUTING.md` | 0; exact-head PR checks passed |
 | Steering | `steering/manifest.json`, modules, snippets, retrospective state | 0 |
 | Rewrite evidence | `references/rewrite-contract.*`, `references/rewrite-verification.md`, changed-path diff | 0 |
 
@@ -224,4 +221,4 @@ No local implementation, architecture, security, performance, testability, or er
 
 ## Recommendation
 
-**Ready for controlled draft PR evidence collection.** Every local acceptance, architecture, test, smoke, exercise, and deterministic steering obligation passed. Delivery must now collect the two declared PR-event checks for the exact head and verify the controller-owned T011 PR contract.
+**Pass.** Every local acceptance, architecture, test, smoke, exercise, deterministic steering, and declared exact-head PR-evidence obligation passed for draft PR #37 at `2680311b6232becf5048fa72973ec536781b5dac`.
