@@ -2,40 +2,31 @@
 
 ## Project Overview
 
-`nmg-sdlc` is an Oh My Pi extension that provides spec-driven delivery for Oh My Pi and Herdr. It is packaged with an OMP manifest in `package.json` (`omp.extensions`) and the extension factory at `src/extension.ts`.
+`nmg-sdlc-smoke-python` is a minimal Python SDLC smoke host. It is an installable Python 3.12+ distribution with a small greeting library and the `nmg-smoke` console script.
 
 ## Repository Structure
 
 ```
-package.json                  # OMP plugin manifest (version + omp.extensions)
-src/extension.ts              # Extension factory (registers /sdlc-* commands)
-workflows/                    # Private workflow files (one directory per workflow, WORKFLOW.md entrypoints)
-agents/                       # OMP task agents (starter, spec-implementer, architecture-reviewer, deliverer)
-references/                   # Shared reference contracts loaded on demand by workflows
-scripts/                      # Deterministic validators, status CLI, exercise runners, and tests
-specs/                        # BDD specs for the plugin's own development cycle (specs/{N}-{slug}/)
-steering/                     # Product, tech, and structure steering documents
-docs/decisions/               # ADR directory
-VERSION                       # Version source (kept in sync with package.json)
-CHANGELOG.md                  # Keep an [Unreleased] section for pending changes
-README.md                     # Public docs: workflow, installation, skills reference
-.github/workflows/            # CI including contribution gate
+pyproject.toml                 # setuptools metadata; reads version from VERSION
+VERSION                        # 3.x release source of truth
+src/nmg_sdlc_smoke/            # library and CLI
+ tests/                         # pytest unit tests
+ tests/features/                # pytest-bdd acceptance features and steps
+specs/                         # current approved issue contracts
+steering/                      # product, technology, and structure guidance
+.github/workflows/python-ci.yml # Python verification
 ```
 
-## Version Bumping
+## Engineering Rules
 
-When bumping the version, update `package.json` `"version"`, the root `VERSION` file, and ensure `src/extension.ts` remains consistent. The delivery flow (via execute) keeps `VERSION`, `package.json`, and `CHANGELOG.md` in sync.
-
-## README Updates
-
-When making changes that affect how users interact with the extension (new skills, changed workflows, new steering documents, etc.), update `README.md` accordingly. The README is the primary public documentation and must stay in sync with actual capabilities.
-
-## Commit & CHANGELOG Conventions
-
-- Conventional commits: `feat:`, `fix:`, `docs:`, `chore:`
-- `CHANGELOG.md` uses `[Unreleased]` for pending changes; delivery rolls it to a versioned heading at release
-- Workflows live in `workflows/{name}/WORKFLOW.md`
-- `specs/` files must be committed with their feature branches, not left as untracked local files
+- Support Python 3.12 and newer.
+- Keep runtime dependencies at zero unless an approved spec requires otherwise.
+- Keep `greet` pure and the CLI adapter thin.
+- Use cross-platform paths and UTF-8 text.
+- Run `python -m pytest`, `python -m pytest tests/features`, and `python -m ruff check .`.
+- Change `VERSION` for releases; `pyproject.toml` must continue reading it dynamically.
+- Update README when user-facing behavior changes.
+- Keep CHANGELOG released history intact.
 
 <!-- nmg-sdlc-managed: spec-context -->
 ## nmg-sdlc Spec Context
