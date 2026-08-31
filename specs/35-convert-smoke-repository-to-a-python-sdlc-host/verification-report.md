@@ -199,7 +199,7 @@ Plugin changes were detected because the approved cutover deletes `workflows/`, 
 
 ## Positive Observations
 
-- The runtime is three small modules with no runtime dependencies and no unnecessary abstraction.
+- The managed steering runtime has four small modules—product, technology, structure, and verification—with no project runtime dependency or unnecessary abstraction.
 - The package metadata, installed CLI, unit tests, BDD tests, Ruff configuration, CI commands, docs, and rewrite evidence agree on one Python 3.12+ contract.
 - The repository rewrite removes the copied plugin surface while preserving the managed contribution gate, issue form, LICENSE, CHANGELOG history, and AGENTS spec-context markers.
 - Managed contribution-gate version 7 checks the registered manifest and module paths; the Python-host marker remains.
