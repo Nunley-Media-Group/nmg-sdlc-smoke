@@ -115,14 +115,16 @@
 
 ### T009: Rewrite current-product docs and steering
 
-**File(s)**: `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `steering/product.md`, `steering/tech.md`, `steering/structure.md`, `steering/retrospective.md`, `steering/retrospective-state.json`
-**Type**: Modify
+**File(s)**: `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `steering/manifest.json`, `steering/modules/product.mjs`, `steering/modules/tech.mjs`, `steering/modules/structure.mjs`, `steering/modules/verification.mjs`, `steering/snippets/project-product.md`, `steering/snippets/project-tech.md`, `steering/snippets/project-structure.md`, `steering/retrospective.md`, `steering/retrospective-state.json`; delete `steering/product.md`, `steering/tech.md`, `steering/structure.md`
+**Type**: Create | Modify | Delete
 **Depends**: T008
 **Acceptance**:
-- [ ] Documents describe this Python SDLC smoke host (src layout, pytest, pytest-bdd, Ruff, VERSION synchronized with pyproject.toml)
+- [ ] README, CONTRIBUTING, AGENTS, and steering snippets describe this Python SDLC smoke host (src layout, pytest, pytest-bdd, Ruff, VERSION synchronized with pyproject.toml)
 - [ ] They do not describe an Oh My Pi plugin as the current product
 - [ ] CONTRIBUTING keeps the managed contribution-workflow contract (evidence graph and exception table)
 - [ ] AGENTS.md keeps `<!-- nmg-sdlc-managed: spec-context -->` / `<!-- /nmg-sdlc-managed -->` and the spec-context rules
+- [ ] `steering/manifest.json` registers product, tech, structure, and verification modules plus the three project snippets
+- [ ] `steering/product.md`, `steering/tech.md`, and `steering/structure.md` are absent
 - [ ] `steering/retrospective-state.json` is `{"version": 1, "specs": {}}`
 
 ### T010: Rewrite rewrite-contract artifacts and comment the contribution gate
@@ -133,8 +135,9 @@
 **Acceptance**:
 - [ ] Rewrite-contract files document this Python host cutover and keep `exception: repository-rewrite`
 - [ ] `rewrite-verification.md` records pytest, pytest-bdd, and Ruff commands as verification
-- [ ] Contribution gate file still starts with `# nmg-sdlc-managed: contribution-gate` and `# nmg-sdlc-managed-version: 6` and keeps the same rewrite-required paths and predicates
-- [ ] The gate file has a comment-only change so it appears in the implementation PR changed-path list
+- [ ] Contribution gate file still starts with `# nmg-sdlc-managed: contribution-gate` and `# nmg-sdlc-managed-version: 7` and keeps version-7 `rewriteRequiredPaths` and `steeringFiles` (manifest plus `steering/modules/{product,tech,structure,verification}.mjs`)
+- [ ] The gate file has the comment-only line `# This repository is a Python SDLC smoke consumer.` immediately after the version marker so the path appears in the implementation PR changed-path list
+- [ ] The evaluator is not restored to version 6 and does not require markdown `steering/product.md`, `steering/tech.md`, or `steering/structure.md`
 
 ### T011: Implementation PR evidence
 
@@ -144,7 +147,7 @@
 **Acceptance**:
 - [ ] Title is exactly `feat!: convert smoke repository to a Python SDLC host`
 - [ ] Body contains `Closes #35`, `**Issue**: #35`, and `SDLC-Exception: repository-rewrite — Pre-cutover plugin files predate this host's singular issue/spec workflow.`
-- [ ] PR changed paths include `package.json`, `VERSION`, `README.md`, `CONTRIBUTING.md`, `steering/product.md`, `steering/tech.md`, `steering/structure.md`, `.github/workflows/nmg-sdlc-contribution-gate.yml`, `references/rewrite-contract.json`, `references/rewrite-contract.md`, `references/rewrite-verification.md`
+- [ ] PR changed paths include `package.json`, `VERSION`, `README.md`, `CONTRIBUTING.md`, `steering/manifest.json`, `steering/modules/product.mjs`, `steering/modules/tech.mjs`, `steering/modules/structure.mjs`, `.github/workflows/nmg-sdlc-contribution-gate.yml`, `steering/modules/verification.mjs`, `references/rewrite-contract.json`, `references/rewrite-contract.md`, `references/rewrite-verification.md`
 
 ---
 
@@ -161,6 +164,7 @@ T001 ──▶ T002 ──▶ T003 ──▶ T004 ──▶ T005 ──▶ T006 
 | Issue | Date | Summary |
 |-------|------|---------|
 | #35 | 2026-08-31 | Initial feature spec |
+| #35 | 2026-08-31 | Spec revised before delivery |
 
 ---
 

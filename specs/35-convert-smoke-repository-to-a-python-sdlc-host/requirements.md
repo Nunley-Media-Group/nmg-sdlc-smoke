@@ -25,6 +25,8 @@ VERSION is currently `3.13.0`. This issue is an `enhancement` on the 3.x line. I
 
 The implementation pull request is a working-tree rewrite and must use `feat!:` plus `SDLC-Exception: repository-rewrite — Pre-cutover plugin files predate this host's singular issue/spec workflow.` Do not put `BREAKING` in the issue or spec title or body, and do not declare `**Version bump**: major`.
 
+The managed contribution gate on this host is evaluator version 7. Preserve that evaluator, including its manifest/module steering predicates. Do not restore version 6 or markdown `steering/product.md` / `steering/tech.md` / `steering/structure.md` rewrite paths.
+
 ---
 
 ## Acceptance Criteria
@@ -86,10 +88,10 @@ Each criterion becomes a Gherkin scenario.
 | FR5 | Gate the tree with Ruff and with GitHub Actions Python CI on pull requests and `main` | Must | Python 3.12 |
 | FR6 | Keep `VERSION` as the 3.x source of truth, set it to `3.14.0`, and synchronize `pyproject.toml` from it | Must | enhancement → minor; not 0.x or 1.0.0 |
 | FR7 | Remove copied plugin/runtime artifacts from the working tree; keep Git history as the archive | Must | Retain only `specs/35-convert-smoke-repository-to-a-python-sdlc-host/` under `specs/` |
-| FR8 | Preserve LICENSE, CHANGELOG history, managed contribution gate, managed issue form, and AGENTS.md spec-context markers | Must | Contribution gate evaluator stays version 6 |
-| FR9 | Rewrite steering, README, CONTRIBUTING (keeping the managed contribution-workflow contract), and AGENTS project overview for the Python host | Must | |
+| FR8 | Preserve LICENSE, CHANGELOG history, managed contribution gate, managed issue form, and AGENTS.md spec-context markers | Must | Contribution gate evaluator stays version 7 with manifest/module steering predicates |
+| FR9 | Rewrite steering, README, CONTRIBUTING (keeping the managed contribution-workflow contract), and AGENTS project overview for the Python host | Must | Steering is `steering/manifest.json`, modules, and project snippets |
 | FR10 | Use UTF-8 text and path-agnostic commands so verification is cross-platform | Should | |
-| FR11 | Satisfy the managed `SDLC-Exception: repository-rewrite` path on the implementation PR | Must | `feat!:` title; all rewrite-required paths changed |
+| FR11 | Satisfy the managed `SDLC-Exception: repository-rewrite` path on the implementation PR | Must | `feat!:` title; all version-7 rewrite-required paths changed |
 
 ---
 
@@ -102,6 +104,7 @@ Each criterion becomes a Gherkin scenario.
 - Authoring follow-on exercise issues beyond this cutover
 - Keeping copied plugin specs, workflows, agents, commands, or Node contract scripts in the working tree
 - Declaring a major version bump or putting `BREAKING` in this spec
+- Restoring contribution-gate evaluator version 6 or markdown `steering/product.md` / `steering/tech.md` / `steering/structure.md` as the live rewrite/steering contract
 
 ---
 
@@ -110,3 +113,4 @@ Each criterion becomes a Gherkin scenario.
 | Issue | Date | Summary |
 |-------|------|---------|
 | #35 | 2026-08-31 | Initial feature spec |
+| #35 | 2026-08-31 | Spec revised before delivery |

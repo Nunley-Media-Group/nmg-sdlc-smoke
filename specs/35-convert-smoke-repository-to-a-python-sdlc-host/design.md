@@ -12,13 +12,15 @@ Replace the copied nmg-sdlc Oh My Pi plugin working tree with a minimal installa
 
 This is an owner-approved working-tree rewrite. The implementation PR uses the managed repository-rewrite exception because pre-cutover plugin files predate this host's singular issue/spec workflow. Delivery remains a 3.x minor (`VERSION` `3.14.0`). Requirements spec: `specs/35-convert-smoke-repository-to-a-python-sdlc-host/requirements.md`.
 
+Steering after cutover is the managed manifest runtime, not plugin markdown `steering/product.md`, `steering/tech.md`, and `steering/structure.md`. The contribution gate is evaluator version 7. Preserve its rewrite-required paths and steering-file predicates; add only a host-identifying comment so the workflow path changes on the rewrite PR.
+
 ---
 
 ## Architecture
 
 ### Component Diagram
 
-Reference `structure.md` after the steering rewrite in this issue. Target layout:
+Reference `steering/snippets/project-structure.md` after the steering rewrite in this issue. Target layout:
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -127,6 +129,7 @@ None. CLI only.
 | **A: Keep plugin and add Python beside it** | Dual runtime | Less deletion | Fails AC5/AC6 clean cutover | Rejected — issue requires plugin runtime gone |
 | **B: setuptools src layout + pytest-bdd + Ruff** | Minimal production-shaped Python host | Matches ACs; boring toolchain | Not a product | **Selected** |
 | **C: Poetry/Hatch-only app without src layout** | Different packaging | Fashionable | Extra tool; issue names src layout | Rejected |
+| **D: Restore contribution-gate evaluator version 6** | Match the first approved spec literally | Avoids a spec revision | Mislabels version-7 predicates or conflicts with the mandatory manifest steering runtime | Rejected — keep version 7 |
 
 ---
 
@@ -221,19 +224,55 @@ Delete from the working tree (non-exhaustive names that must be gone; directorie
 - `.github/workflows/skill-inventory-audit.yml`
 - `.github/workflows/sync-marketplace-pointer.yml`
 - `LIVE_SMOKE_A.txt`, `LIVE_SMOKE_B.txt`, `LIVE_SMOKE_C.txt`, `LIVE_SMOKE_D.txt`, `LIVE_SMOKE_259_A.txt`, `LIVE_SMOKE_259_B.txt`, `LIVE_SMOKE_214_C.txt`, `EXECUTE_SMOKE.md`
+- plugin markdown `steering/product.md`, `steering/tech.md`, `steering/structure.md`
 
 Preserve:
 
 - `LICENSE` (MIT, Nunley Media Group LLC) byte-for-byte
 - `CHANGELOG.md` history (do not wipe released headings)
-- `.github/workflows/nmg-sdlc-contribution-gate.yml` version-6 evaluator; add only a comment that this host is a Python SDLC smoke consumer so the path changes
+- `.github/workflows/nmg-sdlc-contribution-gate.yml` version-7 evaluator; keep its rewrite-required paths and steering-file predicates; add only the comment `# This repository is a Python SDLC smoke consumer.` immediately after `# nmg-sdlc-managed-version: 7` so the path changes
 - `.github/ISSUE_TEMPLATE/nmg-sdlc-ready-issue.yml`
 - AGENTS.md `<!-- nmg-sdlc-managed: spec-context -->` … `<!-- /nmg-sdlc-managed -->` markers and the spec-context rules inside them
 - CONTRIBUTING.md managed contribution-workflow contract (issue/spec evidence, docs-only, repository-rewrite, spec-only write-spec table)
 
-Rewrite current-product prose in `README.md`, `CONTRIBUTING.md` project context, `AGENTS.md` overview/structure/version sections, `steering/product.md`, `steering/tech.md`, `steering/structure.md`. Replace `steering/retrospective.md` with a short note that this host is the Python SDLC smoke project and plugin retrospectives live in Git. Set `steering/retrospective-state.json` to `{"version": 1, "specs": {}}`.
+Rewrite current-product prose in `README.md`, `CONTRIBUTING.md` project context, and `AGENTS.md` overview/structure/version sections. Replace plugin markdown steering with:
+
+- `steering/manifest.json`
+- `steering/modules/product.mjs`
+- `steering/modules/tech.mjs`
+- `steering/modules/structure.mjs`
+- `steering/modules/verification.mjs`
+- `steering/snippets/project-product.md`
+- `steering/snippets/project-tech.md`
+- `steering/snippets/project-structure.md`
+
+Project snippets describe this Python SDLC smoke host (src layout, pytest, pytest-bdd, Ruff, VERSION synchronized with pyproject.toml) and must not describe an Oh My Pi plugin as the current product. Replace `steering/retrospective.md` with a short note that this host is the Python SDLC smoke project and plugin retrospectives live in Git. Set `steering/retrospective-state.json` to `{"version": 1, "specs": {}}`.
 
 Rewrite `references/rewrite-contract.json`, `references/rewrite-contract.md`, and `references/rewrite-verification.md` so they document this Python host cutover (runtime Python 3.12+, exception `repository-rewrite`, capabilities `greet`, `nmg-smoke`, pytest/pytest-bdd, Ruff, Python CI). They must remain present because the contribution gate requires those paths on the rewrite PR.
+
+Version-7 `rewriteRequiredPaths` (normative; every path must change on the implementation PR):
+
+- `package.json`
+- `VERSION`
+- `README.md`
+- `CONTRIBUTING.md`
+- `steering/manifest.json`
+- `steering/modules/product.mjs`
+- `steering/modules/tech.mjs`
+- `steering/modules/structure.mjs`
+- `.github/workflows/nmg-sdlc-contribution-gate.yml`
+- `steering/modules/verification.mjs`
+- `references/rewrite-contract.json`
+- `references/rewrite-contract.md`
+- `references/rewrite-verification.md`
+
+Version-7 `steeringFiles` that must exist after cutover:
+
+- `steering/manifest.json`
+- `steering/modules/product.mjs`
+- `steering/modules/tech.mjs`
+- `steering/modules/structure.mjs`
+- `steering/modules/verification.mjs`
 
 ---
 
@@ -246,10 +285,10 @@ Body must include:
 - `Closes #35`
 - `**Issue**: #35`
 - `SDLC-Exception: repository-rewrite — Pre-cutover plugin files predate this host's singular issue/spec workflow.`
-- steering alignment naming `steering/product.md`, `steering/tech.md`, `steering/structure.md`
+- steering alignment naming `steering/manifest.json`, `steering/modules/product.mjs`, `steering/modules/tech.mjs`, `steering/modules/structure.mjs`, and `steering/modules/verification.mjs`
 - verification commands and outcomes (`python -m pytest`, `python -m pytest tests/features`, `python -m ruff check .`)
 
-Changed paths must include every rewrite-required path listed in the contribution gate.
+Changed paths must include every rewrite-required path listed above.
 
 ---
 
@@ -257,9 +296,9 @@ Changed paths must include every rewrite-required path listed in the contributio
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Rewrite exception misses a required path | Med | High | Tasks list every required path; VERSION bump and package.json deletion are explicit |
+| Rewrite exception misses a required path | Med | High | Tasks list every version-7 required path; VERSION bump and package.json deletion are explicit |
 | Plugin specs left in `specs/` | Med | High | Delete every spec dir except `#35` |
-| Contribution gate evaluator accidentally edited | Low | High | Comment-only change; keep version 6 predicates |
+| Contribution gate evaluator accidentally reverted to version 6 | Low | High | Comment-only extra line; keep version 7 predicates |
 
 ---
 
@@ -274,6 +313,7 @@ None.
 | Issue | Date | Summary |
 |-------|------|---------|
 | #35 | 2026-08-31 | Initial feature spec |
+| #35 | 2026-08-31 | Spec revised before delivery |
 
 ---
 
