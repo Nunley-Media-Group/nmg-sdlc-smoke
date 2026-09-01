@@ -1,0 +1,55 @@
+# File: tests/features/add_nmg_smoke_prefix_text_option.feature
+# Generated from: specs/52-add-nmg-smoke-prefix-text-option/requirements.md
+Feature: Add nmg-smoke --prefix TEXT option
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want nmg-smoke --prefix TEXT to prepend TEXT to each successful CLI greeting line
+  So that CLI output can carry a caller-chosen prefix without changing the library greet API
+
+  @SCN001
+  Scenario: Prefix successful greeting happy path
+    Given the distribution is installed with its console script
+    When nmg-smoke --prefix 'OK: ' Ada is run
+    Then the process exits 0 and prints OK: Hello, Ada followed by a single newline
+    And nmg-smoke Ada --prefix 'OK: ' produces the same stdout and exit code
+    And stderr is empty
+
+  @SCN002
+  Scenario: Omitting --prefix leaves output unchanged
+    Given the distribution is installed with its console script
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+
+  @SCN003
+  Scenario: Missing TEXT is rejected
+    Given the distribution is installed with its console script
+    When nmg-smoke --prefix is run without a TEXT argument
+    Then the process exits non-zero
+    And stdout contains no greeting
+    And stderr contains argparse-style usage or error text
+
+  @SCN004
+  Scenario: Library greet API is unchanged
+    Given the library is importable
+    When a caller invokes greet with Ada
+    Then the function returns exactly Hello, Ada
+    And blank, whitespace-only, and non-string names still raise ValueError with message name must not be blank
+
+  @SCN005
+  Scenario: Blank name is still rejected when --prefix is present
+    Given a blank or whitespace-only name
+    When nmg-smoke --prefix 'OK: ' is invoked with that name
+    Then the CLI exits non-zero without printing a greeting to stdout
+
+  @SCN006
+  Scenario: Positional name remains required with --prefix
+    Given the distribution is installed
+    When nmg-smoke --prefix 'OK: ' is run with no name argument
+    Then the process exits non-zero and does not print a greeting
+
+  @SCN007
+  Scenario: Prefix applies to each printed line after uppercase
+    Given the distribution is installed with its console script
+    When nmg-smoke --prefix 'OK: ' --uppercase Ada is run
+    Then the process exits 0 and prints OK: HELLO, ADA followed by a single newline
+    And when nmg-smoke --prefix 'OK: ' --repeat 2 Ada is run, stdout is exactly two lines of OK: Hello, Ada, each followed by a newline
+    And the supplied TEXT is not itself uppercased
