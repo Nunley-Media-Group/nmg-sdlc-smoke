@@ -30,6 +30,13 @@ $ nmg-smoke Ada
 Hello, Ada
 ```
 
+Use `--uppercase` to capitalize the complete greeting:
+
+```console
+$ nmg-smoke --uppercase Ada
+HELLO, ADA
+```
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification

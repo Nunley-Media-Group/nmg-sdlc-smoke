@@ -1,0 +1,38 @@
+# File: tests/features/add_nmg_smoke_uppercase_flag.feature
+# Generated from: specs/43-add-nmg-smoke-uppercase-flag/requirements.md
+Feature: Add nmg-smoke --uppercase flag
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want nmg-smoke --uppercase to print the existing greeting in uppercase
+  So that the CLI can present an all-caps greeting line without changing the library greet API
+
+  @SCN001
+  Scenario: Uppercase greeting happy path
+    Given the distribution is installed with its console script
+    When nmg-smoke --uppercase Ada is run
+    Then the process exits 0 and prints HELLO, ADA followed by a single newline
+    And nmg-smoke Ada --uppercase produces the same stdout and exit code
+
+  @SCN002
+  Scenario: Greeting without the flag is unchanged
+    Given the distribution is installed with its console script
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+
+  @SCN003
+  Scenario: Flag without a name still fails
+    Given the distribution is installed
+    When nmg-smoke --uppercase is run with no name argument
+    Then the process exits non-zero and does not print a greeting
+
+  @SCN004
+  Scenario: Blank name with the flag still fails
+    Given a blank or whitespace-only name
+    When nmg-smoke --uppercase is invoked with that name
+    Then the CLI exits non-zero without printing a greeting to stdout
+
+  @SCN005
+  Scenario: Library greet API is unchanged
+    Given the library is importable
+    When a caller invokes greet with Ada
+    Then the function returns exactly Hello, Ada
+    And blank, whitespace-only, and non-string names still raise ValueError with message name must not be blank

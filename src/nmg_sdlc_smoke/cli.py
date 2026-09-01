@@ -5,6 +5,7 @@ from .greet import greet
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="nmg-smoke")
+    parser.add_argument("--uppercase", action="store_true")
     parser.add_argument("name")
     args = parser.parse_args(argv)
 
@@ -13,5 +14,5 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as error:
         parser.exit(1, f"nmg-smoke: error: {error}\n")
 
-    print(message)
+    print(message.upper() if args.uppercase else message)
     return 0
