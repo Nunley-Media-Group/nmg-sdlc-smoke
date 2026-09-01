@@ -138,6 +138,20 @@ def greet_ada_result(context: dict[str, object]) -> None:
     assert context["greeting"] == "Hello, Ada"
 
 
+@when("nmg-smoke Ada is run")
+def run_nmg_smoke_ada(
+    context: dict[str, object], capsys: pytest.CaptureFixture[str]
+) -> None:
+    context["exit_code"] = main(["Ada"])
+    context["stdout"] = capsys.readouterr().out
+
+
+@then("the process exits 0 and prints Hello, Ada followed by a single newline")
+def successful_cli_greeting(context: dict[str, object]) -> None:
+    assert context["exit_code"] == 0
+    assert context["stdout"] == "Hello, Ada\n"
+
+
 @then(
     "blank names still raise ValueError from greet and still cause the CLI to exit "
     "non-zero without a stdout greeting"
