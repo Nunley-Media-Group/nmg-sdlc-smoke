@@ -103,8 +103,14 @@ def later_names_are_not_iterated(context: dict[str, object]) -> None:
 
 @when("greet_many is called with a str as the names argument")
 def greet_many_bare_string(context: dict[str, object]) -> None:
+    class ObservedStr(str):
+        def __iter__(self) -> Iterator[str]:
+            context["string_iterated"] = True
+            return super().__iter__()
+
+    context["string_iterated"] = False
     with pytest.raises(TypeError) as error:
-        greet_many("Ada")
+        context["greetings"] = greet_many(ObservedStr("Ada"))
     context["error"] = error.value
 
 
@@ -120,6 +126,7 @@ def bare_string_type_error(context: dict[str, object]) -> None:
     "greetings"
 )
 def no_per_character_greetings(context: dict[str, object]) -> None:
+    assert context["string_iterated"] is False
     assert "greetings" not in context
 
 
