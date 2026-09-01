@@ -1,0 +1,49 @@
+**Issue**: #45
+**Date**: 2026-09-01
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_nmg_smoke_repeat_count_option.feature
+# Generated from: specs/45-add-nmg-smoke-repeat-count-option/requirements.md
+Feature: Add nmg-smoke --repeat COUNT option
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want nmg-smoke --repeat COUNT to print the existing one-name greeting exactly COUNT times
+  So that CLI output volume is observable without changing the library greet API
+
+  @SCN001
+  Scenario: Repeat greeting COUNT times
+    Given the distribution is installed with its console script
+    When nmg-smoke --repeat 3 Ada is run
+    Then the process exits 0 and prints Hello, Ada exactly three times, each followed by a newline
+    And stderr is empty
+
+  @SCN002
+  Scenario: Omitting --repeat keeps single-line output
+    Given the distribution is installed with its console script
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+
+  @SCN003
+  Scenario: Invalid COUNT is rejected
+    Given the distribution is installed with its console script
+    When nmg-smoke --repeat is run with a missing COUNT, a non-integer COUNT, 0, or a negative COUNT
+    Then each invocation exits non-zero with no greeting on stdout and argparse-style usage or error text on stderr
+
+  @SCN004
+  Scenario: Library greet API is unchanged
+    Given the library is importable
+    When a caller invokes greet with Ada
+    Then the function returns exactly Hello, Ada
+    And blank, whitespace-only, and non-string names still raise ValueError with message name must not be blank
+
+  @SCN005
+  Scenario: Blank name is still rejected when --repeat is present
+    Given a blank or whitespace-only name
+    When nmg-smoke --repeat 2 is invoked with that name
+    Then the CLI exits non-zero without printing a greeting to stdout
+
+  @SCN006
+  Scenario: Positional name remains required with --repeat
+    Given the distribution is installed
+    When nmg-smoke --repeat 2 is run with no name argument
+    Then the process exits non-zero and does not print a greeting
