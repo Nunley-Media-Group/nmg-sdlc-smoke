@@ -88,6 +88,22 @@ def propagates_greet_error(context: dict[str, object]) -> None:
         (type(error), str(error)) for error in greet_errors
     ]
     assert all(error.__cause__ is None for error in errors)
+    assert all(error.__context__ is None for error in errors)
+
+
+@when("nmg-smoke Ada is run")
+def invoke_cli(context: dict[str, object], capsys: pytest.CaptureFixture[str]) -> None:
+    context["exit_code"] = main(["Ada"])
+    context["captured"] = capsys.readouterr()
+
+
+@then("the process exits 0 and prints Hello, Ada followed by a single newline")
+def exact_cli_output(context: dict[str, object]) -> None:
+    captured = context["captured"]
+    assert isinstance(captured, tuple)
+    assert context["exit_code"] == 0
+    assert captured.out == "Hello, Ada\n"
+    assert captured.err == ""
 
 
 @given("the distribution is installed")
