@@ -52,6 +52,7 @@ Issue #45 is implemented as specified. The CLI validates a positive integer `--r
 - Coverage: declared 0, recorded 0, complete `true`; no missing, duplicate, or unknown results
 - Ceiling: none
 - Result: complete gate with no project-specific validation declarations
+- Managed steering alignment: the issue uses the registered `steering/manifest.json` runtime; its deterministic gate completed with no project-specific declarations, so no steering artifact changes are required.
 
 ---
 
@@ -203,6 +204,7 @@ None.
 | `tests/features/steps/test_repeat_steps.py` | 0 | Scenario steps exercise the CLI in-process |
 | `README.md` | 0 | User-facing repeat behavior documented |
 | `pyproject.toml` | 0 | Zero runtime dependencies preserved |
+| `VERSION` | 0 | Verified release metadata update to `3.2.0` accompanies the documented user-facing CLI feature |
 
 ---
 
