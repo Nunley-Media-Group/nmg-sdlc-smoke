@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.18.0] - 2026-09-01
+
+### Changed
+
+- Add nmg-smoke --repeat COUNT option (#45)
+
 ## [3.17.0] - 2026-09-01
 
 ### Changed

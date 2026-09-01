@@ -38,6 +38,15 @@ $ nmg-smoke --uppercase Ada
 HELLO, ADA
 ```
 
+Use `--repeat COUNT` to print the greeting once per line:
+
+```console
+$ nmg-smoke --repeat 3 Ada
+Hello, Ada
+Hello, Ada
+Hello, Ada
+```
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification
