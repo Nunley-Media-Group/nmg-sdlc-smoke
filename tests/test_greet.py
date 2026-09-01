@@ -1,6 +1,12 @@
 import pytest
 
-from nmg_sdlc_smoke import greet, greeting_bytes, greeting_is_ascii, greeting_length
+from nmg_sdlc_smoke import (
+    greet,
+    greet_many,
+    greeting_bytes,
+    greeting_is_ascii,
+    greeting_length,
+)
 
 
 def test_greet_returns_exact_message() -> None:
@@ -11,6 +17,34 @@ def test_greet_returns_exact_message() -> None:
 def test_greet_rejects_blank_and_non_string_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greet(name)  # type: ignore[arg-type]
+
+def test_greet_many_returns_greetings_in_order_with_duplicates() -> None:
+    assert greet_many(["Ada", "Bob"]) == ["Hello, Ada", "Hello, Bob"]
+    assert greet_many(["Ada", "Ada"]) == ["Hello, Ada", "Hello, Ada"]
+
+
+def test_greet_many_returns_empty_list_for_empty_iterables() -> None:
+    assert greet_many([]) == []
+    assert greet_many(()) == []
+    assert greet_many(name for name in []) == []
+
+
+def test_greet_many_accepts_tuple_and_generator() -> None:
+    expected = ["Hello, Ada", "Hello, Bob"]
+
+    assert greet_many(("Ada", "Bob")) == expected
+    assert greet_many(name for name in ["Ada", "Bob"]) == expected
+
+
+@pytest.mark.parametrize("names", [["Ada", " ", "Bob"], ["", "Bob"], [42, "Bob"]])
+def test_greet_many_propagates_first_invalid_name(names: list[object]) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greet_many(names)  # type: ignore[arg-type]
+
+
+def test_greet_many_rejects_bare_string() -> None:
+    with pytest.raises(TypeError, match="^names must not be a str$"):
+        greet_many("Ada")
 
 
 def test_greeting_length_returns_full_greeting_length() -> None:
