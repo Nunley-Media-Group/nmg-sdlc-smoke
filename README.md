@@ -47,6 +47,13 @@ Hello, Ada
 Hello, Ada
 ```
 
+Use `--prefix TEXT` to prepend text exactly as supplied:
+
+```console
+$ nmg-smoke --prefix 'OK: ' Ada
+OK: Hello, Ada
+```
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification
