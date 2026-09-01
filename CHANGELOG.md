@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.19.0] - 2026-09-01
+
+### Changed
+
+- Add nmg-smoke --prefix TEXT option (#52)
+
 ## [3.18.0] - 2026-09-01
 
 ### Changed
