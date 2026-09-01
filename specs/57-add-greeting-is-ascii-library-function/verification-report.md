@@ -30,7 +30,7 @@ The implementation satisfies all four acceptance criteria and all four implement
 ## Deterministic Steering Artifact and Ceiling
 
 - Artifact: `.omp/sdlc/verification/57.json`
-- Artifact identity head: `c53c7f7dee34eba5737d59725a62eeac6345fd3e`
+- Artifact identity head: `b5fe5907b09940bc193841a11a80111c5dd5c76b`
 - Declared validations: 0
 - Recorded validations: 0
 - Coverage complete: `true`
@@ -181,29 +181,25 @@ No error-handling findings.
 
 ### Executed Verification
 
-Development dependencies were installed into `.omp/sdlc/verify-venv` with an editable `.[dev]` install. The environment used Python 3.14.6, which satisfies the Python 3.12+ contract.
+Development dependencies were installed into `.venv` with an editable `.[dev]` install. The environment used Python 3.14.3, which satisfies the Python 3.12+ contract.
 
 | Command | Result |
 |---------|--------|
-| `.omp/sdlc/verify-venv/bin/python -m pytest` | Pass — 91 passed; 60 third-party Gherkin deprecation warnings. |
-| `.omp/sdlc/verify-venv/bin/python -m pytest tests/features` | Pass — 33 passed; 60 third-party Gherkin deprecation warnings. |
-| `.omp/sdlc/verify-venv/bin/python -m pytest tests/test_greet.py tests/test_cli.py` | Pass — 58 passed. |
-| `.omp/sdlc/verify-venv/bin/python -m ruff check .` | Pass — `All checks passed!` |
+| `.venv/bin/python -m pytest` | Pass — 91 passed; 60 third-party Gherkin deprecation warnings. |
+| `.venv/bin/python -m pytest tests/features` | Pass — 33 passed; 60 third-party Gherkin deprecation warnings. |
+| `.venv/bin/python -m pytest tests/test_greet.py tests/test_cli.py` | Pass — 58 passed. |
+| `.venv/bin/python -m ruff check .` | Pass — `All checks passed!` |
 
 - BDD acceptance coverage: 4/4 criteria.
 - New helper boundaries: ASCII, non-ASCII, blank, whitespace, tab, newline, `None`, and integer.
 - Plugin exercise: not applicable; `main...HEAD` changes no `workflows/` or `agents/` path.
-- Real smoke lifecycle: not required for this library-only Python change; the actual library and CLI paths were exercised by unit and BDD runs.
+- Real smoke lifecycle: direct installed-library invocation returned `True` for `"Ada"` and `False` for `"É"` (`ascii-smoke: pass`); CLI behavior was exercised by unit and BDD runs.
 
 ---
 
 ## Fixes Applied
 
-| Severity | Category | Location | Original Issue | Fix Applied | Routing |
-|----------|----------|----------|----------------|-------------|---------|
-| Informational | Review process | Verification execution | A prohibited external review delegation was started before the inline-only constraint was enforced. | The delegation was canceled before its output was used; this report and all five checklist reviews were completed inline. | direct |
-
-No implementation fix was required. A provisional export-order edit was discarded because the repository's enforced Ruff `I001` and `RUF022` rules require sorted imports and `__all__`; the final implementation remains lint-clean and preserves every required public name.
+No implementation fixes were required.
 
 ---
 
