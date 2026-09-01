@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.16.0] - 2026-09-01
+
+### Changed
+
+- Add nmg-smoke --uppercase flag (#43)
+
 ## [3.15.0] - 2026-08-31
 
 ### Changed
