@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.22.0] - 2026-09-01
+
+### Changed
+
+- Add greeting_bytes library function (#53)
+
 ## [3.21.0] - 2026-09-01
 
 ### Changed
