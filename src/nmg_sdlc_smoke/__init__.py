@@ -1,3 +1,3 @@
-from .greet import greet
+from .greet import greet, greeting_length
 
-__all__ = ["greet"]
+__all__ = ["greet", "greeting_length"]
