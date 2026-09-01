@@ -90,6 +90,13 @@ T001 ──┬──▶ T002 ──▶ T003
 
 ---
 
+## Delivery Evidence
+
+- Registered managed steering runtime alignment: the CLI-only presentation change follows `steering/manifest.json` and the registered product, technology, structure, and verification guidance; no steering artifact change is required.
+- Behavior for `VERSION`: deterministic delivery advances the existing 3.x release metadata while `pyproject.toml` continues to read `VERSION` dynamically; the runtime dependency and public-library contracts remain unchanged.
+
+---
+
 ## Change History
 
 | Issue | Date | Summary |
