@@ -1,0 +1,61 @@
+**Issue**: #58
+**Date**: 2026-09-01
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_nmg_smoke_no_newline_flag.feature
+# Generated from: specs/58-add-nmg-smoke-no-newline-flag/requirements.md
+Feature: Add nmg-smoke --no-newline flag
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want nmg-smoke --no-newline to omit the terminator newline on successful CLI output
+  So that a long boolean CLI flag can be exercised without changing library APIs or failure behavior
+
+  @SCN001
+  Scenario: Omit final newline on success
+    Given the distribution is installed with its console script
+    When nmg-smoke --no-newline Ada is run
+    Then the process exits 0
+    And stdout is exactly Hello, Ada with no trailing newline
+    And nmg-smoke Ada --no-newline produces the same stdout and exit code
+    And stderr is empty
+
+  @SCN002
+  Scenario: Omitting the flag keeps the trailing newline
+    Given the distribution is installed with its console script
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+
+  @SCN003
+  Scenario: Repeated greetings keep separating newlines
+    Given the distribution is installed with its console script
+    When nmg-smoke --no-newline --repeat 3 Ada is run
+    Then the process exits 0
+    And stdout is exactly three Hello, Ada greetings separated by newlines, with no newline after the last greeting
+    And stderr is empty
+
+  @SCN004
+  Scenario: Uppercase composition still omits only the final newline
+    Given the distribution is installed with its console script
+    When nmg-smoke --no-newline --uppercase Ada is run
+    Then the process exits 0
+    And stdout is exactly HELLO, ADA with no trailing newline
+    And stderr is empty
+
+  @SCN005
+  Scenario: Flag without a name still fails
+    Given the distribution is installed
+    When nmg-smoke --no-newline is run with no name argument
+    Then the process exits non-zero and does not print a greeting
+
+  @SCN006
+  Scenario: Blank name with the flag still fails
+    Given a blank or whitespace-only name
+    When nmg-smoke --no-newline is invoked with that name
+    Then the CLI exits non-zero without printing a greeting to stdout
+
+  @SCN007
+  Scenario: Library APIs are unchanged
+    Given a caller imports from nmg_sdlc_smoke
+    When greet Ada and greeting_length Ada are called
+    Then greet returns Hello, Ada and greeting_length returns 10
+    And invalid names retain the existing name must not be blank ValueError
