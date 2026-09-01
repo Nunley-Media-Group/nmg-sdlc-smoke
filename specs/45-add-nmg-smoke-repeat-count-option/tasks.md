@@ -15,6 +15,8 @@
 | Docs | 1 | [ ] |
 | **Total** | 4 | |
 
+**Steering alignment**: This CLI-only change follows the registered managed steering runtime in `steering/manifest.json`; it adds no project-specific validation declaration or steering artifact change.
+
 ---
 
 ## Phase 1: CLI
