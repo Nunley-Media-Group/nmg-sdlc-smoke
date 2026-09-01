@@ -11,6 +11,70 @@ def test_cli_prints_greeting(capsys: pytest.CaptureFixture[str]) -> None:
 
 
 @pytest.mark.parametrize(
+    "argv", [["--no-newline", "Ada"], ["Ada", "--no-newline"]]
+)
+def test_cli_omits_final_newline(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(argv) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "Hello, Ada"
+    assert captured.err == ""
+
+
+@pytest.mark.parametrize(
+    ("count", "expected"),
+    [
+        ("1", "Hello, Ada"),
+        ("3", "Hello, Ada\nHello, Ada\nHello, Ada"),
+    ],
+)
+def test_cli_no_newline_preserves_repeat_separators(
+    count: str,
+    expected: str,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--no-newline", "--repeat", count, "Ada"]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == expected
+    assert captured.err == ""
+
+
+def test_cli_no_newline_composes_with_uppercase(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--no-newline", "--uppercase", "Ada"]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "HELLO, ADA"
+    assert captured.err == ""
+
+
+def test_cli_rejects_no_newline_without_name(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--no-newline"])
+
+    assert exit_info.value.code != 0
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err != ""
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n"])
+def test_cli_rejects_blank_name_with_no_newline(
+    name: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--no-newline", name])
+
+    assert exit_info.value.code == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "name must not be blank" in captured.err
+
+
+@pytest.mark.parametrize(
     "argv",
     [
         ["--prefix", "OK: ", "Ada"],

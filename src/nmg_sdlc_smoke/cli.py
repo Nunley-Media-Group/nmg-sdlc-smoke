@@ -22,6 +22,7 @@ def main(argv: list[str] | None = None) -> int:
         "--repeat", type=_positive_count, default=1, metavar="COUNT"
     )
     parser.add_argument("--prefix", default="", metavar="TEXT")
+    parser.add_argument("--no-newline", action="store_true")
     parser.add_argument("name")
     args = parser.parse_args(argv)
 
@@ -33,6 +34,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.uppercase:
         message = message.upper()
     message = args.prefix + message
-    for _ in range(args.repeat):
-        print(message)
+    for index in range(args.repeat):
+        end = "" if args.no_newline and index == args.repeat - 1 else "\n"
+        print(message, end=end)
     return 0
