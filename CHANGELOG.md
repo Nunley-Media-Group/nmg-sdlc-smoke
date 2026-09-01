@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.20.0] - 2026-09-01
+
+### Changed
+
+- Add greeting_is_ascii library function (#57)
+
 ## [3.19.0] - 2026-09-01
 
 ### Changed
