@@ -6,3 +6,6 @@ def greet(name: str) -> str:
 
 def greeting_length(name: str) -> int:
     return len(greet(name))
+
+def greeting_is_ascii(name: str) -> bool:
+    return greet(name).isascii()

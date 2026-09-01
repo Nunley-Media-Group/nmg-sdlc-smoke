@@ -16,10 +16,11 @@ python -m pip install -e ".[dev]"
 ## Library
 
 ```python
-from nmg_sdlc_smoke import greet, greeting_length
+from nmg_sdlc_smoke import greet, greeting_is_ascii, greeting_length
 
 greet("Ada")  # "Hello, Ada"
 greeting_length("Ada")  # 10
+greeting_is_ascii("Ada")  # True
 ```
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
