@@ -154,9 +154,42 @@ def inspect_tree() -> None:
 def plugin_runtime_absent() -> None:
     for path in ("workflows", "agents", "commands", "scripts", "package.json", "src/extension.ts"):
         assert not (ROOT / path).exists()
-    assert [path.name for path in (ROOT / "specs").iterdir()] == [
-        "35-convert-smoke-repository-to-a-python-sdlc-host"
-    ]
+    legacy_plugin_specs = {
+        "1-run-retro-skill",
+        "2-plugin-scaffold-and-marketplace-infrastructure",
+        "3-add-help-to-publish-approved-spec",
+        "4-draft-issue-skill",
+        "5-write-spec-skill",
+        "6-write-code-skill",
+        "7-verify-code-skill",
+        "8-open-pr-skill",
+        "9-add-execute-startup-retry-smoke-marker",
+        "10-start-issue-skill",
+        "11-add-live-smoke-a-lifecycle-verification-marker",
+        "12-add-second-serial-lifecycle-smoke-marker",
+        "17-add-third-serial-lifecycle-smoke-marker",
+        "18-add-fourth-serial-lifecycle-smoke-marker",
+        "21-migration-and-upgrade-skill",
+        "23-add-live-smoke-259-a-controller-remediation-marker",
+        "24-add-live-smoke-259-b-controller-remediation-marker",
+        "31-add-live-smoke-214-c-success-path-marker",
+        "66-onboard-project-skill",
+        "86-add-address-pr-comments-skill-to-close-the-pr-review-loop",
+        "106-simplify-skill",
+        "125-add-github-actions-contribution-gates-to-project-setup",
+        "145-add-lifecycle-status-command-for-active-sdlc-work",
+        "151-remove-the-automated-sdlc-loop-and-unattended-mode",
+        "193-reduce-injected-sdlc-workflow-tokens-while-keeping-file-command-surfaces",
+        "194-move-start-and-execute-orchestration-into-controllers-behind-sibling-workers",
+        "195-move-exact-head-delivery-into-a-controller-with-on-demand-remediation",
+        "197-move-write-spec-publication-lifecycle-into-code-while-keeping-native-plan",
+        "199-pass-github-ci-on-write-spec-spec-only-prs",
+        "208-replace-execute-simplify-with-two-branch-to-main-review-and-fix-panes",
+        "209-remove-draft-issue-run-total-ask-quota",
+        "216-honor-passed-worker-handoff-after-prompt-wait-failure",
+    }
+    current_specs = {path.name for path in (ROOT / "specs").iterdir()}
+    assert legacy_plugin_specs.isdisjoint(current_specs)
     assert not list(ROOT.glob("LIVE_SMOKE*.txt"))
 
 
