@@ -55,6 +55,15 @@ $ nmg-smoke --prefix 'OK: ' Ada
 OK: Hello, Ada
 ```
 
+Use `--no-newline` to omit the trailing newline from successful output:
+
+```console
+$ nmg-smoke --no-newline Ada
+Hello, Ada
+```
+
+The output above is exactly `Hello, Ada` without a trailing newline.
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification
