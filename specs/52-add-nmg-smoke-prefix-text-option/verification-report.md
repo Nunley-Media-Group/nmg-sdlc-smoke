@@ -56,6 +56,7 @@ The registered steering runtime is valid. This issue declares no project-specifi
 - Local verification: Pass
 - PR evidence: Not required
 - Plugin exercise: Not applicable; changed paths contain no `workflows/` or `agents/` plugin files
+- Release metadata: `VERSION` contains `3.19.0`; `pyproject.toml` continues to read the distribution version dynamically from that file
 
 ---
 
