@@ -12,3 +12,6 @@ def greeting_bytes(name: str) -> int:
 
 def greeting_is_ascii(name: str) -> bool:
     return greet(name).isascii()
+
+def greeting_contains_name(name: str) -> bool:
+    return name in greet(name)

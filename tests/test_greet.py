@@ -1,6 +1,12 @@
 import pytest
 
-from nmg_sdlc_smoke import greet, greeting_bytes, greeting_is_ascii, greeting_length
+from nmg_sdlc_smoke import (
+    greet,
+    greeting_bytes,
+    greeting_contains_name,
+    greeting_is_ascii,
+    greeting_length,
+)
 
 
 def test_greet_returns_exact_message() -> None:
@@ -68,3 +74,26 @@ def test_greeting_is_ascii_returns_false_for_non_ascii_greeting() -> None:
 def test_greeting_is_ascii_rejects_blank_and_non_string_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_is_ascii(name)  # type: ignore[arg-type]
+
+
+def test_greeting_contains_name_returns_membership_for_ada() -> None:
+    result = greeting_contains_name("Ada")
+
+    assert result is True
+    assert result == ("Ada" in greet("Ada"))
+
+
+def test_greeting_contains_name_returns_membership_for_jo() -> None:
+    result = greeting_contains_name("Jo")
+
+    assert result is True
+    assert result == ("Jo" in greet("Jo"))
+    assert "Ada" not in greet("Jo")
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n", None, 42])
+def test_greeting_contains_name_rejects_blank_and_non_string_names(
+    name: object,
+) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_contains_name(name)  # type: ignore[arg-type]
