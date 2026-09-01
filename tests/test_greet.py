@@ -1,6 +1,6 @@
 import pytest
 
-from nmg_sdlc_smoke import greet, greeting_is_ascii, greeting_length
+from nmg_sdlc_smoke import greet, greeting_bytes, greeting_is_ascii, greeting_length
 
 
 def test_greet_returns_exact_message() -> None:
@@ -28,6 +28,29 @@ def test_greeting_length_returns_full_greeting_length() -> None:
 def test_greeting_length_rejects_blank_and_non_string_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_length(name)  # type: ignore[arg-type]
+
+
+def test_greeting_bytes_returns_ascii_greeting_byte_count() -> None:
+    result = greeting_bytes("Ada")
+
+    assert result == 10
+    assert result == len(greet("Ada").encode("utf-8"))
+
+
+def test_greeting_bytes_returns_non_ascii_greeting_byte_count() -> None:
+    result = greeting_bytes("É")
+
+    assert result == 9
+    assert result == len(greet("É").encode("utf-8"))
+    assert greeting_length("É") == 8
+    assert result != greeting_length("É")
+    assert result != greeting_bytes("Ada")
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n", None, 42])
+def test_greeting_bytes_rejects_blank_and_non_string_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_bytes(name)  # type: ignore[arg-type]
 
 
 def test_greeting_is_ascii_returns_true_for_ascii_greeting() -> None:

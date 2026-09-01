@@ -16,10 +16,11 @@ python -m pip install -e ".[dev]"
 ## Library
 
 ```python
-from nmg_sdlc_smoke import greet, greeting_is_ascii, greeting_length
+from nmg_sdlc_smoke import greet, greeting_bytes, greeting_is_ascii, greeting_length
 
 greet("Ada")  # "Hello, Ada"
 greeting_length("Ada")  # 10
+greeting_bytes("Ada")  # 10
 greeting_is_ascii("Ada")  # True
 ```
 
