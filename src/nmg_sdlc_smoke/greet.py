@@ -3,3 +3,6 @@ def greet(name: str) -> str:
     if not isinstance(name, str) or not name.strip():
         raise ValueError("name must not be blank")
     return f"Hello, {name}"
+
+def greeting_length(name: str) -> int:
+    return len(greet(name))
