@@ -1,3 +1,5 @@
+from importlib import import_module
+
 import pytest
 from pytest_bdd import given, scenarios, then, when
 
@@ -5,6 +7,7 @@ from nmg_sdlc_smoke import greet, greeting_bytes, greeting_length
 from nmg_sdlc_smoke.cli import main
 
 scenarios("../add_greeting_bytes_library_function.feature")
+greet_module = import_module("nmg_sdlc_smoke.greet")
 
 
 @pytest.fixture
@@ -69,18 +72,28 @@ def differs_from_ada_count(context: dict[str, object]) -> None:
 
 
 @when("greeting_bytes is called with a blank, whitespace-only, or non-string name")
-def greeting_bytes_invalid_names(context: dict[str, object]) -> None:
+def greeting_bytes_invalid_names(
+    context: dict[str, object], monkeypatch: pytest.MonkeyPatch
+) -> None:
     errors: list[ValueError] = []
-    greet_errors: list[ValueError] = []
     for name in ("", " ", "\t", "\n", None, 42):
         with pytest.raises(ValueError) as error:
             greeting_bytes(name)  # type: ignore[arg-type]
-        with pytest.raises(ValueError) as greet_error:
-            greet(name)  # type: ignore[arg-type]
         errors.append(error.value)
-        greet_errors.append(greet_error.value)
+
+    sentinel_error = ValueError("name must not be blank")
+
+    def delegated_greet(name: str) -> str:
+        assert name == ""
+        raise sentinel_error
+
+    monkeypatch.setattr(greet_module, "greet", delegated_greet)
+    with pytest.raises(ValueError) as delegated_error:
+        greeting_bytes("")
+
     context["errors"] = errors
-    context["greet_errors"] = greet_errors
+    context["sentinel_error"] = sentinel_error
+    context["delegated_error"] = delegated_error.value
 
 
 @then("it raises ValueError with message name must not be blank")
@@ -95,15 +108,7 @@ def raises_existing_message(context: dict[str, object]) -> None:
     "that error is the existing greet validation error, not a wrapped or renamed error"
 )
 def propagates_greet_error(context: dict[str, object]) -> None:
-    errors = context["errors"]
-    greet_errors = context["greet_errors"]
-    assert isinstance(errors, list)
-    assert isinstance(greet_errors, list)
-    assert [(type(error), str(error)) for error in errors] == [
-        (type(error), str(error)) for error in greet_errors
-    ]
-    assert all(error.__cause__ is None for error in errors)
-    assert all(error.__context__ is None for error in errors)
+    assert context["delegated_error"] is context["sentinel_error"]
 
 
 @when("greet is called with Ada")
