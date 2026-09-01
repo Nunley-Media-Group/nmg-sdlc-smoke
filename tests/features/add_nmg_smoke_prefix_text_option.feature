@@ -49,7 +49,7 @@ Feature: Add nmg-smoke --prefix TEXT option
   @SCN007
   Scenario: Prefix applies to each printed line after uppercase
     Given the distribution is installed with its console script
-    When nmg-smoke --prefix 'OK: ' --uppercase Ada is run
-    Then the process exits 0 and prints OK: HELLO, ADA followed by a single newline
+    When nmg-smoke --prefix 'ok: ' --uppercase Ada is run
+    Then the process exits 0 and prints ok: HELLO, ADA followed by a single newline
     And when nmg-smoke --prefix 'OK: ' --repeat 2 Ada is run, stdout is exactly two lines of OK: Hello, Ada, each followed by a newline
     And the supplied TEXT is not itself uppercased

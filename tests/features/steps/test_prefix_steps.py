@@ -84,22 +84,22 @@ def invoke_prefix_without_name(
     context["captured"] = capsys.readouterr()
 
 
-@when("nmg-smoke --prefix 'OK: ' --uppercase Ada is run")
+@when("nmg-smoke --prefix 'ok: ' --uppercase Ada is run")
 def invoke_prefixed_uppercase_cli(
     context: dict[str, object], capsys: pytest.CaptureFixture[str]
 ) -> None:
-    context["exit_code"] = main(["--prefix", "OK: ", "--uppercase", "Ada"])
+    context["exit_code"] = main(["--prefix", "ok: ", "--uppercase", "Ada"])
     captured = capsys.readouterr()
     context["captured"] = captured
     context["uppercase_stdout"] = captured.out
 
 
-@then("the process exits 0 and prints OK: HELLO, ADA followed by a single newline")
+@then("the process exits 0 and prints ok: HELLO, ADA followed by a single newline")
 def exact_prefixed_uppercase_output(context: dict[str, object]) -> None:
     captured = context["captured"]
     assert isinstance(captured, tuple)
     assert context["exit_code"] == 0
-    assert captured.out == "OK: HELLO, ADA\n"
+    assert captured.out == "ok: HELLO, ADA\n"
     assert captured.err == ""
 
 
@@ -115,4 +115,4 @@ def prefix_each_repeated_line(capsys: pytest.CaptureFixture[str]) -> None:
 def prefix_is_not_uppercased(context: dict[str, object]) -> None:
     uppercase_stdout = context["uppercase_stdout"]
     assert isinstance(uppercase_stdout, str)
-    assert uppercase_stdout.startswith("OK: ")
+    assert uppercase_stdout.startswith("ok: ")
