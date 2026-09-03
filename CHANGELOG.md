@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.24.0] - 2026-09-03
+
+### Changed
+
+- Add greeting_starts_with_hello library function (#68)
+
 ## [3.23.0] - 2026-09-01
 
 ### Changed
