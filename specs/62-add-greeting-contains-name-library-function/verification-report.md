@@ -1,6 +1,6 @@
 # Verification Report: Add greeting_contains_name library function
 
-**Date**: 2026-09-01
+**Date**: 2026-09-03
 **Issue**: #62
 **Reviewer**: Codex (`architecture-reviewer` inline review)
 **Scope**: Implementation verification against approved spec
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Issue #62 is complete against its approved specification. `greeting_contains_name(name)` delegates validation and greeting construction to `greet(name)`, returns the Python membership bool, remains a pure library helper, and is exported without dropping the existing public surface. All four acceptance criteria, all four implementation tasks, the full test suite, the dedicated BDD suite, Ruff, and installed CLI smoke checks passed. No architecture, security, performance, testability, or error-handling findings remain.
+Issue #62 passes its approved delivery and regression contracts. `greeting_contains_name(name)` is the exact pure membership operation `name in greet(name)`, reuses the existing validation path, and is exported without removing prior public names. All four acceptance criteria and tasks are evidenced. The isolated install, full pytest suite, dedicated BDD suite, Ruff, and installed CLI smoke lifecycle passed. No review finding required a code fix.
 
 | Category | Score (1-5) |
 |----------|-------------|
@@ -22,18 +22,17 @@ Issue #62 is complete against its approved specification. `greeting_contains_nam
 | **Overall** | **5.0** |
 
 ### Implementation Status: Pass
-**Total Issues**: 0
 
----
+**Total Issues**: 0
 
 ## Deterministic Steering Artifact and Ceiling
 
 - Artifact: `.omp/sdlc/verification/62.json`
-- Identity head: `d315f3f80da6795376081ea78bb56dc39deae4ed`
+- Identity head: `d7b5f95a87b4e9479ea708daa79ab603d413c27e`
 - Coverage: `declared: 0`, `recorded: 0`, `complete: true`
 - Missing / duplicate / unknown results: none
 - Ceiling: none
-- Interpretation: the manifest declares no project-specific validations; zero declared and zero recorded is complete, not missing evidence.
+- Interpretation: the steering manifest declares no project-specific validations. Zero declarations and zero results is complete evidence.
 
 ## Issue Scope
 
@@ -51,119 +50,89 @@ Issue #62 is complete against its approved specification. `greeting_contains_nam
 - Local verification: Pass
 - PR evidence: Not required
 
----
-
 ## Acceptance Criteria Verification
 
 | AC | Description | Status | Evidence |
 |----|-------------|--------|----------|
-| AC1 | Valid `Ada` returns Python `True` equal to membership in `greet("Ada")`. | Pass | `src/nmg_sdlc_smoke/greet.py:16-17`; `tests/test_greet.py:79-83`; `tests/features/add_greeting_contains_name_library_function.feature:8-14`; BDD suite passed. |
-| AC2 | A different name, `Jo`, also returns membership `True` and is not Ada-specific. | Pass | `src/nmg_sdlc_smoke/greet.py:16-17`; `tests/test_greet.py:86-91`; `tests/features/steps/test_greeting_contains_name_steps.py:50-66`; BDD suite passed. |
-| AC3 | Blank, whitespace-only, and non-string values propagate the existing unwrapped `ValueError`. | Pass | `src/nmg_sdlc_smoke/greet.py:1-5,16-17`; `tests/test_greet.py:94-99`; `tests/features/steps/test_greeting_contains_name_steps.py:69-102`; BDD suite passed. |
-| AC4 | Existing `greet` and CLI behavior remains unchanged. | Pass | `src/nmg_sdlc_smoke/greet.py:1-5`; unchanged `src/nmg_sdlc_smoke/cli.py`; `tests/features/steps/test_greeting_contains_name_steps.py:105-138`; installed CLI smoke produced `Hello, Ada\n`, while an empty name exited 1 with no greeting. |
+| AC1 | `greeting_contains_name("Ada")` returns Python `True` equal to membership in `greet("Ada")`. | Pass | `src/nmg_sdlc_smoke/greet.py:16-17`; `tests/test_greet.py:79-83`; SCN001 passed in the BDD suite. |
+| AC2 | `Jo` also returns membership `True`; behavior is not Ada-specific. | Pass | `src/nmg_sdlc_smoke/greet.py:16-17`; `tests/test_greet.py:86-91`; `tests/features/steps/test_greeting_contains_name_steps.py:50-66`; SCN002 passed. |
+| AC3 | Blank, whitespace-only, and non-string values propagate the existing `ValueError("name must not be blank")` without wrapping. | Pass | `src/nmg_sdlc_smoke/greet.py:1-5,16-17`; `tests/test_greet.py:94-99`; `tests/features/steps/test_greeting_contains_name_steps.py:69-102`; SCN003 passed. |
+| AC4 | Existing `greet` and CLI behavior remains unchanged. | Pass | `src/nmg_sdlc_smoke/greet.py:1-5`; `src/nmg_sdlc_smoke/cli.py` is absent from the issue diff; SCN004, the full suite, and installed CLI success/failure smoke paths passed. |
 
 ## Regression Obligations
 
 | Obligation | Status | Evidence |
 |------------|--------|----------|
-| AC4 / FR4 / SCN004: preserve `greet`, helper, and `nmg-smoke` behavior | Pass | Steering artifact changed paths omit `src/nmg_sdlc_smoke/cli.py` and `tests/test_cli.py`; full suite passed 132 tests; installed success and invalid-input CLI paths behaved as specified. |
-
----
+| AC4 / FR4 / SCN004: preserve `greet`, `greeting_length`, `greeting_is_ascii`, and `nmg-smoke` behavior | Pass | Existing function bodies remain exact; `src/nmg_sdlc_smoke/cli.py` and `tests/test_cli.py` are unchanged; 132/132 full-suite tests passed; installed CLI returned 0 for `Ada` and 1 for an empty name with no stdout greeting. |
 
 ## Task Completion
 
-| Task | Description | Status | Notes |
-|------|-------------|--------|-------|
-| T001 | Add and export `greeting_contains_name`. | Complete | Exact `return name in greet(name)` implementation; existing exports including `greeting_bytes` retained; no CLI or runtime dependency change. |
-| T002 | Add unit coverage and preserve greeting/helper contracts. | Complete | Ada, Jo, six invalid inputs, and existing helper behavior covered; full suite passed. |
-| T003 | Add executable pytest-bdd feature and steps for AC1-AC4. | Complete | `SCN001`-`SCN004` map 1:1; dedicated feature suite passed 48 tests. |
-| T004 | Document the public helper. | Complete | `README.md:19-31` retains prior examples and adds `greeting_contains_name("Ada")  # True`. |
-
----
+| Task | Status | Evidence |
+|------|--------|----------|
+| T001: add and export `greeting_contains_name` | Complete | `src/nmg_sdlc_smoke/greet.py:16-17` is exactly `return name in greet(name)`; `src/nmg_sdlc_smoke/__init__.py:1-15` exports it and retains `greeting_bytes` and all required names. No new module or runtime dependency. |
+| T002: unit tests and preserved helper contracts | Complete | `tests/test_greet.py` covers Ada, Jo, and six invalid values; full suite passed 132 tests. |
+| T003: pytest-bdd feature and steps | Complete | Dedicated feature and step module provide SCN001-SCN004; feature suite passed 48 tests. |
+| T004: README library example | Complete | `README.md:19-31` retains prior examples and adds `greeting_contains_name("Ada")  # True`. |
 
 ## Architecture Assessment
 
-The `architecture-reviewer` reviewed the implementation against all five required checklists. Scores are proportional to this minimal pure-library scope; web, database, authentication, transport, UI, caching, and service-layer controls are not applicable and were not treated as missing architecture.
-
-### Architecture Scores
+The five required checklists were applied proportionally to this pure-library change. Authentication, authorization, transport, database, caching, concurrency, UI, and service-layer controls are not applicable.
 
 | Area | Score (1-5) | Findings |
 |------|-------------|----------|
-| SOLID Principles | 5 | One focused pure function; canonical `greet` contract reused; no needless interface, service layer, module, or dependency inversion mechanism. |
-| Security | 5 | Existing validation is reused; no new input sink, command execution, persistence, network, secret, or dependency surface. |
-| Performance | 5 | One greeting construction and one membership operation; no avoidable allocation beyond the required greeting result and no persistent resources. |
-| Testability | 5 | Deterministic pure function with direct unit and independent BDD coverage for success, alternate input, invalid inputs, and regression behavior. |
-| Error Handling | 5 | Exact existing `ValueError("name must not be blank")` propagates without catching, wrapping, renaming, or losing context. |
+| SOLID Principles | 5 | One focused pure function in the existing greeting module. It depends on the canonical `greet` contract rather than duplicating validation or adding an interface/module. |
+| Security | 5 | Existing validation is reused. No command, network, persistence, secret, dependency, or untrusted-output surface was introduced. |
+| Performance | 5 | One required greeting construction and one string-membership operation; no retained state, resource, redundant traversal, or avoidable abstraction. |
+| Testability | 5 | Deterministic pure behavior has direct unit and independent BDD coverage across primary, alternate, invalid, and regression paths. |
+| Error Handling | 5 | The exact existing `ValueError` propagates naturally without catching, wrapping, renaming, swallowing, or adding cause/context. |
 
 **Architecture average**: 5.0 / 5.0
 
 ### SOLID Detail
 
-| Principle | Score | Notes |
-|-----------|-------|-------|
-| Single Responsibility | 5 | `greeting_contains_name` only derives membership from `greet(name)`. |
-| Open/Closed | 5 | The public API is extended while existing `greet`, length, ASCII, bytes, and CLI implementations remain unchanged. |
-| Liskov Substitution | 5 | No subtype hierarchy exists; existing public callables retain their contracts. |
-| Interface Segregation | 5 | One focused function export; no consumer is forced through a broad interface. |
-| Dependency Inversion | 5 | The helper depends on the canonical greeting contract instead of duplicating validation; introducing DI would add weight without a seam to abstract. |
+- **Single Responsibility**: the helper only derives containment from the greeting.
+- **Open/Closed**: the package API is extended while existing implementations remain unchanged.
+- **Liskov Substitution**: no subtype hierarchy is involved; existing callable contracts are preserved.
+- **Interface Segregation**: callers opt into one focused function.
+- **Dependency Inversion**: reuse of the canonical greeting function is the correct dependency boundary; dependency injection would add weight without a useful seam.
 
-### Layer Separation and Dependency Flow
+### Security, Performance, and Error Detail
 
-The dependency direction remains `public package export -> pure greeting module`. The CLI may use the library, while the library does not depend on the CLI, tests, workflow, repository layout, or external packages. No new module or framework was introduced.
-
----
-
-## Security Assessment
-
-- Authentication and authorization: not applicable; no protected resource or endpoint.
-- Input validation: Pass; `greet` remains the sole validator.
-- Injection prevention: Pass; no SQL, shell, HTML, HTTP, or persistence sink exists.
-- Data protection and transport: not applicable; no sensitive data or network path.
-- Dependency security: Pass; zero runtime dependencies remain.
-
-## Performance Assessment
-
-- Async/concurrency: not applicable; the operation is synchronous CPU-local work.
-- Caching: not applicable; the operation is deterministic and trivial.
-- Resource management: Pass; no handles, streams, connections, retained state, or unbounded collection.
-- Database/UI/network optimization: not applicable.
-
-## Error Handling Assessment
-
-- Validation message remains exact and actionable.
-- No error is swallowed or converted to a generic result.
-- Invalid inputs use the original `ValueError` type and message with no cause/context introduced.
-- Custom error hierarchies, HTTP mappings, retry logic, and telemetry are not applicable to this one-line library helper.
-
----
+- Input validation remains centralized in `greet`.
+- The operation is synchronous, CPU-local, bounded by the input/greeting length, and owns no external resources.
+- No exception is hidden or converted to a result; invalid values preserve type and message.
+- Zero runtime dependencies remain.
 
 ## Test Results
 
 | Command / Scenario | Result | Evidence |
 |--------------------|--------|----------|
-| `.omp/sdlc/verify-venv/bin/python -m pip install -e ".[dev]"` | Pass | Editable package and dev dependencies installed in an isolated environment. |
-| `.omp/sdlc/verify-venv/bin/python -m pytest` | Pass | 132 passed in 0.12s; 87 dependency deprecation warnings. |
-| `.omp/sdlc/verify-venv/bin/python -m pytest tests/features` | Pass | 48 passed in 0.08s; all four issue scenarios passed. |
+| `python -m venv .omp/sdlc/verify-venv && .omp/sdlc/verify-venv/bin/python -m pip install -e ".[dev]"` | Pass | Editable distribution `nmg-sdlc-smoke-python==3.23.0` and development dependencies installed in an isolated environment. |
+| `.omp/sdlc/verify-venv/bin/python -m pytest` | Pass | 132 passed in 0.15s; 87 dependency deprecation warnings. |
+| `.omp/sdlc/verify-venv/bin/python -m pytest tests/features` | Pass | 48 passed in 0.10s; all four issue scenarios passed. |
 | `.omp/sdlc/verify-venv/bin/python -m ruff check .` | Pass | `All checks passed!` |
-| `.omp/sdlc/verify-venv/bin/nmg-smoke Ada` | Pass | Exit 0; stdout `Hello, Ada\n`. |
-| `.omp/sdlc/verify-venv/bin/nmg-smoke ""` | Pass | Expected exit 1; stderr `nmg-smoke: error: name must not be blank`; no stdout greeting. |
+| `.omp/sdlc/verify-venv/bin/nmg-smoke Ada` | Pass | Exit 0; stdout was exactly `Hello, Ada` followed by one newline. |
+| `.omp/sdlc/verify-venv/bin/nmg-smoke ""` | Pass | Expected exit 1; stderr was `nmg-smoke: error: name must not be blank`; no stdout greeting. |
 
 ### BDD Coverage
 
-| Acceptance Criterion | Has Scenario | Has Steps | Passes |
-|---------------------|--------------|-----------|--------|
-| AC1 / SCN001 | Yes | Yes | Yes |
-| AC2 / SCN002 | Yes | Yes | Yes |
-| AC3 / SCN003 | Yes | Yes | Yes |
-| AC4 / SCN004 | Yes | Yes | Yes |
+| Acceptance Criterion | Scenario | Steps | Result |
+|---------------------|----------|-------|--------|
+| AC1 | SCN001 | Implemented | Pass |
+| AC2 | SCN002 | Implemented | Pass |
+| AC3 | SCN003 | Implemented | Pass |
+| AC4 | SCN004 | Implemented | Pass |
 
 - BDD scenarios: 4/4 approved criteria covered and passing.
-- Step definitions: Implemented in `tests/features/steps/test_greeting_contains_name_steps.py`.
-- Unit tests: implementation-specific tests plus preserved regression coverage; full suite 132/132 passing.
-- Plugin exercise: not applicable. Changed paths contain no `workflows/` or `agents/` plugin files.
-- Steering doc verification gates: omitted because the steering manifest declares zero project-specific validations and coverage is complete.
+- Plugin exercise: not applicable; the issue diff contains no `workflows/` or `agents/` files.
+- Steering validations: zero declared, zero recorded, complete coverage; no gate table is required.
 
----
+## Real Smoke Lifecycle Evidence
+
+The installed console script was exercised rather than only invoked through test code:
+
+1. Valid lifecycle: `nmg-smoke Ada` exited 0 and emitted exactly `Hello, Ada\n`.
+2. Invalid lifecycle: `nmg-smoke ""` exited 1, emitted no stdout greeting, and reported the existing validation message on stderr.
 
 ## Fixes Applied
 
@@ -172,43 +141,6 @@ None. Review found no safe local correction necessary.
 ## Remaining Issues
 
 None.
-
-## Positive Observations
-
-- Implementation is the exact contract expression: `return name in greet(name)`.
-- Validation remains centralized in `greet` and propagates unchanged.
-- Existing public export `greeting_bytes` was retained during the API extension.
-- Tests defend bool identity, alternate-name behavior, invalid-input propagation, CLI output, and exit status.
-
-## Recommendations Summary
-
-### Before PR (Must)
-
-- [x] No remaining local obligation.
-
-### Short Term (Should)
-
-- [x] No follow-up required for issue #62.
-
-### Long Term (Could)
-
-- [x] No additional abstraction warranted.
-
----
-
-## Files Reviewed
-
-| File | Issues | Notes |
-|------|--------|-------|
-| `src/nmg_sdlc_smoke/greet.py` | 0 | Exact pure helper implementation and unchanged validators/helpers. |
-| `src/nmg_sdlc_smoke/__init__.py` | 0 | Public export added; prior exports retained. |
-| `tests/test_greet.py` | 0 | Unit contracts cover AC1-AC3 and helper regressions. |
-| `tests/features/add_greeting_contains_name_library_function.feature` | 0 | Four scenarios map 1:1 to AC1-AC4. |
-| `tests/features/steps/test_greeting_contains_name_steps.py` | 0 | Complete deterministic step definitions. |
-| `README.md` | 0 | Concise library usage added without CLI scope creep. |
-| `.omp/sdlc/verification/62.json` | 0 | Complete deterministic steering coverage; no ceiling. |
-
----
 
 ## Overall Status
 
