@@ -6,6 +6,7 @@ from nmg_sdlc_smoke import (
     greeting_bytes,
     greeting_is_ascii,
     greeting_length,
+    greeting_starts_with_hello,
 )
 
 
@@ -102,3 +103,24 @@ def test_greeting_is_ascii_returns_false_for_non_ascii_greeting() -> None:
 def test_greeting_is_ascii_rejects_blank_and_non_string_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_is_ascii(name)  # type: ignore[arg-type]
+
+
+def test_greeting_starts_with_hello_returns_true_for_ada() -> None:
+    result = greeting_starts_with_hello("Ada")
+
+    assert result is True
+    assert result == greet("Ada").startswith("Hello, ")
+
+
+def test_greeting_starts_with_hello_returns_true_for_jo() -> None:
+    result = greeting_starts_with_hello("Jo")
+
+    assert result is True
+    assert result == greet("Jo").startswith("Hello, ")
+    assert greet("Jo") != greet("Ada")
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n", None, 42])
+def test_greeting_starts_with_hello_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_starts_with_hello(name)  # type: ignore[arg-type]

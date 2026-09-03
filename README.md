@@ -16,13 +16,14 @@ python -m pip install -e ".[dev]"
 ## Library
 
 ```python
-from nmg_sdlc_smoke import greet, greet_many, greeting_bytes, greeting_is_ascii, greeting_length
+from nmg_sdlc_smoke import greet, greet_many, greeting_bytes, greeting_is_ascii, greeting_length, greeting_starts_with_hello
 
 greet("Ada")  # "Hello, Ada"
 greet_many(["Ada", "Bob"])  # ["Hello, Ada", "Hello, Bob"]
 greeting_length("Ada")  # 10
 greeting_bytes("Ada")  # 10
 greeting_is_ascii("Ada")  # True
+greeting_starts_with_hello("Ada")  # True
 ```
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
