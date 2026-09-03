@@ -1,0 +1,34 @@
+# File: tests/features/add_nmg_smoke_version_output.feature
+# Generated from: specs/39-add-nmg-smoke-version-output/requirements.md
+Feature: Add nmg-smoke --version output
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want nmg-smoke --version to print the installed package version and exit 0 without a name
+  So that installed version identity is observable independently of the greeting path
+
+  @SCN001
+  Scenario: Version flag without a name
+    Given the distribution is installed
+    When nmg-smoke --version is run
+    Then the process exits 0
+    And stdout is exactly the installed package version derived through importlib.metadata for nmg-sdlc-smoke-python, followed by a single newline
+    And a name argument is not required
+
+  @SCN002
+  Scenario: Existing greeting is unchanged
+    Given the distribution is installed with its console script
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+
+  @SCN003
+  Scenario: Missing name still fails when version is not requested
+    Given the distribution is installed
+    When nmg-smoke is run with no arguments
+    Then the process exits non-zero and does not print a greeting
+
+  @SCN004
+  Scenario: Version wins when a name is also present
+    Given the distribution is installed
+    When nmg-smoke --version is run with a name also present
+    Then the process exits 0
+    And stdout is exactly the installed package version derived through importlib.metadata for nmg-sdlc-smoke-python, followed by a single newline
+    And the process does not print a greeting

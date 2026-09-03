@@ -30,6 +30,13 @@ $ nmg-smoke Ada
 Hello, Ada
 ```
 
+```console
+$ nmg-smoke --version
+<installed nmg-sdlc-smoke-python version>
+```
+
+`nmg-smoke --version` prints the installed `nmg-sdlc-smoke-python` version followed by a newline and exits 0.
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification

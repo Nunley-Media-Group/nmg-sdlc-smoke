@@ -154,9 +154,9 @@ def inspect_tree() -> None:
 def plugin_runtime_absent() -> None:
     for path in ("workflows", "agents", "commands", "scripts", "package.json", "src/extension.ts"):
         assert not (ROOT / path).exists()
-    assert [path.name for path in (ROOT / "specs").iterdir()] == [
-        "35-convert-smoke-repository-to-a-python-sdlc-host"
-    ]
+    assert (
+        ROOT / "specs/35-convert-smoke-repository-to-a-python-sdlc-host"
+    ).is_dir()
     assert not list(ROOT.glob("LIVE_SMOKE*.txt"))
 
 
