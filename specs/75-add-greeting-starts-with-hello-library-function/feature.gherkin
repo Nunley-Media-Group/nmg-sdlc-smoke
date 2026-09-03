@@ -1,0 +1,32 @@
+**Issue**: #75
+**Date**: 2026-09-03
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_starts_with_hello_library_function.feature
+# Generated from: specs/75-add-greeting-starts-with-hello-library-function/requirements.md
+Feature: Add greeting_starts_with_hello library function
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want a greeting_starts_with_hello library helper
+  So that callers can verify the greeting prefix without changing greet or the CLI
+
+  @SCN001
+  Scenario: Valid greeting reports the expected prefix
+    Given the library is importable
+    When greeting_starts_with_hello is called with Ada
+    Then it returns the Python bool True
+    And the value equals greet Ada startswith Hello comma space
+
+  @SCN002
+  Scenario: Existing validation is preserved
+    Given the library is importable
+    When greeting_starts_with_hello receives invalid names
+    Then each call raises ValueError with message name must not be blank
+    And the errors are propagated without wrapping
+
+  @SCN003
+  Scenario: Existing public behavior is unchanged
+    Given the distribution is installed
+    When greet and nmg-smoke are used with Ada
+    Then greet returns Hello, Ada
+    And the CLI exits 0 and prints Hello, Ada followed by one newline
