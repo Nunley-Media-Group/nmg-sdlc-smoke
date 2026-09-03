@@ -1,0 +1,42 @@
+**Issue**: #71
+**Date**: 2026-09-03
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_ends_with_name_library_helper.feature
+# Generated from: specs/71-add-greeting-ends-with-name-library-helper/requirements.md
+Feature: Add greeting_ends_with_name library helper
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want a public greeting_ends_with_name(name) library helper
+  So that callers can observe whether the generated greeting ends with the supplied name while retaining the existing greeting and CLI contracts
+
+  @SCN001
+  Scenario: A valid name returns the greeting suffix result
+    Given the installed package is importable
+    When greeting_ends_with_name is called with Ada
+    Then it returns True
+    And that value equals greet Ada endswith Ada
+
+  @SCN002
+  Scenario: A different valid name uses that same name
+    Given the installed package is importable
+    When greeting_ends_with_name is called with Jo
+    Then it returns True
+    And that value equals greet Jo endswith Jo
+    And the result is not specific to the Ada example
+
+  @SCN003
+  Scenario: Invalid names preserve greet validation
+    Given greeting_ends_with_name is imported from the public package
+    When greeting_ends_with_name is called with a blank, whitespace-only, or non-string name
+    Then it raises ValueError with message name must not be blank
+    And that error is the existing greet validation error, not a wrapped or renamed error
+
+  @SCN004
+  Scenario: Existing greeting and CLI behavior remains unchanged
+    Given the distribution is installed
+    When greet is called with Ada
+    Then it returns Hello, Ada
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+    And blank names still raise ValueError from greet and still cause the CLI to exit non-zero without a stdout greeting
