@@ -24,3 +24,7 @@ def greeting_is_ascii(name: str) -> bool:
 
 def greeting_starts_with_hello(name: str) -> bool:
     return greet(name).startswith("Hello, ")
+
+
+def greeting_ends_with_name(name: str) -> bool:
+    return greet(name).endswith(name)

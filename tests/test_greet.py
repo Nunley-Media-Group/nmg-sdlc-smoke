@@ -4,6 +4,7 @@ from nmg_sdlc_smoke import (
     greet,
     greet_many,
     greeting_bytes,
+    greeting_ends_with_name,
     greeting_is_ascii,
     greeting_length,
     greeting_starts_with_hello,
@@ -124,3 +125,24 @@ def test_greeting_starts_with_hello_returns_true_for_jo() -> None:
 def test_greeting_starts_with_hello_rejects_invalid_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_starts_with_hello(name)  # type: ignore[arg-type]
+
+
+def test_greeting_ends_with_name_returns_true_for_ada() -> None:
+    result = greeting_ends_with_name("Ada")
+
+    assert result is True
+    assert result == greet("Ada").endswith("Ada")
+
+
+def test_greeting_ends_with_name_returns_true_for_jo() -> None:
+    result = greeting_ends_with_name("Jo")
+
+    assert result is True
+    assert result == greet("Jo").endswith("Jo")
+    assert greet("Jo") != greet("Ada")
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n", None, 42])
+def test_greeting_ends_with_name_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_ends_with_name(name)  # type: ignore[arg-type]
