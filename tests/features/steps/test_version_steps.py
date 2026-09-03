@@ -29,7 +29,6 @@ def invoke_version(
 ) -> None:
     with pytest.raises(SystemExit) as exit_info:
         main(["--version"])
-    context["argv"] = ["--version"]
     context["exit_code"] = exit_info.value.code
     context["captured"] = capsys.readouterr()
 
@@ -79,10 +78,6 @@ def stdout_is_installed_version(context: dict[str, object]) -> None:
     )
     assert captured.err == ""
 
-
-@then("a name argument is not required")
-def name_not_required(context: dict[str, object]) -> None:
-    assert context["argv"] == ["--version"]
 
 
 @then("the process exits 0 and prints Hello, Ada followed by a single newline")

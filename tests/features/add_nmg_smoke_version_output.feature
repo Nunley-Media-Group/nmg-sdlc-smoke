@@ -11,7 +11,6 @@ Feature: Add nmg-smoke --version output
     When nmg-smoke --version is run
     Then the process exits 0
     And stdout is exactly the installed package version derived through importlib.metadata for nmg-sdlc-smoke-python, followed by a single newline
-    And a name argument is not required
 
   @SCN002
   Scenario: Existing greeting is unchanged
