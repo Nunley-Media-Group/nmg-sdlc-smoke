@@ -134,5 +134,6 @@ def blank_names_still_fail(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as exit_info:
         main([""])
     captured = capsys.readouterr()
-    assert exit_info.value.code != 0
+    assert isinstance(exit_info.value.code, int)
+    assert exit_info.value.code > 0
     assert captured.out == ""
