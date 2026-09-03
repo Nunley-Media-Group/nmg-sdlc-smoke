@@ -1,10 +1,9 @@
 import importlib.metadata
-import shutil
-import subprocess
 
 import pytest
 from pytest_bdd import given, scenarios, then, when
 
+from nmg_sdlc_smoke.cli import main
 
 scenarios("../add_nmg_smoke_version_output.feature")
 
@@ -30,45 +29,51 @@ def distribution_installed_with_console_script() -> None:
     ]
     assert len(console_scripts) == 1
     assert console_scripts[0].value == "nmg_sdlc_smoke.cli:main"
-    assert shutil.which("nmg-smoke") is not None
 
 
-def run_console_script(context: dict[str, object], *arguments: str) -> None:
-    executable = shutil.which("nmg-smoke")
-    assert executable is not None
-    context["result"] = subprocess.run(
-        [executable, *arguments],
-        capture_output=True,
-        check=False,
-        text=True,
-    )
+def run_cli(
+    context: dict[str, object],
+    capsys: pytest.CaptureFixture[str],
+    *arguments: str,
+) -> None:
+    try:
+        context["exit_code"] = main(list(arguments))
+    except SystemExit as error:
+        context["exit_code"] = error.code
+    context["captured"] = capsys.readouterr()
 
 
 @when("nmg-smoke --version is run")
-def invoke_version(context: dict[str, object]) -> None:
-    run_console_script(context, "--version")
+def invoke_version(
+    context: dict[str, object], capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_cli(context, capsys, "--version")
 
 
 @when("nmg-smoke Ada is run")
-def invoke_greeting(context: dict[str, object]) -> None:
-    run_console_script(context, "Ada")
+def invoke_greeting(
+    context: dict[str, object], capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_cli(context, capsys, "Ada")
 
 
 @when("nmg-smoke is run with no arguments")
-def invoke_without_arguments(context: dict[str, object]) -> None:
-    run_console_script(context)
+def invoke_without_arguments(
+    context: dict[str, object], capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_cli(context, capsys)
 
 
 @when("nmg-smoke --version is run with a name also present")
-def invoke_version_with_name(context: dict[str, object]) -> None:
-    run_console_script(context, "--version", "Ada")
+def invoke_version_with_name(
+    context: dict[str, object], capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_cli(context, capsys, "--version", "Ada")
 
 
 @then("the process exits 0")
 def process_exits_zero(context: dict[str, object]) -> None:
-    result = context["result"]
-    assert isinstance(result, subprocess.CompletedProcess)
-    assert result.returncode == 0
+    assert context["exit_code"] == 0
 
 
 @then(
@@ -76,34 +81,34 @@ def process_exits_zero(context: dict[str, object]) -> None:
     "importlib.metadata for nmg-sdlc-smoke-python, followed by a single newline"
 )
 def stdout_is_installed_version(context: dict[str, object]) -> None:
-    result = context["result"]
-    assert isinstance(result, subprocess.CompletedProcess)
-    assert result.stdout == (
+    captured = context["captured"]
+    assert isinstance(captured, tuple)
+    assert captured.out == (
         importlib.metadata.version("nmg-sdlc-smoke-python") + "\n"
     )
-    assert result.stderr == ""
+    assert captured.err == ""
 
 
 
 @then("the process exits 0 and prints Hello, Ada followed by a single newline")
 def greeting_is_unchanged(context: dict[str, object]) -> None:
-    result = context["result"]
-    assert isinstance(result, subprocess.CompletedProcess)
-    assert result.returncode == 0
-    assert result.stdout == "Hello, Ada\n"
-    assert result.stderr == ""
+    captured = context["captured"]
+    assert isinstance(captured, tuple)
+    assert context["exit_code"] == 0
+    assert captured.out == "Hello, Ada\n"
+    assert captured.err == ""
 
 
 @then("the process exits non-zero and does not print a greeting")
 def missing_name_fails(context: dict[str, object]) -> None:
-    result = context["result"]
-    assert isinstance(result, subprocess.CompletedProcess)
-    assert result.returncode != 0
-    assert result.stdout == ""
+    captured = context["captured"]
+    assert isinstance(captured, tuple)
+    assert context["exit_code"] != 0
+    assert captured.out == ""
 
 
 @then("the process does not print a greeting")
 def greeting_not_printed(context: dict[str, object]) -> None:
-    result = context["result"]
-    assert isinstance(result, subprocess.CompletedProcess)
-    assert "Hello," not in result.stdout
+    captured = context["captured"]
+    assert isinstance(captured, tuple)
+    assert "Hello," not in captured.out
