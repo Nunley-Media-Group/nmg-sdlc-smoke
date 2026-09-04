@@ -46,6 +46,8 @@
 - [ ] Runtime dependencies remain zero.
 - [ ] Full pytest, feature pytest, and Ruff pass.
 
+Delivery evidence must explain alignment with `steering/manifest.json` and its registered managed steering runtime.
+
 ## Change History
 
 | Issue | Date | Summary |

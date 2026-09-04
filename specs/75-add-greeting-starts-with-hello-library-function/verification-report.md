@@ -45,6 +45,7 @@ The branch initially had no delta from `main`; the implementation and executable
 - Local verification: Pass
 - PR evidence: Not required
 - Plugin exercise: Not applicable; `git diff --name-only main...HEAD` returned no changed paths, including no `workflows/` or `agents/` changes.
+- Release metadata: `VERSION` was updated by deterministic delivery and is covered by the persisted release checks.
 
 ---
 
