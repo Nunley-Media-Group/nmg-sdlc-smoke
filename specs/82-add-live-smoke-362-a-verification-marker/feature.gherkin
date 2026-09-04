@@ -1,0 +1,25 @@
+**Issue**: #82
+**Date**: 2026-09-04
+**Status**: Approved
+**Author**: NMG
+
+Feature: Add LIVE_SMOKE_362_A verification marker
+  A fresh deterministic marker exercises the complete delivery lifecycle.
+
+  @SCN001
+  Scenario: Marker has exact content
+    Given the repository root
+    When LIVE_SMOKE_362_A.txt is read
+    Then it contains exactly LIVE_SMOKE_362_A followed by one newline
+
+  @SCN002
+  Scenario: Existing verification remains green
+    Given the marker exists
+    When pytest, feature pytest, and Ruff run
+    Then each exits zero
+
+  @SCN003
+  Scenario: Product change is isolated
+    Given the completed issue
+    When changed product paths are inspected
+    Then only LIVE_SMOKE_362_A.txt is added
