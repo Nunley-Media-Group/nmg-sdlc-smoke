@@ -16,9 +16,19 @@ python -m pip install -e ".[dev]"
 ## Library
 
 ```python
-from nmg_sdlc_smoke import greet, greet_many, greeting_bytes, greeting_ends_with_name, greeting_is_ascii, greeting_length, greeting_starts_with_hello
+from nmg_sdlc_smoke import (
+    greet,
+    greet_many,
+    greeting_bytes,
+    greeting_ends_with_exclamation,
+    greeting_ends_with_name,
+    greeting_is_ascii,
+    greeting_length,
+    greeting_starts_with_hello,
+)
 
 greet("Ada")  # "Hello, Ada"
+greeting_ends_with_exclamation("Ada")  # "Hello, Ada!"
 greet_many(["Ada", "Bob"])  # ["Hello, Ada", "Hello, Bob"]
 greeting_length("Ada")  # 10
 greeting_bytes("Ada")  # 10

@@ -28,3 +28,7 @@ def greeting_starts_with_hello(name: str) -> bool:
 
 def greeting_ends_with_name(name: str) -> bool:
     return greet(name).endswith(name)
+
+
+def greeting_ends_with_exclamation(name: str) -> str:
+    return f"{greet(name)}!"

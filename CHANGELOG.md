@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.27.0] - 2026-09-04
+
+### Changed
+
+- Add greeting_ends_with_exclamation library function (#79)
+
 ## [3.26.0] - 2026-09-04
 
 ### Changed
