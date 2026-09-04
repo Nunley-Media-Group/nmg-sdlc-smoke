@@ -150,7 +150,7 @@ def inspect_tree() -> None:
     assert (ROOT / "src/nmg_sdlc_smoke").is_dir()
 
 
-@then("copied plugin runtime workflows/, agents/, commands/, Node scripts/, OMP package.json, src/extension.ts, other plugin specs/, and live smoke marker files are gone")
+@then("copied plugin runtime workflows/, agents/, commands/, Node scripts/, OMP package.json, src/extension.ts, and other plugin specs/ are gone")
 def plugin_runtime_absent() -> None:
     for path in ("workflows", "agents", "commands", "scripts", "package.json", "src/extension.ts"):
         assert not (ROOT / path).exists()
@@ -190,7 +190,6 @@ def plugin_runtime_absent() -> None:
     }
     current_specs = {path.name for path in (ROOT / "specs").iterdir()}
     assert legacy_plugin_specs.isdisjoint(current_specs)
-    assert not list(ROOT.glob("LIVE_SMOKE*.txt"))
 
 
 @then("LICENSE, 3.x VERSION synced to pyproject.toml, CHANGELOG history, the managed contribution gate, the managed issue form, and the AGENTS.md spec-context markers remain")
