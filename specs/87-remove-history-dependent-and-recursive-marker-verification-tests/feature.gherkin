@@ -1,0 +1,6 @@
+# **Issue**: #87
+Feature: Deterministic marker verification
+  Scenario: Marker behavior survives delivery metadata changes
+    Given the delivered marker and release metadata
+    When ordinary pytest and Ruff run
+    Then verification passes without marker tests reading Git history or invoking nested verification
