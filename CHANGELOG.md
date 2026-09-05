@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.28.0] - 2026-09-05
+
+### Changed
+
+- Add LIVE_SMOKE_362_A verification marker (#82)
+
 ## [3.27.0] - 2026-09-04
 
 ### Changed
