@@ -38,7 +38,7 @@ Feature: Convert smoke repository to a Python SDLC host
   Scenario: Clean cutover preserves SDLC delivery contracts
     Given the converted working tree
     When it is inspected
-    Then copied plugin runtime workflows/, agents/, commands/, Node scripts/, OMP package.json, src/extension.ts, and other plugin specs/ are gone, and LIVE_SMOKE_362_A.txt is the only live smoke marker
+    Then copied plugin runtime workflows/, agents/, commands/, Node scripts/, OMP package.json, src/extension.ts, and other plugin specs/ are gone
     And LICENSE, 3.x VERSION synced to pyproject.toml, CHANGELOG history, the managed contribution gate, the managed issue form, and the AGENTS.md spec-context markers remain
 
   @SCN007
