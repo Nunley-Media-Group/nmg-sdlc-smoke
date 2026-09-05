@@ -20,6 +20,7 @@ from nmg_sdlc_smoke import (
     greet,
     greet_many,
     greeting_bytes,
+    greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
     greeting_is_ascii,
@@ -33,11 +34,13 @@ greet_many(["Ada", "Bob"])  # ["Hello, Ada", "Hello, Bob"]
 greeting_length("Ada")  # 10
 greeting_bytes("Ada")  # 10
 greeting_is_ascii("Ada")  # True
+greeting_casefold("Straße")  # "hello, strasse"
 greeting_starts_with_hello("Ada")  # True
 greeting_ends_with_name("Ada")  # True
 ```
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
+`greeting_casefold` applies Unicode casefolding to the complete greeting and uses the same validation as `greet`; it does not change `greet` or CLI output.
 
 ## CLI
 

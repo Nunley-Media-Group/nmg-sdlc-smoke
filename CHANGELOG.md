@@ -10,6 +10,10 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+### Added
+
+- Export `greeting_casefold(name)` for Unicode-casefolded greetings with existing name validation (#90).
+
 ## [3.29.0] - 2026-09-05
 
 ### Changed

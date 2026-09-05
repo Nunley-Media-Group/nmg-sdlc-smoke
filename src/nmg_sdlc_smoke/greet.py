@@ -32,3 +32,7 @@ def greeting_ends_with_name(name: str) -> bool:
 
 def greeting_ends_with_exclamation(name: str) -> str:
     return f"{greet(name)}!"
+
+
+def greeting_casefold(name: str) -> str:
+    return greet(name).casefold()

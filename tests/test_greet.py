@@ -4,6 +4,7 @@ from nmg_sdlc_smoke import (
     greet,
     greet_many,
     greeting_bytes,
+    greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
     greeting_is_ascii,
@@ -161,3 +162,18 @@ def test_greeting_ends_with_exclamation_preserves_name_whitespace() -> None:
 def test_greeting_ends_with_exclamation_rejects_invalid_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_ends_with_exclamation(name)  # type: ignore[arg-type]
+
+
+def test_greeting_casefold_normalizes_unicode_and_ascii() -> None:
+    assert greeting_casefold("Straße") == "hello, strasse"
+    assert greeting_casefold("Ada") == "hello, ada"
+
+
+def test_greeting_casefold_preserves_name_whitespace() -> None:
+    assert greeting_casefold(" Straße ") == "hello,  strasse "
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_casefold_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_casefold(name)  # type: ignore[arg-type]
