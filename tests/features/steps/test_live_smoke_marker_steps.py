@@ -85,6 +85,21 @@ def completed_issue() -> None:
 
 @when("changed product paths for issue 82 are inspected")
 def inspect_product_paths(context: dict[str, object]) -> None:
+    shallow = subprocess.run(
+        ("git", "rev-parse", "--is-shallow-repository"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    if shallow == "true":
+        subprocess.run(
+            ("git", "fetch", "--unshallow", "--no-tags", "origin"),
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
     addition = subprocess.run(
         (
             "git",
