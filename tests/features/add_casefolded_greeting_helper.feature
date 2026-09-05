@@ -1,0 +1,16 @@
+Feature: Casefolded greeting helper
+  Scenario: Normalize Unicode and ASCII greetings
+    Given the installed greeting library
+    When greeting_casefold is called for Straße and Ada
+    Then the results are hello, strasse and hello, ada
+
+  Scenario: Reject invalid names through existing validation
+    Given blank, whitespace-only, and non-string names
+    When greeting_casefold is called
+    Then the existing greet ValueError is raised
+
+  Scenario: Preserve existing greeting library and CLI
+    Given the installed package
+    When greet and nmg-smoke greet Ada
+    Then the existing Hello, Ada outputs and CLI newline are unchanged
+    And existing public exports remain available
