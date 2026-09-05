@@ -1,0 +1,25 @@
+**Issue**: #85
+**Date**: 2026-09-05
+**Status**: Approved
+**Author**: NMG
+
+Feature: Add LIVE_SMOKE_362_B verification marker
+  A fresh deterministic marker exercises the complete delivery lifecycle.
+
+  @SCN001
+  Scenario: Marker has exact content
+    Given the repository root for issue 85
+    When LIVE_SMOKE_362_B.txt is read
+    Then it contains exactly LIVE_SMOKE_362_B followed by one newline
+
+  @SCN002
+  Scenario: Existing verification remains green
+    Given the issue 85 marker exists
+    When the repository verification gates run outside this scenario
+    Then their recorded outcomes are all successful
+
+  @SCN003
+  Scenario: Product change is isolated
+    Given the completed issue 85 change
+    When changed product paths are inspected
+    Then only LIVE_SMOKE_362_B.txt is added
