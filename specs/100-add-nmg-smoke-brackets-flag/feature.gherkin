@@ -1,0 +1,36 @@
+**Issue**: #100
+**Date**: 2026-09-07
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_nmg_smoke_brackets_flag.feature
+# Generated from: specs/100-add-nmg-smoke-brackets-flag/requirements.md
+# In expected stdout strings, \n denotes one LF; no unshown final LF is allowed.
+Feature: Optional brackets around fully composed CLI greetings
+  As a maintainer of the disposable smoke host
+  I want optional literal brackets around each composed greeting
+  So that a minimal enhancement can exercise the authorized delivery lifecycle
+
+  @SCN001
+  Scenario: Brackets wrap each fully composed greeting
+    Given the installed nmg-smoke console script
+    When I run "nmg-smoke --brackets --uppercase --prefix 'ok[]: ' --repeat 2 --no-newline 'Ada[Q]'"
+    Then stdout is exactly "[ok[]: HELLO, ADA[Q]]\n[ok[]: HELLO, ADA[Q]]"
+    And the exit status is 0 and stderr is empty
+    When I run "nmg-smoke --brackets Ada"
+    Then stdout is exactly "[Hello, Ada]\n"
+    And the exit status is 0 and stderr is empty
+
+  @SCN002
+  Scenario: Omitting brackets preserves default and composed output
+    Given the installed nmg-smoke console script
+    When I run "nmg-smoke Ada"
+    Then stdout is exactly "Hello, Ada\n"
+    And the exit status is 0 and stderr is empty
+    When I run "nmg-smoke --uppercase --prefix 'ok[]: ' --repeat 2 --no-newline 'Ada[Q]'"
+    Then stdout is exactly "ok[]: HELLO, ADA[Q]\nok[]: HELLO, ADA[Q]"
+    And the exit status is 0 and stderr is empty
+
+# Change History
+# | Issue | Date | Summary |
+# | #100 | 2026-09-07 | Initial feature spec |
