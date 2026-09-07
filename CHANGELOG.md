@@ -10,6 +10,10 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+### Added
+
+- Add `nmg-smoke --suffix TEXT` to append an exact suffix to each rendered greeting without changing default or invalid-name output (#96).
+
 ## [3.32.0] - 2026-09-07
 
 ### Changed

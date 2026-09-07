@@ -251,3 +251,24 @@ def test_cli_rejects_blank_name_with_repeat(
     captured = capsys.readouterr()
     assert captured.out == ""
     assert "name must not be blank" in captured.err
+
+
+def test_cli_appends_suffix_before_final_newline(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["Ada", "--suffix", " dOnE \t"]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "Hello, Ada dOnE \t\n"
+    assert captured.err == ""
+
+
+@pytest.mark.parametrize("argv", [["Ada", "--suffix"], ["--suffix", "!"]])
+def test_cli_rejects_suffix_without_required_argument(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(argv)
+    assert exit_info.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err != ""

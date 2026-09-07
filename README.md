@@ -76,6 +76,14 @@ $ nmg-smoke --prefix 'OK: ' Ada
 OK: Hello, Ada
 ```
 
+Use `--suffix TEXT` to append text exactly as supplied to each greeting, after
+uppercase and prefix processing and before repetition:
+
+```console
+$ nmg-smoke --suffix '!' Ada
+Hello, Ada!
+```
+
 Use `--no-newline` to omit the trailing newline from successful output:
 
 ```console
