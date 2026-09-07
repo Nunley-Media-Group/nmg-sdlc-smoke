@@ -36,3 +36,7 @@ def greeting_ends_with_exclamation(name: str) -> str:
 
 def greeting_casefold(name: str) -> str:
     return greet(name).casefold()
+
+
+def greeting_word_count(name: str) -> int:
+    return len(greet(name).split())

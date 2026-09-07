@@ -6,6 +6,7 @@ from .greet import greeting_ends_with_name as greeting_ends_with_name
 from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_length as greeting_length
 from .greet import greeting_starts_with_hello as greeting_starts_with_hello
+from .greet import greeting_word_count as greeting_word_count
 
 __all__ = [
     "greet",
@@ -17,4 +18,5 @@ __all__ = [
     "greeting_is_ascii",
     "greeting_length",
     "greeting_starts_with_hello",
+    "greeting_word_count",
 ]

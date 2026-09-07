@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.31.0] - 2026-09-06
+
+### Added
+
+- Export `greeting_word_count(name)` to count whitespace-separated greeting words with existing name validation (#93).
+
 ## [3.30.0] - 2026-09-05
 
 ### Added

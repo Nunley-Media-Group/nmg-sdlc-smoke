@@ -10,6 +10,7 @@ from nmg_sdlc_smoke import (
     greeting_is_ascii,
     greeting_length,
     greeting_starts_with_hello,
+    greeting_word_count,
 )
 
 
@@ -177,3 +178,17 @@ def test_greeting_casefold_preserves_name_whitespace() -> None:
 def test_greeting_casefold_rejects_invalid_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_casefold(name)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [("Ada", 2), ("Ada Lovelace", 3), (" \tAda\u2003Lovelace\n ", 3)],
+)
+def test_greeting_word_count_splits_whitespace(name: str, expected: int) -> None:
+    assert greeting_word_count(name) == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_word_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_word_count(name)  # type: ignore[arg-type]
