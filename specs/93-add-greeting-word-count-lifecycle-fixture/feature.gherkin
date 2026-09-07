@@ -1,0 +1,28 @@
+**Issue**: #93
+**Date**: 2026-09-06
+**Status**: Approved
+**Author**: NMG
+
+Feature: Greeting word-count lifecycle fixture
+  @AC1
+  Scenario Outline: Count words in the greeting
+    Given the name "<name>"
+    When I call the exported greeting_word_count helper
+    Then the word count is <count>
+    Examples:
+      | name         | count |
+      | Ada          | 2     |
+      | Ada Lovelace | 3     |
+
+  @AC2
+  Scenario: Preserve greeting validation
+    Given blank, whitespace-only, or non-string input
+    When I call greeting_word_count
+    Then it raises the existing greet ValueError
+    And existing greeting and CLI contracts remain unchanged
+
+  @AC3
+  Scenario: Independently verify the fixture
+    Given the documented public helper and behavior tests
+    When the existing pytest, pytest-bdd, and Ruff checks run
+    Then all checks pass without relaxing unrelated contracts
