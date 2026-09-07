@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.32.0] - 2026-09-07
+
+### Changed
+
+- Add greeting_word_count lifecycle fixture (#93)
+
 ## [3.31.0] - 2026-09-06
 
 ### Added
