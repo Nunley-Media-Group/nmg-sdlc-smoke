@@ -1,0 +1,20 @@
+**Issue**: #96
+**Date**: 2026-09-07
+**Status**: Approved
+**Author**: NMG
+
+Feature: Exact suffix in the fresh nmg-sdlc 372 delivery fixture
+  @SCN001
+  Scenario: Append exact suffix to each completed greeting
+    Given a valid name and an exact mixed-case suffix
+    When the CLI combines suffix with uppercase prefix repetition and no-newline
+    Then each completed greeting has the verbatim suffix
+    And repetition separators and final-newline behavior are preserved
+
+  @SCN002
+  Scenario: Preserve existing default and error behavior
+    Given an omitted or empty suffix and an invalid-name case
+    When the CLI is invoked
+    Then omitted and empty suffix preserve current successful output
+    And invalid names exit one without any stdout greeting or suffix
+    And help documents the optional suffix
