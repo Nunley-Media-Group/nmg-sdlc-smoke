@@ -23,6 +23,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--prefix", default="", metavar="TEXT")
     parser.add_argument("--no-newline", action="store_true")
+    parser.add_argument("--separator", default="\n", metavar="TEXT")
     parser.add_argument("name")
     args = parser.parse_args(argv)
 
@@ -35,6 +36,9 @@ def main(argv: list[str] | None = None) -> int:
         message = message.upper()
     message = args.prefix + message
     for index in range(args.repeat):
-        end = "" if args.no_newline and index == args.repeat - 1 else "\n"
+        if index == args.repeat - 1:
+            end = "" if args.no_newline else "\n"
+        else:
+            end = args.separator
         print(message, end=end)
     return 0

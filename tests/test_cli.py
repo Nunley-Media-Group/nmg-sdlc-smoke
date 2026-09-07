@@ -10,6 +10,24 @@ def test_cli_prints_greeting(capsys: pytest.CaptureFixture[str]) -> None:
     assert captured.err == ""
 
 
+def test_cli_separates_repeated_greetings(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--repeat", "2", "--separator", " | ", "Ada"]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "Hello, Ada | Hello, Ada\n"
+    assert captured.err == ""
+
+
+def test_cli_defaults_to_newline_separator(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--repeat", "2", "Ada"]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "Hello, Ada\nHello, Ada\n"
+    assert captured.err == ""
+
+
 @pytest.mark.parametrize(
     "argv", [["--no-newline", "Ada"], ["Ada", "--no-newline"]]
 )

@@ -69,6 +69,16 @@ Hello, Ada
 Hello, Ada
 ```
 
+Use `--separator TEXT` to choose the text between repeated greetings:
+
+```console
+$ nmg-smoke --repeat 2 --separator ' | ' Ada
+Hello, Ada | Hello, Ada
+```
+
+The output above ends with a single newline. Omitting `--separator` keeps
+newlines between greetings; `--no-newline` still omits only the final newline.
+
 Use `--prefix TEXT` to prepend text exactly as supplied:
 
 ```console
