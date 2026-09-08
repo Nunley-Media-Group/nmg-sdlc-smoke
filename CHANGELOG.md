@@ -10,6 +10,10 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+### Added
+
+- Add opt-in `nmg-smoke --parentheses` to wrap each fully composed greeting after uppercase/prefix and before repeat/newline output, preserving default behavior (#102).
+
 ## [3.32.0] - 2026-09-07
 
 ### Changed

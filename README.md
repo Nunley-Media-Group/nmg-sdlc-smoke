@@ -85,6 +85,19 @@ Hello, Ada
 
 The output above is exactly `Hello, Ada` without a trailing newline.
 
+Use `--parentheses` to enclose each fully composed greeting in literal parentheses:
+
+```console
+$ nmg-smoke --parentheses --uppercase --prefix 'ok: ' --repeat 2 --no-newline Ada
+(ok: HELLO, ADA)
+(ok: HELLO, ADA)
+```
+
+Uppercase applies before the literal prefix; parentheses wrap the complete message
+once before repetition and newline handling. The example has one separating LF
+and no final LF. Existing parentheses and internal newlines are preserved without
+escaping. Without `--parentheses`, composed and default output remain unchanged.
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification
