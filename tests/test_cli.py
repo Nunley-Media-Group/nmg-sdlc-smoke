@@ -251,3 +251,12 @@ def test_cli_rejects_blank_name_with_repeat(
     captured = capsys.readouterr()
     assert captured.out == ""
     assert "name must not be blank" in captured.err
+
+
+def test_cli_parentheses_preserve_literal_multiline_content(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--parentheses", "--prefix", "(ok)\n", "Ada (Lovelace)"]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "((ok)\nHello, Ada (Lovelace))\n"
+    assert captured.err == ""
