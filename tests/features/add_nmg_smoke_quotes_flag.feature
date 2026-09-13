@@ -6,9 +6,9 @@ Feature: Add nmg-smoke quotes flag for nmg-sdlc 379 verification
   @SCN001
   Scenario: Quotes wrap the fully composed greeting
     Given the installed nmg-smoke console script and a valid name
-    When nmg-smoke --quotes --uppercase --prefix ok-colon-space --parentheses --braces Ada runs
+    When nmg-smoke --quotes --uppercase --prefix ok-colon-space --parentheses --braces --repeat 2 Ada runs
     Then the process exits 0
-    And stdout is exactly double-quote open-brace open-parenthesis ok-colon-space HELLO-comma-space-ADA close-parenthesis close-brace double-quote followed by one newline
+    And stdout is exactly two individually double-quoted open-brace open-parenthesis ok-colon-space HELLO-comma-space-ADA close-parenthesis close-brace greetings, each followed by one newline
     And stderr is empty
 
   @SCN002
