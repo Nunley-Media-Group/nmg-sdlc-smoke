@@ -29,6 +29,7 @@ The implementation satisfies both acceptance criteria. The long-only `--quotes` 
 ## Deterministic Steering Artifact and Ceiling
 
 - Artifact: `.omp/sdlc/verification/109.json`
+- Verified head: `23f5f71f05315b140aa19e1166cbb25cc9bb2e9f`
 - Steering identity: `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`
 - Spec identity: `sha256:248337525f132b75d4ad8d98da7b7bf7957a3ddfc73f132351e6f63e035d6da6`
 - Coverage: declared 0, recorded 0, complete `true`
@@ -53,7 +54,7 @@ The implementation satisfies both acceptance criteria. The long-only `--quotes` 
 
 - Local verification: Pass
 - PR evidence: Not required
-- Delivery-owned version bump: correctly deferred; `VERSION` remains `3.34.0` and `pyproject.toml` still reads it dynamically.
+- Delivery-owned version bump: applied at the verified delivery head; `VERSION` is `3.35.0` and `pyproject.toml` still reads it dynamically.
 
 ---
 
@@ -79,7 +80,7 @@ The issue scope declares no separate regression slice. Full pytest and feature-s
 | T001 | Add optional quote wrapping. | Complete | Long-only `store_true` option; applied after braces and before repeat/newline; no dependency, module, or public API added. |
 | T002 | Verify both observable scenarios. | Complete | Exactly two independent BDD scenarios map to AC1/AC2; the focused unit assertion covers exact no-repeat output, while installed-script SCN001 preserves `--repeat 2` and requires two individually quoted output lines. |
 | T003 | Document and record the enhancement. | Complete | README contains the exact composed-output example; CHANGELOG records #109 under Unreleased; all mandated checks passed. |
-| T004 | Apply the delivery-owned version bump. | Correctly deferred | Spec explicitly assigns this mutation to delivery. `VERSION` and `pyproject.toml` are unchanged. |
+| T004 | Apply the delivery-owned version bump. | Complete | Delivery applied the normal 3.x bump to `3.35.0`; `pyproject.toml` remains unchanged and reads VERSION dynamically. |
 
 ---
 
@@ -196,7 +197,7 @@ None.
 | `tests/features/steps/test_quotes_steps.py` | 0 after fix | Installed-console steps and exact assertions. |
 | `README.md` | 0 | User-facing option documented. |
 | `CHANGELOG.md` | 0 | Unreleased enhancement recorded. |
-| `VERSION` | 0 | Delivery-owned bump correctly deferred. |
+| `VERSION` | 0 | Delivery-owned bump to `3.35.0` is present in the verified head. |
 | `pyproject.toml` | 0 | Dynamic VERSION wiring and zero runtime dependencies preserved. |
 | `.github/workflows/python-ci.yml` | 0 | Required Python 3.12 verification remains configured. |
 | `steering/manifest.json` and registered runtime | 0 | Valid; deterministic gate complete with no ceiling. |
