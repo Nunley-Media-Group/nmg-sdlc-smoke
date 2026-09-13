@@ -269,3 +269,20 @@ def test_cli_braces_preserve_literal_multiline_content(
     captured = capsys.readouterr()
     assert captured.out == "{{ok}\nHello, Ada {Lovelace}}\n"
     assert captured.err == ""
+
+
+def test_cli_quotes_fully_composed_greeting(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main([
+        "--quotes",
+        "--uppercase",
+        "--prefix",
+        "ok: ",
+        "--parentheses",
+        "--braces",
+        "Ada",
+    ]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == '"{(ok: HELLO, ADA)}"\n'
+    assert captured.err == ""

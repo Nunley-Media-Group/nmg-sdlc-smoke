@@ -110,6 +110,16 @@ Braces wrap the complete message after parentheses and before repetition and
 newline handling, so they are always outermost. Without `--braces`, composed
 and default output remain byte-identical.
 
+Use `--quotes` to enclose the fully composed greeting in literal double quotes:
+
+```console
+$ nmg-smoke --quotes --uppercase --prefix 'ok: ' --parentheses --braces Ada
+"{(ok: HELLO, ADA)}"
+```
+
+Quotes wrap the complete message after braces and before repetition and newline
+handling. Without `--quotes`, output remains byte-identical.
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification
