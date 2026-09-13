@@ -260,3 +260,12 @@ def test_cli_parentheses_preserve_literal_multiline_content(
     captured = capsys.readouterr()
     assert captured.out == "((ok)\nHello, Ada (Lovelace))\n"
     assert captured.err == ""
+
+
+def test_cli_braces_preserve_literal_multiline_content(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    assert main(["--braces", "--prefix", "{ok}\n", "Ada {Lovelace}"]) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "{{ok}\nHello, Ada {Lovelace}}\n"
+    assert captured.err == ""
