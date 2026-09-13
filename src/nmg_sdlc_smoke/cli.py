@@ -24,6 +24,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--prefix", default="", metavar="TEXT")
     parser.add_argument("--suffix", default="", metavar="TEXT")
     parser.add_argument("--no-newline", action="store_true")
+    parser.add_argument("--parentheses", action="store_true")
     parser.add_argument("name")
     args = parser.parse_args(argv)
 
@@ -34,7 +35,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.uppercase:
         message = message.upper()
-    message = args.prefix + message + args.suffix
+    message = args.prefix + message
+    if args.parentheses:
+        message = f"({message})"
+    message += args.suffix
     for index in range(args.repeat):
         end = "" if args.no_newline and index == args.repeat - 1 else "\n"
         print(message, end=end)

@@ -1,0 +1,18 @@
+Feature: Add nmg-smoke parentheses flag
+  As a maintainer using the Python smoke CLI
+  I want each fully composed greeting optionally enclosed in literal parentheses
+  So that existing output remains unchanged by default
+
+  @SCN001
+  Scenario: Enabled parentheses compose with existing flags
+    Given the smoke CLI is available
+    When nmg-smoke --parentheses --uppercase --prefix 'ok: ' --repeat 2 --no-newline Ada is run
+    Then the process exits 0 with empty stderr
+    And stdout is exactly "(ok: HELLO, ADA)\n(ok: HELLO, ADA)" with each \n denoting one LF and no final LF
+
+  @SCN002
+  Scenario: Absent flag preserves composed and default output
+    Given the smoke CLI is available
+    When nmg-smoke --uppercase --prefix 'ok: ' --repeat 2 --no-newline Ada and nmg-smoke Ada are run without parentheses
+    Then both processes exit 0 with empty stderr
+    And their stdout is respectively "ok: HELLO, ADA\nok: HELLO, ADA" and "Hello, Ada\n" with each \n denoting one LF
