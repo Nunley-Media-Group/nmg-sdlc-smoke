@@ -98,6 +98,18 @@ once before repetition and newline handling. The example has one separating LF
 and no final LF. Existing parentheses and internal newlines are preserved without
 escaping. Without `--parentheses`, composed and default output remain unchanged.
 
+Use `--braces` to enclose each fully formatted greeting in literal curly braces:
+
+```console
+$ nmg-smoke --braces --parentheses --uppercase --prefix 'ok: ' --repeat 2 --no-newline Ada
+{(ok: HELLO, ADA)}
+{(ok: HELLO, ADA)}
+```
+
+Braces wrap the complete message after parentheses and before repetition and
+newline handling, so they are always outermost. Without `--braces`, composed
+and default output remain byte-identical.
+
 A blank name exits 1 and writes no greeting to stdout.
 
 ## Verification

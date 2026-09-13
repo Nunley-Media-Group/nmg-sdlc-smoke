@@ -10,6 +10,10 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+### Added
+
+- Add opt-in `nmg-smoke --braces` to wrap each fully formatted greeting outside parentheses and before repeat/newline output, preserving absent-flag behavior (#105).
+
 ## [3.33.0] - 2026-09-08
 
 ### Added
