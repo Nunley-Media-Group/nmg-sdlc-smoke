@@ -26,7 +26,7 @@ Three small implementation tasks; downstream review/verify/deliver retain normal
 - [ ] Actual CLI smoke, full pytest, full BDD and Ruff pass in an isolated environment.
 
 ### T003: Document the fixture and publish implementation evidence
-**File(s)**: README.md; CHANGELOG.md; VERSION only in delivery stage
+**File(s)**: README.md; CHANGELOG.md; VERSION (delivery owner only)
 **Type**: Modify
 **Depends**: T001, T002
 **Acceptance**:
