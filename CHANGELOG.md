@@ -10,6 +10,16 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.35.0] - 2026-09-13
+
+### Added
+
+- Add opt-in `nmg-smoke --quotes` to wrap each fully composed greeting after braces and before repeat/newline output, preserving absent-flag behavior (#109).
+
+### Changed
+
+- Add nmg-smoke --quotes flag for nmg-sdlc #379 verification (#109)
+
 ## [3.34.0] - 2026-09-13
 
 ### Added
