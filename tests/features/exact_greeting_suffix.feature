@@ -1,4 +1,4 @@
-Feature: Exact suffix in the fresh nmg-sdlc 372 delivery fixture
+Feature: Exact greeting suffix for issue 96
   @SCN001
   Scenario: Append exact suffix to each completed greeting
     Given a valid name and an exact mixed-case suffix

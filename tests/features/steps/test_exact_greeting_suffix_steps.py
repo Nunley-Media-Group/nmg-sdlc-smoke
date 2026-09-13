@@ -78,11 +78,9 @@ def unchanged_success(boundary_results: dict[str, tuple[int, str, str]]) -> None
 
 @then("invalid names exit one without any stdout greeting or suffix")
 def unchanged_errors(boundary_results: dict[str, tuple[int, str, str]]) -> None:
-    for case in ("blank", "whitespace"):
-        code, out, err = boundary_results[case]
-        assert code == 1
-        assert out == ""
-        assert "name must not be blank" in err
+    expected = (1, "", "nmg-smoke: error: name must not be blank\n")
+    assert boundary_results["blank"] == expected
+    assert boundary_results["whitespace"] == expected
 
 
 @then("help documents the optional suffix")

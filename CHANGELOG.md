@@ -10,18 +10,17 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.33.0] - 2026-09-13
+
 ### Added
 
 - Add `nmg-smoke --suffix TEXT` to append an exact suffix to each rendered greeting without changing default or invalid-name output (#96).
-
-## [3.33.0] - 2026-09-08
-
-### Added
 
 - Add opt-in `nmg-smoke --parentheses` to wrap each fully composed greeting after uppercase/prefix and before repeat/newline output, preserving default behavior (#102).
 
 ### Changed
 
+- Add exact greeting suffix for the nmg-sdlc 372 delivery fixture (#96)
 - Add nmg-smoke parentheses flag (#102)
 
 ## [3.32.0] - 2026-09-07
