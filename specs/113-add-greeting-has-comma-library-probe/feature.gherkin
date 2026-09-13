@@ -1,0 +1,43 @@
+**Issue**: #113
+**Date**: 2026-09-13
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_has_comma_library_probe.feature
+#
+# Generated from: specs/113-add-greeting-has-comma-library-probe/requirements.md
+Feature: Add greeting_has_comma library probe
+  As a maintainer exercising nmg-sdlc against this disposable Python host
+  I want a greeting_has_comma(name) library probe
+  So that the complete default greeting can be checked for a literal comma without changing greet or the CLI
+
+  @SCN001
+  Scenario: Default Ada greeting reports the comma separator
+    Given the library is importable
+    When greeting_has_comma is called with Ada
+    Then it returns the Python bool True
+    And that value matches whether greet Ada contains the literal comma separator
+
+  @SCN002
+  Scenario: A second valid name is also true and is not hardcoded to Ada
+    Given the library is importable
+    When greeting_has_comma is called with Jo
+    Then it returns the Python bool True
+    And that value matches whether greet Jo contains the literal comma separator
+    And greet Jo is not the same string as greet Ada
+
+  @SCN003
+  Scenario: Invalid names reuse existing validation
+    Given the library is importable
+    When greeting_has_comma is called with a blank, whitespace-only, or non-string name
+    Then it raises ValueError with message name must not be blank
+    And that error is the existing greet validation error, not a wrapped or renamed error
+
+  @SCN004
+  Scenario: Existing greet and CLI behavior is unchanged
+    Given the distribution is installed
+    When greet is called with Ada
+    Then it returns Hello, Ada
+    When nmg-smoke Ada is run
+    Then the process exits 0 and prints Hello, Ada followed by a single newline
+    And no new CLI flag or CLI output path is added
