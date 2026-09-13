@@ -7,7 +7,7 @@
 
 ## Summary
 
-Three bounded delivery tasks. Review, verification, and delivery retain their normal stage ownership. Spec publication performs none of them.
+Four bounded delivery tasks. Review, verification, and delivery retain their normal stage ownership. Spec publication performs none of them.
 
 ### T001: Add optional quote wrapping
 
@@ -31,16 +31,24 @@ Three bounded delivery tasks. Review, verification, and delivery retain their no
 - [ ] Exactly two BDD scenarios map one-to-one to AC1 and AC2 using existing pytest-bdd conventions.
 - [ ] Focused CLI tests assert consumer-observable behavior without duplicating unrelated option cases.
 
-### T003: Document and deliver the enhancement
+### T003: Document and record the enhancement
 
-**File(s)**: `README.md`, `CHANGELOG.md`, `VERSION` (delivery-owner only)
+**File(s)**: `README.md`, `CHANGELOG.md`
 **Type**: Modify
 **Depends**: T001, T002
 **Acceptance**:
 - [ ] README documents `--quotes` with the exact composed-output example while preserving existing CLI and library documentation.
 - [ ] CHANGELOG records #109 under the normal pending enhancement section without rewriting released history.
-- [ ] Delivery alone applies the normal 3.x VERSION bump; `pyproject.toml` continues reading VERSION dynamically.
 - [ ] Implementation verification runs the actual CLI smoke, full pytest, feature pytest, and Ruff commands required by the repository.
+
+### T004: Apply the delivery-owned version bump
+
+**File(s)**: `VERSION` (delivery-owner only)
+**Type**: Modify
+**Depends**: T001, T002, T003
+**Acceptance**:
+- [ ] Delivery alone applies the normal 3.x VERSION bump.
+- [ ] `pyproject.toml` remains unchanged and continues reading VERSION dynamically.
 
 ## Execution Boundary
 
@@ -51,3 +59,4 @@ This approved package is the single nmg-sdlc #379 verification fixture. Do not i
 | Issue | Date | Summary |
 |-------|------|---------|
 | #109 | 2026-09-13 | Initial feature tasks for the single nmg-sdlc #379 verification fixture |
+| #109 | 2026-09-13 | Spec revised before delivery to isolate delivery-owned VERSION authority |
