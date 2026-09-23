@@ -50,5 +50,9 @@ def greeting_has_colon(name: str) -> bool:
     return ":" in greet(name)
 
 
+def greeting_has_at_sign(name: str) -> bool:
+    return "@" in greet(name)
+
+
 def greeting_has_question_mark(name: str) -> bool:
     return "?" in greet(name)
