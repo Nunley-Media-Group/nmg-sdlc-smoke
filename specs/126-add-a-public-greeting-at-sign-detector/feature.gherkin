@@ -1,0 +1,26 @@
+**Issue**: #126
+**Date**: 2026-09-23
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_has_at_sign_library_helper.feature
+# Generated from: specs/126-add-a-public-greeting-at-sign-detector/requirements.md
+Feature: Detect an at sign in a completed greeting
+
+  @SCN001
+  Scenario: Detect literal at sign
+    Given the installed greeting library and a valid name containing an at sign
+    When greeting_has_at_sign is called with Ada@
+    Then it returns True for the completed greeting Hello, Ada@
+
+  @SCN002
+  Scenario: Report no at sign
+    Given the installed greeting library and a valid name without an at sign
+    When greeting_has_at_sign is called with Ada
+    Then it returns False for the completed greeting Hello, Ada
+
+  @SCN003
+  Scenario: Reject invalid names
+    Given empty, whitespace-only, and non-string names
+    When greeting_has_at_sign is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
