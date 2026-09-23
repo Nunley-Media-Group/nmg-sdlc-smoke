@@ -1,0 +1,24 @@
+**Issue**: #115
+**Date**: 2026-09-22
+**Status**: Approved
+**Author**: NMG
+
+Feature: Detect decimal digits in a completed greeting
+  @SCN001
+  Scenario: Detect ASCII and Unicode decimal digits
+    Given the installed greeting library
+    When greeting_has_digit is called for Ada7, Ada٣, and Ada
+    Then it returns True, True, and False respectively
+
+  @SCN002
+  Scenario: Reject invalid names with existing validation
+    Given blank, whitespace-only, and non-string names
+    When greeting_has_digit is called
+    Then the existing greet ValueError is raised
+
+  @SCN003
+  Scenario: Preserve existing greeting and CLI output
+    Given the installed package
+    When greet and nmg-smoke greet Ada
+    Then the existing Hello, Ada output and CLI newline are unchanged
+    And all existing public exports remain available
