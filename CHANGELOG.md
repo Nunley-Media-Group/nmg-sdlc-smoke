@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.38.0] - 2026-09-23
+
+### Changed
+
+- Add greeting_has_question_mark library probe (#123)
+
 ## [3.37.0] - 2026-09-23
 
 ### Changed

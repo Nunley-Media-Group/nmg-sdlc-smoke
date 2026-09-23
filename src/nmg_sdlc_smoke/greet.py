@@ -48,3 +48,7 @@ def greeting_has_semicolon(name: str) -> bool:
 
 def greeting_has_colon(name: str) -> bool:
     return ":" in greet(name)
+
+
+def greeting_has_question_mark(name: str) -> bool:
+    return "?" in greet(name)
