@@ -44,3 +44,7 @@ def greeting_word_count(name: str) -> int:
 
 def greeting_has_semicolon(name: str) -> bool:
     return ";" in greet(name)
+
+
+def greeting_has_colon(name: str) -> bool:
+    return ":" in greet(name)

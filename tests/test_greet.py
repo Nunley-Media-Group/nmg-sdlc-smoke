@@ -7,6 +7,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_colon,
     greeting_has_semicolon,
     greeting_is_ascii,
     greeting_length,
@@ -209,3 +210,19 @@ def test_greeting_has_semicolon_reports_absence_in_completed_greeting() -> None:
 def test_greeting_has_semicolon_rejects_invalid_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_semicolon(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_colon_detects_literal_in_completed_greeting() -> None:
+    assert greet("Ada:") == "Hello, Ada:"
+    assert greeting_has_colon("Ada:") is True
+
+
+def test_greeting_has_colon_reports_absence_in_completed_greeting() -> None:
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_colon("Ada") is False
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_has_colon_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_colon(name)  # type: ignore[arg-type]
