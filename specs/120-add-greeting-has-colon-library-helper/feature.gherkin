@@ -1,0 +1,26 @@
+**Issue**: #120
+**Date**: 2026-09-22
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_has_colon_library_helper.feature
+# Generated from: specs/120-add-greeting-has-colon-library-helper/requirements.md
+Feature: Detect a colon in a completed greeting
+
+  @SCN001
+  Scenario: Detect literal colon
+    Given the installed greeting library and a valid name containing a colon
+    When greeting_has_colon is called with Ada:
+    Then it returns True for the completed greeting Hello, Ada:
+
+  @SCN002
+  Scenario: Report no colon
+    Given the installed greeting library and a valid name without a colon
+    When greeting_has_colon is called with Ada
+    Then it returns False for the completed greeting Hello, Ada
+
+  @SCN003
+  Scenario: Reject invalid names
+    Given empty, whitespace-only, and non-string names
+    When greeting_has_colon is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
