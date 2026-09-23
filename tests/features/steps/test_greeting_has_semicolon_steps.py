@@ -74,7 +74,7 @@ def installed_package(context: dict[str, object]) -> None:
     context["executable"] = executable
 
 
-@when("greet and nmg-smoke greet Ada")
+@when("greet and nmg-smoke Ada")
 def greet_ada(context: dict[str, object]) -> None:
     context["greeting"] = library.greet("Ada")
     executable = context["executable"]

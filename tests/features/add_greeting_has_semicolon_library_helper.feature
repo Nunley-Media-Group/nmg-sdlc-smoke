@@ -21,6 +21,6 @@ Feature: Detect a semicolon in a completed greeting
   @SCN004
   Scenario: Preserve public helpers and default CLI output
     Given the installed package and its console script
-    When greet and nmg-smoke greet Ada
+    When greet and nmg-smoke Ada
     Then the library returns Hello, Ada and the CLI exits 0 with exactly Hello, Ada and one newline on stdout and empty stderr
     And all previously exported public helpers remain importable
