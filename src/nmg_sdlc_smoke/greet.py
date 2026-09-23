@@ -40,3 +40,7 @@ def greeting_casefold(name: str) -> str:
 
 def greeting_word_count(name: str) -> int:
     return len(greet(name).split())
+
+
+def greeting_has_digit(name: str) -> bool:
+    return any(character.isdecimal() for character in greet(name))

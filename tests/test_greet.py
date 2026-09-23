@@ -7,6 +7,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_digit,
     greeting_is_ascii,
     greeting_length,
     greeting_starts_with_hello,
@@ -192,3 +193,17 @@ def test_greeting_word_count_splits_whitespace(name: str, expected: int) -> None
 def test_greeting_word_count_rejects_invalid_names(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_word_count(name)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [("Ada7", True), ("Ada٣", True), ("Ada", False), ("Ada²", False)],
+)
+def test_greeting_has_digit_detects_decimal_digits(name: str, expected: bool) -> None:
+    assert greeting_has_digit(name) is expected
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_has_digit_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_digit(name)  # type: ignore[arg-type]
