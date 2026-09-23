@@ -10,6 +10,10 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+### Added
+
+- Export `greeting_has_semicolon(name)` to detect a literal semicolon in the complete greeting with existing name validation (#117).
+
 ## [3.35.0] - 2026-09-13
 
 ### Added
