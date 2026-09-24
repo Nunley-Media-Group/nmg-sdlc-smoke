@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.43.0] - 2026-09-24
+
+### Changed
+
+- Add public greeting_has_plus library helper (#144)
+
 ## [3.42.0] - 2026-09-24
 
 ### Changed
