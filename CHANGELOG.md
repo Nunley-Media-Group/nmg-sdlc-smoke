@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.42.0] - 2026-09-24
+
+### Changed
+
+- Add public greeting_has_equal helper (#146)
+
 ## [3.41.0] - 2026-09-24
 
 ### Changed
