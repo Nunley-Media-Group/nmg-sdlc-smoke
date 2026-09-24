@@ -8,6 +8,7 @@ from .greet import greeting_has_colon as greeting_has_colon
 from .greet import greeting_has_equal as greeting_has_equal
 from .greet import greeting_has_hash as greeting_has_hash
 from .greet import greeting_has_percent as greeting_has_percent
+from .greet import greeting_has_plus as greeting_has_plus
 from .greet import greeting_has_question_mark as greeting_has_question_mark
 from .greet import greeting_has_semicolon as greeting_has_semicolon
 from .greet import greeting_is_ascii as greeting_is_ascii
@@ -27,6 +28,7 @@ __all__ = [
     "greeting_has_equal",
     "greeting_has_hash",
     "greeting_has_percent",
+    "greeting_has_plus",
     "greeting_has_question_mark",
     "greeting_has_semicolon",
     "greeting_is_ascii",

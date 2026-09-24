@@ -28,6 +28,7 @@ from nmg_sdlc_smoke import (
     greeting_has_equal,
     greeting_has_hash,
     greeting_has_percent,
+    greeting_has_plus,
     greeting_has_question_mark,
     greeting_has_semicolon,
     greeting_is_ascii,
@@ -56,6 +57,8 @@ greeting_has_hash("Ada#")  # True
 greeting_has_hash("Ada")  # False
 greeting_has_percent("Ada%")  # True
 greeting_has_percent("Ada")  # False
+greeting_has_plus("Ada+")  # True
+greeting_has_plus("Ada")  # False
 greeting_has_question_mark("Ada?")  # True
 greeting_has_question_mark("Ada")  # False
 greeting_has_semicolon("Ada;")  # True
@@ -74,6 +77,7 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_has_hash` checks for a literal `#` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_question_mark` checks for a literal `?` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_percent` checks for a literal `%` in the complete greeting and uses the same invalid-name validation as `greet`.
+`greeting_has_plus` checks for a literal `+` in the complete greeting and uses the same invalid-name validation as `greet`.
 
 ## CLI
 
