@@ -9,6 +9,7 @@ from nmg_sdlc_smoke import (
     greeting_ends_with_name,
     greeting_has_at_sign,
     greeting_has_colon,
+    greeting_has_hash,
     greeting_has_percent,
     greeting_has_question_mark,
     greeting_has_semicolon,
@@ -275,3 +276,20 @@ def test_greeting_has_percent_reports_absence() -> None:
 def test_greeting_has_percent_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_percent(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_hash_detects_literal_in_completed_greeting() -> None:
+    assert greet("Ada#") == "Hello, Ada#"
+    assert greeting_has_hash("Ada#") is True
+
+
+def test_greeting_has_hash_reports_absence() -> None:
+    assert greeting_has_hash("Ada") is False
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_question_mark("Ada?") is True
+
+
+@pytest.mark.parametrize("name", ["", " ", None, 42])
+def test_greeting_has_hash_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_hash(name)  # type: ignore[arg-type]
