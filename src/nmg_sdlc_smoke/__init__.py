@@ -5,6 +5,7 @@ from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamat
 from .greet import greeting_ends_with_name as greeting_ends_with_name
 from .greet import greeting_has_at_sign as greeting_has_at_sign
 from .greet import greeting_has_colon as greeting_has_colon
+from .greet import greeting_has_equal as greeting_has_equal
 from .greet import greeting_has_hash as greeting_has_hash
 from .greet import greeting_has_percent as greeting_has_percent
 from .greet import greeting_has_question_mark as greeting_has_question_mark
@@ -23,6 +24,7 @@ __all__ = [
     "greeting_ends_with_name",
     "greeting_has_at_sign",
     "greeting_has_colon",
+    "greeting_has_equal",
     "greeting_has_hash",
     "greeting_has_percent",
     "greeting_has_question_mark",
