@@ -7,6 +7,7 @@ from .greet import greeting_has_at_sign as greeting_has_at_sign
 from .greet import greeting_has_colon as greeting_has_colon
 from .greet import greeting_has_question_mark as greeting_has_question_mark
 from .greet import greeting_has_semicolon as greeting_has_semicolon
+from .greet import greeting_has_tilde as greeting_has_tilde
 from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_length as greeting_length
 from .greet import greeting_starts_with_hello as greeting_starts_with_hello
@@ -23,6 +24,7 @@ __all__ = [
     "greeting_has_colon",
     "greeting_has_question_mark",
     "greeting_has_semicolon",
+    "greeting_has_tilde",
     "greeting_is_ascii",
     "greeting_length",
     "greeting_starts_with_hello",

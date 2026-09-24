@@ -11,6 +11,7 @@ from nmg_sdlc_smoke import (
     greeting_has_colon,
     greeting_has_question_mark,
     greeting_has_semicolon,
+    greeting_has_tilde,
     greeting_is_ascii,
     greeting_length,
     greeting_starts_with_hello,
@@ -258,3 +259,19 @@ def test_greeting_has_question_mark_reports_absence() -> None:
 def test_greeting_has_question_mark_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_question_mark(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_tilde_detects_literal_in_completed_greeting() -> None:
+    assert greet("Ada~") == "Hello, Ada~"
+    assert greeting_has_tilde("Ada~") is True
+
+
+def test_greeting_has_tilde_reports_absence_in_completed_greeting() -> None:
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_tilde("Ada") is False
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_has_tilde_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_tilde(name)  # type: ignore[arg-type]
