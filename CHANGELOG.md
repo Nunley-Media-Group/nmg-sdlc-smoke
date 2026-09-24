@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.41.0] - 2026-09-24
+
+### Changed
+
+- Add public greeting_has_hash helper (#138)
+
 ## [3.40.0] - 2026-09-24
 
 ### Changed
