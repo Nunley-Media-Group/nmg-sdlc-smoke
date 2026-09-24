@@ -66,5 +66,9 @@ def greeting_has_hash(name: str) -> bool:
     return "#" in greet(name)
 
 
+def greeting_has_plus(name: str) -> bool:
+    return "+" in greet(name)
+
+
 def greeting_has_equal(name: str) -> bool:
     return "=" in greet(name)
