@@ -1,0 +1,33 @@
+**Issue**: #144
+**Date**: 2026-09-24
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_public_greeting_has_plus_library_helper.feature
+# Generated from: specs/144-add-public-greeting-has-plus-library-helper/requirements.md
+Feature: Detect a literal plus in a completed greeting
+  Library callers can query plus presence without changing existing greeting behavior.
+
+  @SCN001
+  Scenario: Plus occurs in the completed greeting
+    Given the valid name Ada+ and the public greeting library
+    When greeting_has_plus is called with that name
+    Then the completed greeting is Hello, Ada+ and the result is True
+
+  @SCN002
+  Scenario: Plus does not occur in the completed greeting
+    Given the valid name Ada and the public greeting library
+    When greeting_has_plus is called with that name
+    Then the completed greeting is Hello, Ada and the result is False
+
+  @SCN003
+  Scenario: Invalid names retain greet validation
+    Given the invalid names empty, whitespace-only, None, and 42
+    When greeting_has_plus is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Existing public exports and greeting behavior remain intact
+    Given the public package with greeting_has_plus and every prior export available
+    When greet Ada and greeting_has_hash Ada# are invoked
+    Then they yield Hello, Ada and True and all prior exports remain importable
