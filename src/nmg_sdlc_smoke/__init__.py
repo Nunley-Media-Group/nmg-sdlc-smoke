@@ -4,6 +4,7 @@ from .greet import greeting_casefold as greeting_casefold
 from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamation
 from .greet import greeting_ends_with_name as greeting_ends_with_name
 from .greet import greeting_has_at_sign as greeting_has_at_sign
+from .greet import greeting_has_brace as greeting_has_brace
 from .greet import greeting_has_colon as greeting_has_colon
 from .greet import greeting_has_hash as greeting_has_hash
 from .greet import greeting_has_percent as greeting_has_percent
@@ -22,6 +23,7 @@ __all__ = [
     "greeting_ends_with_exclamation",
     "greeting_ends_with_name",
     "greeting_has_at_sign",
+    "greeting_has_brace",
     "greeting_has_colon",
     "greeting_has_hash",
     "greeting_has_percent",

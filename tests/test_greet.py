@@ -8,6 +8,7 @@ from nmg_sdlc_smoke import (
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
     greeting_has_at_sign,
+    greeting_has_brace,
     greeting_has_colon,
     greeting_has_hash,
     greeting_has_percent,
@@ -293,3 +294,25 @@ def test_greeting_has_hash_reports_absence() -> None:
 def test_greeting_has_hash_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_hash(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_brace_detects_literal_in_completed_greeting() -> None:
+    assert greet("Ada{") == "Hello, Ada{"
+    assert greeting_has_brace("Ada{") is True
+
+
+def test_greeting_has_brace_reports_absence() -> None:
+    assert greeting_has_brace("Ada") is False
+    assert greeting_has_brace("Ada}") is False
+
+
+@pytest.mark.parametrize("name", ["", " ", None, 42])
+def test_greeting_has_brace_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_brace(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_brace_preserves_existing_public_behavior() -> None:
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_hash("Ada#") is True
+    assert greeting_has_question_mark("Ada?") is True
