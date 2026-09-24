@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.40.0] - 2026-09-24
+
+### Changed
+
+- Add greeting_has_percent library helper for recovery smoke (#135)
+
 ## [3.39.0] - 2026-09-23
 
 ### Changed
