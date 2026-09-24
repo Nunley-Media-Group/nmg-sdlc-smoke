@@ -10,6 +10,10 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+### Added
+
+- Export `greeting_has_ampersand(name)` to detect a literal ASCII ampersand in the completed greeting (#150).
+
 ## [3.43.0] - 2026-09-24
 
 ### Changed

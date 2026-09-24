@@ -72,3 +72,7 @@ def greeting_has_plus(name: str) -> bool:
 
 def greeting_has_equal(name: str) -> bool:
     return "=" in greet(name)
+
+
+def greeting_has_ampersand(name: str) -> bool:
+    return "&" in greet(name)

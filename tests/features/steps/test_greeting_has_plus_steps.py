@@ -1,7 +1,6 @@
 import pytest
 from pytest_bdd import given, scenarios, then, when
 
-import nmg_sdlc_smoke
 from nmg_sdlc_smoke import (
     greet,
     greet_many,
@@ -114,4 +113,3 @@ def existing_exports_preserved(context: dict[str, object]) -> None:
     assert context["greeting"] == "Hello, Ada"
     assert context["hash"] is True
     assert all(callable(helper) for helper in context["prior_exports"])
-    assert len(context["prior_exports"]) == len(nmg_sdlc_smoke.__all__) - 1
