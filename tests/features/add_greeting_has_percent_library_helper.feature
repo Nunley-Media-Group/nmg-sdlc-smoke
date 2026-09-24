@@ -14,7 +14,14 @@ Feature: Check for literal percent in a completed greeting
     Then the result is False
 
   @SCN003
-  Scenario: Invalid names retain greet validation
-    Given a blank, whitespace-only, or non-string name
+  Scenario Outline: Invalid names retain greet validation
+    Given an invalid <kind> name
     When I ask whether its completed greeting contains a literal percent sign
     Then it raises the same ValueError as greet
+
+    Examples:
+      | kind            |
+      | blank           |
+      | whitespace-only |
+      | non-string None |
+      | non-string int  |
