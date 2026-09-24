@@ -1,0 +1,32 @@
+**Issue**: #141
+**Date**: 2026-09-24
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_has_brace_library_helper.feature
+# Generated from: specs/141-add-greeting-has-brace-library-helper/requirements.md
+Feature: Detect a literal opening brace in a completed greeting
+
+  @SCN001
+  Scenario: Opening brace occurs in the completed greeting
+    Given the valid name Ada{ and the public greeting library
+    When greeting_has_brace is called with that name
+    Then the completed greeting is Hello, Ada{ and the result is True
+
+  @SCN002
+  Scenario: Neither an ordinary name nor a closing brace matches
+    Given the valid names Ada and Ada} and the public greeting library
+    When greeting_has_brace is called with each of those names
+    Then both results are False and the completed greetings are Hello, Ada and Hello, Ada}
+
+  @SCN003
+  Scenario: Invalid names retain greet validation
+    Given the invalid names empty, whitespace-only, None, and 42
+    When greeting_has_brace is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Existing public greeting interfaces remain intact
+    Given the public greeting library including greeting_has_brace
+    When greet Ada, greeting_has_hash Ada#, and greeting_has_question_mark Ada? are invoked
+    Then they yield Hello, Ada, True, and True respectively
