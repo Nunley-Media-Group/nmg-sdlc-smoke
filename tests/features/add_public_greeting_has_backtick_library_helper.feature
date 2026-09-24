@@ -1,0 +1,25 @@
+Feature: Detect a literal ASCII backtick in a completed greeting
+
+  @SCN001
+  Scenario: ASCII backtick occurs in the completed greeting
+    Given the valid name Ada followed by ASCII U+0060 and the public greeting library
+    When greeting_has_backtick is called with that name
+    Then the completed greeting is Hello, Ada followed by ASCII U+0060 and the result is Python True
+
+  @SCN002
+  Scenario: Missing and fullwidth backticks do not match
+    Given valid names Ada and Ada followed by U+FF40
+    When greeting_has_backtick is called with each name
+    Then their completed greetings are Hello, Ada and Hello, Ada followed by U+FF40 and both results are Python False
+
+  @SCN003
+  Scenario: Invalid names retain greet validation
+    Given invalid names empty, whitespace-only, None, and 42
+    When greeting_has_backtick is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: The greeting and CLI remain unchanged
+    Given the public greeting library and installed nmg-smoke script
+    When greet Ada is evaluated and nmg-smoke Ada is run
+    Then the library returns Hello, Ada and the CLI exits zero with one Hello, Ada newline on stdout and empty stderr

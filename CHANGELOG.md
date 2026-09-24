@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.44.0] - 2026-09-24
+
+### Changed
+
+- Add public greeting_has_backtick library helper (#152)
+
 ## [3.43.0] - 2026-09-24
 
 ### Changed
