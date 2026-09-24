@@ -5,6 +5,7 @@ from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamat
 from .greet import greeting_ends_with_name as greeting_ends_with_name
 from .greet import greeting_has_at_sign as greeting_has_at_sign
 from .greet import greeting_has_colon as greeting_has_colon
+from .greet import greeting_has_pipe as greeting_has_pipe
 from .greet import greeting_has_question_mark as greeting_has_question_mark
 from .greet import greeting_has_semicolon as greeting_has_semicolon
 from .greet import greeting_is_ascii as greeting_is_ascii
@@ -21,6 +22,7 @@ __all__ = [
     "greeting_ends_with_name",
     "greeting_has_at_sign",
     "greeting_has_colon",
+    "greeting_has_pipe",
     "greeting_has_question_mark",
     "greeting_has_semicolon",
     "greeting_is_ascii",

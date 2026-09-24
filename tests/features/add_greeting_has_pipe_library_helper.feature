@@ -1,0 +1,19 @@
+Feature: Detect a literal pipe in a completed greeting
+
+  @SCN001
+  Scenario: Detect a literal pipe
+    Given the installed greeting library and a valid name containing a pipe
+    When greeting_has_pipe is called with Ada|
+    Then it returns True for the completed greeting Hello, Ada|
+
+  @SCN002
+  Scenario: Report no pipe
+    Given the installed greeting library and a valid name without a pipe
+    When greeting_has_pipe is called with Ada
+    Then it returns False for the completed greeting Hello, Ada
+
+  @SCN003
+  Scenario: Reject invalid names
+    Given empty, whitespace-only, and non-string names
+    When greeting_has_pipe is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
