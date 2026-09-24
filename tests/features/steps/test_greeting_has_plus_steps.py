@@ -2,6 +2,7 @@ import pytest
 from pytest_bdd import given, scenarios, then, when
 
 from nmg_sdlc_smoke import (
+    __all__,
     greet,
     greet_many,
     greeting_bytes,
@@ -9,6 +10,7 @@ from nmg_sdlc_smoke import (
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
     greeting_has_at_sign,
+    greeting_has_backtick,
     greeting_has_colon,
     greeting_has_equal,
     greeting_has_hash,
@@ -113,3 +115,7 @@ def existing_exports_preserved(context: dict[str, object]) -> None:
     assert context["greeting"] == "Hello, Ada"
     assert context["hash"] is True
     assert all(callable(helper) for helper in context["prior_exports"])
+    assert set(__all__) == {
+        helper.__name__
+        for helper in (*context["prior_exports"], greeting_has_plus, greeting_has_equal, greeting_has_backtick)
+    }
