@@ -8,6 +8,7 @@ from nmg_sdlc_smoke import (
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
     greeting_has_at_sign,
+    greeting_has_caret,
     greeting_has_colon,
     greeting_has_question_mark,
     greeting_has_semicolon,
@@ -258,3 +259,19 @@ def test_greeting_has_question_mark_reports_absence() -> None:
 def test_greeting_has_question_mark_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_question_mark(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_caret_detects_literal_caret() -> None:
+    assert greet("Ada^") == "Hello, Ada^"
+    assert greeting_has_caret("Ada^") is True
+
+
+def test_greeting_has_caret_reports_absence() -> None:
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_caret("Ada") is False
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_has_caret_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_caret(name)  # type: ignore[arg-type]

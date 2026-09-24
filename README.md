@@ -24,6 +24,7 @@ from nmg_sdlc_smoke import (
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
     greeting_has_at_sign,
+    greeting_has_caret,
     greeting_has_colon,
     greeting_has_question_mark,
     greeting_has_semicolon,
@@ -44,6 +45,8 @@ greeting_starts_with_hello("Ada")  # True
 greeting_ends_with_name("Ada")  # True
 greeting_has_at_sign("Ada@")  # True
 greeting_has_at_sign("Ada")  # False
+greeting_has_caret("Ada^")  # True
+greeting_has_caret("Ada")  # False
 greeting_has_colon("Ada:")  # True
 greeting_has_colon("Ada")  # False
 greeting_has_question_mark("Ada?")  # True
@@ -61,6 +64,7 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_has_colon` checks for a literal `:` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_at_sign` checks for a literal `@` in the completed greeting and uses the same name validation as `greet`.
 `greeting_has_question_mark` checks for a literal `?` in the complete greeting and uses the same invalid-name validation as `greet`.
+`greeting_has_caret` checks for a literal `^` in the completed greeting and uses the same name validation as `greet`.
 
 ## CLI
 
