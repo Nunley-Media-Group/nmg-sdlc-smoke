@@ -7,6 +7,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_ascii_asterisk,
     greeting_has_asterisk,
     greeting_has_at_sign,
     greeting_has_backtick,
@@ -371,3 +372,50 @@ def test_greeting_has_asterisk_distinguishes_operator() -> None:
 def test_greeting_has_asterisk_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_asterisk(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_ascii_asterisk_detects_literal_in_completed_greeting() -> None:
+    assert greet("Ada*") == "Hello, Ada*"
+    assert greeting_has_ascii_asterisk("Ada*") is True
+
+
+def test_greeting_has_ascii_asterisk_reports_absence() -> None:
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_ascii_asterisk("Ada") is False
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_has_ascii_asterisk_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_ascii_asterisk(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_ascii_asterisk_preserves_prior_exports() -> None:
+    import nmg_sdlc_smoke
+
+    prior = [
+        "greet",
+        "greet_many",
+        "greeting_bytes",
+        "greeting_casefold",
+        "greeting_ends_with_exclamation",
+        "greeting_ends_with_name",
+        "greeting_has_asterisk",
+        "greeting_has_at_sign",
+        "greeting_has_backtick",
+        "greeting_has_colon",
+        "greeting_has_equal",
+        "greeting_has_hash",
+        "greeting_has_percent",
+        "greeting_has_plus",
+        "greeting_has_question_mark",
+        "greeting_has_semicolon",
+        "greeting_is_ascii",
+        "greeting_length",
+        "greeting_starts_with_hello",
+        "greeting_word_count",
+    ]
+    assert set(prior) < set(nmg_sdlc_smoke.__all__)
+    assert all(callable(getattr(nmg_sdlc_smoke, export)) for export in prior)
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_asterisk("Ada*") is True

@@ -23,6 +23,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_ascii_asterisk,
     greeting_has_asterisk,
     greeting_has_at_sign,
     greeting_has_backtick,
@@ -48,6 +49,8 @@ greeting_is_ascii("Ada")  # True
 greeting_casefold("Straße")  # "hello, strasse"
 greeting_starts_with_hello("Ada")  # True
 greeting_ends_with_name("Ada")  # True
+greeting_has_ascii_asterisk("Ada*")  # True
+greeting_has_ascii_asterisk("Ada")  # False
 greeting_has_asterisk("Ada*")  # True
 greeting_has_asterisk("Ada")  # False
 greeting_has_asterisk("Ada∗")  # False
@@ -80,6 +83,7 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
 `greeting_has_semicolon` checks for a literal `;` in the complete greeting and uses the same name validation as `greet`.
 `greeting_has_colon` checks for a literal `:` in the complete greeting and uses the same invalid-name validation as `greet`.
+`greeting_has_ascii_asterisk` checks for a literal ASCII `*` in the completed greeting and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_asterisk` matches only a literal ASCII `*` (U+002A) in the completed greeting, not U+2217 `∗`, and inherits `greet`'s `ValueError("name must not be blank")`.
 `greeting_has_backtick` matches only a literal ASCII backtick (U+0060) in the complete greeting, not the fullwidth lookalike U+FF40, and inherits `greet`'s `ValueError("name must not be blank")`.
 `greeting_has_at_sign` checks for a literal `@` in the completed greeting and uses the same name validation as `greet`.
