@@ -4,13 +4,13 @@
 **Issue**: #158
 **Reviewer**: Codex
 **Scope**: Implementation verification against spec
-**Verification head**: 698f54f93ecaf140ce29c4e76cdd49cd2f40d203
+**Verification head**: a656c0d59fcb45f8264d70746127a2d9182d52b1
 
 ---
 
 ## Executive Summary
 
-Commit `698f54f` implements T001–T003. `greeting_has_ascii_asterisk(name: str) -> bool` in `src/nmg_sdlc_smoke/greet.py` returns `"*" in greet(name)`. The package root exports it and lists it in `__all__`, and the README documents it. Unit tests and four pytest-bdd scenarios (SCN001–SCN004) exercise every AC. All registered commands pass in an isolated venv. The steering artifact has no ceiling, and its coverage is complete (0 declared validations).
+Commit `698f54f` implements T001–T003; current head `a656c0d` adds only the prior verification report on top of it, with no source, test, README, or spec change. This run re-verifies the current head. `greeting_has_ascii_asterisk(name: str) -> bool` in `src/nmg_sdlc_smoke/greet.py` returns `"*" in greet(name)`. The package root exports it and lists it in `__all__`, and the README documents it. Unit tests and four pytest-bdd scenarios (SCN001–SCN004) exercise every AC. All registered commands pass in an isolated venv. The steering artifact has no ceiling, and its coverage is complete (0 declared validations).
 
 | Category | Score (1-5) |
 |----------|-------------|
@@ -47,9 +47,9 @@ Commit `698f54f` implements T001–T003. `greeting_has_ascii_asterisk(name: str)
 
 ## Deterministic Steering Artifact and Ceiling
 
-- Command: `sdlc-verify-steering.mjs --project . --issue 158 --spec specs/158-add-public-greeting-has-ascii-asterisk-helper --base main --controller-run-id f71d921f-7582-4e4c-a3f9-56d24bead574`, exit 0 with `ok: true`
+- Command: `sdlc-verify-steering.mjs --project . --issue 158 --spec specs/158-add-public-greeting-has-ascii-asterisk-helper --base main --controller-run-id 10629e08-a0bf-4840-9457-0b0b2956639f`, exit 0 with `ok: true`
 - Artifact: `.omp/sdlc/verification/158.json`
-  - `headSha`: `698f54f93ecaf140ce29c4e76cdd49cd2f40d203`
+  - `headSha`: `a656c0d59fcb45f8264d70746127a2d9182d52b1`
   - `steeringHash`: `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`
   - `specHash`: `sha256:a2070e302aebc98be2f6523dc37d03748b421fec87cfd0627aedf57c4a8c6d3b`
   - `ceiling: null`
@@ -129,7 +129,7 @@ The library stays pure, and the CLI is untouched. No new modules or runtime depe
 | AC3 / SCN003 | Yes | Yes | Yes |
 | AC4 / SCN004 | Yes | Yes | Yes |
 
-### Registered commands (fresh isolated venv, `pip install -e ".[dev]"`, head `698f54f`)
+### Registered commands (fresh isolated venv, `pip install -e ".[dev]"`, head `a656c0d`, Python 3.14.6)
 
 - `python -m pytest`: 314 passed, 2 skipped (both pre-existing skips)
 - `python -m pytest tests/features`: 120 passed, 2 skipped
@@ -146,7 +146,7 @@ The library stays pure, and the CLI is untouched. No new modules or runtime depe
 
 ## Fixes Applied
 
-None were needed. This report replaces the stale Fail report from `d649006` that the implementation commit carried forward.
+None were needed. This report refreshes the previous Pass report (verification head `698f54f`) for current head `a656c0d`; findings are unchanged.
 
 ## Remaining Issues
 
@@ -189,4 +189,4 @@ None.
 
 **Ready for PR**
 
-Every delivery AC, FR, task, and scenario passes locally at head `698f54f93ecaf140ce29c4e76cdd49cd2f40d203`, and the steering gate is complete with no ceiling.
+Every delivery AC, FR, task, and scenario passes locally at head `a656c0d59fcb45f8264d70746127a2d9182d52b1`, and the steering gate is complete with no ceiling.
