@@ -9,6 +9,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_asterisk,
     greeting_has_at_sign,
     greeting_has_backtick,
     greeting_has_colon,
@@ -115,5 +116,7 @@ def invoke_existing_helpers(context: dict[str, object]) -> None:
 def existing_exports_preserved(context: dict[str, object]) -> None:
     assert context["greeting"] == "Hello, Ada"
     assert context["hash"] is True
+    assert greeting_has_asterisk("Ada*") is True
+    assert greeting_has_asterisk("Ada") is False
     assert all(callable(helper) for helper in context["prior_exports"])
-    assert {helper.__name__ for helper in (*context["prior_exports"], greeting_has_plus)} <= set(__all__)
+    assert {helper.__name__ for helper in (*context["prior_exports"], greeting_has_plus, greeting_has_asterisk)} == set(__all__)
