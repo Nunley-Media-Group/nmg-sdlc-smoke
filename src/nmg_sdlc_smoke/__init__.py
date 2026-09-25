@@ -3,6 +3,7 @@ from .greet import greeting_bytes as greeting_bytes
 from .greet import greeting_casefold as greeting_casefold
 from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamation
 from .greet import greeting_ends_with_name as greeting_ends_with_name
+from .greet import greeting_has_ascii_asterisk as greeting_has_ascii_asterisk
 from .greet import greeting_has_asterisk as greeting_has_asterisk
 from .greet import greeting_has_at_sign as greeting_has_at_sign
 from .greet import greeting_has_backtick as greeting_has_backtick
@@ -25,6 +26,7 @@ __all__ = [
     "greeting_casefold",
     "greeting_ends_with_exclamation",
     "greeting_ends_with_name",
+    "greeting_has_ascii_asterisk",
     "greeting_has_asterisk",
     "greeting_has_at_sign",
     "greeting_has_backtick",
