@@ -7,6 +7,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_asterisk,
     greeting_has_at_sign,
     greeting_has_backtick,
     greeting_has_colon,
@@ -349,3 +350,24 @@ def test_greeting_has_backtick_rejects_absence_and_fullwidth_lookalike() -> None
 def test_greeting_has_backtick_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_backtick(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_asterisk_detects_literal_in_completed_greeting() -> None:
+    assert greet("Ada*") == "Hello, Ada*"
+    assert greeting_has_asterisk("Ada*") is True
+
+
+def test_greeting_has_asterisk_reports_absence() -> None:
+    assert greet("Ada") == "Hello, Ada"
+    assert greeting_has_asterisk("Ada") is False
+
+
+def test_greeting_has_asterisk_distinguishes_operator() -> None:
+    assert greet("Ada∗") == "Hello, Ada∗"
+    assert greeting_has_asterisk("Ada∗") is False
+
+
+@pytest.mark.parametrize("name", ["", " \t\n", None, 42])
+def test_greeting_has_asterisk_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_asterisk(name)  # type: ignore[arg-type]

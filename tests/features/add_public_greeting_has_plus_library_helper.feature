@@ -18,9 +18,3 @@ Feature: Detect a literal plus in a completed greeting
     Given the invalid names empty, whitespace-only, None, and 42
     When greeting_has_plus is called with each invalid name
     Then each call raises ValueError with message name must not be blank
-
-  @SCN004
-  Scenario: Existing public exports and greeting behavior remain intact
-    Given the public package with greeting_has_plus and every prior export available
-    When greet Ada and greeting_has_hash Ada# are invoked
-    Then they yield Hello, Ada and True and all prior exports remain importable

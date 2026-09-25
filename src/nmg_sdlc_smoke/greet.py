@@ -76,3 +76,7 @@ def greeting_has_equal(name: str) -> bool:
 
 def greeting_has_backtick(name: str) -> bool:
     return "\u0060" in greet(name)
+
+
+def greeting_has_asterisk(name: str) -> bool:
+    return "*" in greet(name)
