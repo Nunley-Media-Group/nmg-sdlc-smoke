@@ -30,6 +30,7 @@ from nmg_sdlc_smoke import (
     greeting_has_colon,
     greeting_has_equal,
     greeting_has_exclamation,
+    greeting_has_exclamation_or_question,
     greeting_has_hash,
     greeting_has_percent,
     greeting_has_plus,
@@ -67,6 +68,9 @@ greeting_has_equal("Ada")  # False
 greeting_has_equal("Ada＝")  # False
 greeting_has_exclamation("Ada!")  # True
 greeting_has_exclamation("Ada")  # False
+greeting_has_exclamation_or_question("Ada!")  # True
+greeting_has_exclamation_or_question("Ada?")  # True
+greeting_has_exclamation_or_question("Ada")  # False
 greeting_has_hash("Ada#")  # True
 greeting_has_hash("Ada")  # False
 greeting_has_percent("Ada%")  # True
@@ -92,6 +96,7 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_has_at_sign` checks for a literal `@` in the completed greeting and uses the same name validation as `greet`.
 `greeting_has_equal` matches only a literal ASCII `=` in the complete greeting (not a fullwidth `＝`) and inherits `greet`'s invalid-name `ValueError`.
 `greeting_has_exclamation` checks for a literal `!` in the completed greeting (not the fullwidth `！`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_has_exclamation_or_question` checks whether the completed greeting contains a literal `!` or `?` (not the fullwidth `！` or `？`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_hash` checks for a literal `#` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_question_mark` checks for a literal `?` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_percent` checks for a literal `%` in the complete greeting and uses the same invalid-name validation as `greet`.
