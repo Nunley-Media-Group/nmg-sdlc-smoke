@@ -84,3 +84,7 @@ def greeting_has_asterisk(name: str) -> bool:
 
 def greeting_has_ascii_asterisk(name: str) -> bool:
     return "*" in greet(name)
+
+
+def greeting_has_exclamation(name: str) -> bool:
+    return "!" in greet(name)
