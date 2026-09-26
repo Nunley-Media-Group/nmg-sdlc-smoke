@@ -13,6 +13,7 @@ from nmg_sdlc_smoke import (
     greeting_has_backtick,
     greeting_has_colon,
     greeting_has_dollar,
+    greeting_has_double_quote,
     greeting_has_equal,
     greeting_has_exclamation,
     greeting_has_exclamation_or_question,
@@ -503,3 +504,19 @@ def test_greeting_has_slash_reports_absence(name: str) -> None:
 def test_greeting_has_slash_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_slash(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_double_quote_detects_literal_double_quote() -> None:
+    assert greet('Ada"') == 'Hello, Ada"'
+    assert greeting_has_double_quote('Ada"') is True
+
+
+@pytest.mark.parametrize("name", ["Ada", "Ada\uff02"])
+def test_greeting_has_double_quote_reports_absence(name: str) -> None:
+    assert greeting_has_double_quote(name) is False
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_has_double_quote_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_double_quote(name)  # type: ignore[arg-type]
