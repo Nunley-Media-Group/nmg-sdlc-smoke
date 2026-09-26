@@ -1,0 +1,32 @@
+**Issue**: #170
+**Date**: 2026-09-26
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_public_greeting_has_underscore_helper.feature
+# Generated from: specs/170-add-public-greeting-has-underscore-helper/requirements.md
+Feature: Detect a literal underscore in a completed greeting
+
+  @SCN001
+  Scenario: Detect literal underscore in a completed greeting
+    Given the public greeting package and valid name Ada_
+    When greeting_has_underscore is called with Ada_
+    Then greet returns Hello, Ada_ and the helper returns True
+
+  @SCN002
+  Scenario: Reject absent and fullwidth underscores
+    Given valid names Ada and Ada＿
+    When greeting_has_underscore is called with each valid name
+    Then each completed greeting lacks literal underscore and each helper result is False
+
+  @SCN003
+  Scenario: Preserve greet validation for invalid names
+    Given invalid names empty, whitespace-only, None, and 42
+    When greeting_has_underscore is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Import and run documented helper examples
+    Given the installed public package and README Library examples Ada_ and Ada
+    When greeting_has_underscore is imported from nmg_sdlc_smoke and called with those names
+    Then the imported helper returns True and False respectively
