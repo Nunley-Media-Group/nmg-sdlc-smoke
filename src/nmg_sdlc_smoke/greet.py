@@ -93,3 +93,7 @@ def greeting_has_exclamation(name: str) -> bool:
 def greeting_has_exclamation_or_question(name: str) -> bool:
     greeting = greet(name)
     return "!" in greeting or "?" in greeting
+
+
+def greeting_has_dollar(name: str) -> bool:
+    return "$" in greet(name)

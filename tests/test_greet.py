@@ -12,6 +12,7 @@ from nmg_sdlc_smoke import (
     greeting_has_at_sign,
     greeting_has_backtick,
     greeting_has_colon,
+    greeting_has_dollar,
     greeting_has_equal,
     greeting_has_exclamation,
     greeting_has_exclamation_or_question,
@@ -452,3 +453,19 @@ def test_greeting_has_exclamation_or_question_checks_literal_marks(name: str, ex
 def test_greeting_has_exclamation_or_question_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_exclamation_or_question(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_dollar_detects_literal_dollar() -> None:
+    assert greet("Ada$") == "Hello, Ada$"
+    assert greeting_has_dollar("Ada$") is True
+
+
+@pytest.mark.parametrize("name", ["Ada", "Ada\uff04"])
+def test_greeting_has_dollar_reports_absence(name: str) -> None:
+    assert greeting_has_dollar(name) is False
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_has_dollar_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_dollar(name)  # type: ignore[arg-type]

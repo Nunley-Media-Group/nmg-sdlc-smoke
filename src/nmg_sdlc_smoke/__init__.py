@@ -8,6 +8,7 @@ from .greet import greeting_has_asterisk as greeting_has_asterisk
 from .greet import greeting_has_at_sign as greeting_has_at_sign
 from .greet import greeting_has_backtick as greeting_has_backtick
 from .greet import greeting_has_colon as greeting_has_colon
+from .greet import greeting_has_dollar as greeting_has_dollar
 from .greet import greeting_has_equal as greeting_has_equal
 from .greet import greeting_has_exclamation as greeting_has_exclamation
 from .greet import (
@@ -35,6 +36,7 @@ __all__ = [
     "greeting_has_at_sign",
     "greeting_has_backtick",
     "greeting_has_colon",
+    "greeting_has_dollar",
     "greeting_has_equal",
     "greeting_has_exclamation",
     "greeting_has_exclamation_or_question",
