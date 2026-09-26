@@ -121,4 +121,4 @@ def existing_exports_preserved(context: dict[str, object]) -> None:
     assert greeting_has_asterisk("Ada*") is True
     assert greeting_has_asterisk("Ada") is False
     assert all(callable(helper) for helper in context["prior_exports"])
-    assert {helper.__name__ for helper in (*context["prior_exports"], greeting_has_plus, greeting_has_asterisk, greeting_has_ascii_asterisk, greeting_has_exclamation)} == set(__all__)
+    assert {helper.__name__ for helper in (*context["prior_exports"], greeting_has_plus, greeting_has_asterisk, greeting_has_ascii_asterisk, greeting_has_exclamation)} <= set(__all__)

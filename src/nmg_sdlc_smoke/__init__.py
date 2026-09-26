@@ -10,6 +10,9 @@ from .greet import greeting_has_backtick as greeting_has_backtick
 from .greet import greeting_has_colon as greeting_has_colon
 from .greet import greeting_has_equal as greeting_has_equal
 from .greet import greeting_has_exclamation as greeting_has_exclamation
+from .greet import (
+    greeting_has_exclamation_or_question as greeting_has_exclamation_or_question,
+)
 from .greet import greeting_has_hash as greeting_has_hash
 from .greet import greeting_has_percent as greeting_has_percent
 from .greet import greeting_has_plus as greeting_has_plus
@@ -34,6 +37,7 @@ __all__ = [
     "greeting_has_colon",
     "greeting_has_equal",
     "greeting_has_exclamation",
+    "greeting_has_exclamation_or_question",
     "greeting_has_hash",
     "greeting_has_percent",
     "greeting_has_plus",

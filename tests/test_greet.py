@@ -14,6 +14,7 @@ from nmg_sdlc_smoke import (
     greeting_has_colon,
     greeting_has_equal,
     greeting_has_exclamation,
+    greeting_has_exclamation_or_question,
     greeting_has_hash,
     greeting_has_percent,
     greeting_has_plus,
@@ -437,3 +438,17 @@ def test_greeting_has_exclamation_reports_absence(name: str) -> None:
 def test_greeting_has_exclamation_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_exclamation(name)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [("Ada!", True), ("Ada?", True), ("Ada!?", True), ("Ada", False), ("Ada\uff01\uff1f", False)],
+)
+def test_greeting_has_exclamation_or_question_checks_literal_marks(name: str, expected: bool) -> None:
+    assert greeting_has_exclamation_or_question(name) is expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_has_exclamation_or_question_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_exclamation_or_question(name)  # type: ignore[arg-type]
