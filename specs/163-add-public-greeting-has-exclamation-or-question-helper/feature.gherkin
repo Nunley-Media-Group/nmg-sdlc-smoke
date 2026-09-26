@@ -1,0 +1,38 @@
+**Issue**: #163
+**Date**: 2026-09-26
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_public_greeting_has_exclamation_or_question_helper.feature
+# Generated from: specs/163-add-public-greeting-has-exclamation-or-question-helper/requirements.md
+Feature: Detect literal exclamation or question in completed greetings
+
+  @SCN001
+  Scenario: AC1 detects literal exclamation
+    Given the public greeting package and valid name "Ada!"
+    When I call the combined punctuation helper
+    Then the result is Python True
+
+  @SCN002
+  Scenario: AC2 detects literal question
+    Given the public greeting package and valid name "Ada?"
+    When I call the combined punctuation helper
+    Then the result is Python True
+
+  @SCN003
+  Scenario: AC3 distinguishes absence, fullwidth marks, and both literal marks
+    Given valid names "Ada", "Ada！？", and "Ada!?"
+    When I call the combined punctuation helper for each name
+    Then the results are Python False, False, and True respectively
+
+  @SCN004
+  Scenario: AC4 preserves invalid-name errors
+    Given invalid names "", " \t", None, and 42
+    When I call the combined punctuation helper for each invalid name
+    Then each call raises ValueError with exact message "name must not be blank"
+
+  @SCN005
+  Scenario: AC5 public import follows README examples
+    Given the combined punctuation helper imported from nmg_sdlc_smoke
+    When I call it with "Ada!", "Ada?", and "Ada"
+    Then the results are Python True, True, and False respectively
