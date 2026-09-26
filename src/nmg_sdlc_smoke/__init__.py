@@ -19,6 +19,7 @@ from .greet import greeting_has_percent as greeting_has_percent
 from .greet import greeting_has_plus as greeting_has_plus
 from .greet import greeting_has_question_mark as greeting_has_question_mark
 from .greet import greeting_has_semicolon as greeting_has_semicolon
+from .greet import greeting_has_underscore as greeting_has_underscore
 from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_length as greeting_length
 from .greet import greeting_starts_with_hello as greeting_starts_with_hello
@@ -45,6 +46,7 @@ __all__ = [
     "greeting_has_plus",
     "greeting_has_question_mark",
     "greeting_has_semicolon",
+    "greeting_has_underscore",
     "greeting_is_ascii",
     "greeting_length",
     "greeting_starts_with_hello",

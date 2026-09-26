@@ -21,6 +21,7 @@ from nmg_sdlc_smoke import (
     greeting_has_plus,
     greeting_has_question_mark,
     greeting_has_semicolon,
+    greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
     greeting_starts_with_hello,
@@ -469,3 +470,19 @@ def test_greeting_has_dollar_reports_absence(name: str) -> None:
 def test_greeting_has_dollar_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_dollar(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_underscore_detects_literal_underscore() -> None:
+    assert greet("Ada_") == "Hello, Ada_"
+    assert greeting_has_underscore("Ada_") is True
+
+
+@pytest.mark.parametrize("name", ["Ada", "Ada\uff3f"])
+def test_greeting_has_underscore_reports_absence(name: str) -> None:
+    assert greeting_has_underscore(name) is False
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_has_underscore_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_underscore(name)  # type: ignore[arg-type]

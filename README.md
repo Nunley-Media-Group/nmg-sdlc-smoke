@@ -37,6 +37,7 @@ from nmg_sdlc_smoke import (
     greeting_has_plus,
     greeting_has_question_mark,
     greeting_has_semicolon,
+    greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
     greeting_starts_with_hello,
@@ -84,6 +85,8 @@ greeting_has_question_mark("Ada?")  # True
 greeting_has_question_mark("Ada")  # False
 greeting_has_semicolon("Ada;")  # True
 greeting_has_semicolon("Ada")  # False
+greeting_has_underscore("Ada_")  # True
+greeting_has_underscore("Ada")  # False
 greeting_word_count("Ada")  # 2
 greeting_word_count("Ada Lovelace")  # 3
 ```
@@ -94,6 +97,7 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_has_semicolon` checks for a literal `;` in the complete greeting and uses the same name validation as `greet`.
 `greeting_has_colon` checks for a literal `:` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_dollar` checks for a literal `$` in the complete greeting (not the fullwidth `＄`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_has_underscore` checks for a literal `_` (U+005F) in the completed greeting (not the fullwidth `＿`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_ascii_asterisk` checks for a literal ASCII `*` in the completed greeting and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_asterisk` matches only a literal ASCII `*` (U+002A) in the completed greeting, not U+2217 `∗`, and inherits `greet`'s `ValueError("name must not be blank")`.
 `greeting_has_backtick` matches only a literal ASCII backtick (U+0060) in the complete greeting, not the fullwidth lookalike U+FF40, and inherits `greet`'s `ValueError("name must not be blank")`.
