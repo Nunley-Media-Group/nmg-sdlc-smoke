@@ -101,3 +101,7 @@ def greeting_has_dollar(name: str) -> bool:
 
 def greeting_has_underscore(name: str) -> bool:
     return "_" in greet(name)
+
+
+def greeting_has_slash(name: str) -> bool:
+    return "/" in greet(name)

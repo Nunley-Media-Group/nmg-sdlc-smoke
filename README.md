@@ -37,6 +37,7 @@ from nmg_sdlc_smoke import (
     greeting_has_plus,
     greeting_has_question_mark,
     greeting_has_semicolon,
+    greeting_has_slash,
     greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
@@ -85,6 +86,8 @@ greeting_has_question_mark("Ada?")  # True
 greeting_has_question_mark("Ada")  # False
 greeting_has_semicolon("Ada;")  # True
 greeting_has_semicolon("Ada")  # False
+greeting_has_slash("Ada/")  # True
+greeting_has_slash("Ada")  # False
 greeting_has_underscore("Ada_")  # True
 greeting_has_underscore("Ada")  # False
 greeting_word_count("Ada")  # 2
@@ -109,6 +112,7 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_has_question_mark` checks for a literal `?` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_percent` checks for a literal `%` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_plus` checks for a literal `+` in the complete greeting and uses the same invalid-name validation as `greet`.
+`greeting_has_slash` checks for a literal `/` in the complete greeting (not the fullwidth `／`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 
 ## CLI
 
