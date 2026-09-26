@@ -13,6 +13,7 @@ from nmg_sdlc_smoke import (
     greeting_has_backtick,
     greeting_has_colon,
     greeting_has_equal,
+    greeting_has_exclamation,
     greeting_has_hash,
     greeting_has_percent,
     greeting_has_plus,
@@ -419,3 +420,20 @@ def test_greeting_has_ascii_asterisk_preserves_prior_exports() -> None:
     assert all(callable(getattr(nmg_sdlc_smoke, export)) for export in prior)
     assert greet("Ada") == "Hello, Ada"
     assert greeting_has_asterisk("Ada*") is True
+
+
+def test_greeting_has_exclamation_detects_literal_in_completed_greeting() -> None:
+    assert greet("Ada!") == "Hello, Ada!"
+    assert greeting_has_exclamation("Ada!") is True
+
+
+@pytest.mark.parametrize("name", ["Ada", "Ada！"])
+def test_greeting_has_exclamation_reports_absence(name: str) -> None:
+    assert "!" not in greet(name)
+    assert greeting_has_exclamation(name) is False
+
+
+@pytest.mark.parametrize("name", ["", " ", None, 42])
+def test_greeting_has_exclamation_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_exclamation(name)  # type: ignore[arg-type]
