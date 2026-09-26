@@ -1,0 +1,32 @@
+**Issue**: #171
+**Date**: 2026-09-26
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_public_greeting_has_double_quote_helper.feature
+# Generated from: specs/171-add-public-greeting-has-double-quote-helper/requirements.md
+Feature: Detect a literal double quote in a completed greeting
+
+  @SCN001
+  Scenario: Detect literal double quote in a completed greeting
+    Given the public greeting package and valid name Ada"
+    When greeting_has_double_quote is called with Ada"
+    Then greet returns Hello, Ada" and the helper returns True
+
+  @SCN002
+  Scenario: Reject absent and fullwidth double quotes
+    Given valid names Ada and Ada＂
+    When greeting_has_double_quote is called with each valid name
+    Then each completed greeting lacks literal double quote and each helper result is False
+
+  @SCN003
+  Scenario: Preserve greet validation for invalid names
+    Given invalid names empty, whitespace-only, None, and 42
+    When greeting_has_double_quote is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Import and run documented helper examples
+    Given the installed public package and README Library examples Ada" and Ada
+    When greeting_has_double_quote is imported from nmg_sdlc_smoke and called with those names
+    Then the imported helper returns True and False respectively
