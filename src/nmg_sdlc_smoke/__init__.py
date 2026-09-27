@@ -7,6 +7,7 @@ from .greet import greeting_has_apostrophe as greeting_has_apostrophe
 from .greet import greeting_has_ascii_asterisk as greeting_has_ascii_asterisk
 from .greet import greeting_has_asterisk as greeting_has_asterisk
 from .greet import greeting_has_at_sign as greeting_has_at_sign
+from .greet import greeting_has_backslash as greeting_has_backslash
 from .greet import greeting_has_backtick as greeting_has_backtick
 from .greet import greeting_has_colon as greeting_has_colon
 from .greet import greeting_has_dollar as greeting_has_dollar
@@ -39,6 +40,7 @@ __all__ = [
     "greeting_has_ascii_asterisk",
     "greeting_has_asterisk",
     "greeting_has_at_sign",
+    "greeting_has_backslash",
     "greeting_has_backtick",
     "greeting_has_colon",
     "greeting_has_dollar",

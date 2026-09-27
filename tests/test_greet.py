@@ -11,6 +11,7 @@ from nmg_sdlc_smoke import (
     greeting_has_ascii_asterisk,
     greeting_has_asterisk,
     greeting_has_at_sign,
+    greeting_has_backslash,
     greeting_has_backtick,
     greeting_has_colon,
     greeting_has_dollar,
@@ -537,3 +538,19 @@ def test_greeting_has_apostrophe_reports_absence(name: str) -> None:
 def test_greeting_has_apostrophe_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_apostrophe(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_backslash_detects_literal_backslash() -> None:
+    assert greet("Ada\\") == "Hello, Ada\\"
+    assert greeting_has_backslash("Ada\\") is True
+
+
+@pytest.mark.parametrize("name", ["Ada", "Ada/", "Ada\uff3c", "Ada\u2216"])
+def test_greeting_has_backslash_reports_absence(name: str) -> None:
+    assert greeting_has_backslash(name) is False
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_has_backslash_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_backslash(name)  # type: ignore[arg-type]
