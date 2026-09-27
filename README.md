@@ -23,6 +23,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_apostrophe,
     greeting_has_ascii_asterisk,
     greeting_has_asterisk,
     greeting_has_at_sign,
@@ -55,6 +56,9 @@ greeting_is_ascii("Ada")  # True
 greeting_casefold("Straße")  # "hello, strasse"
 greeting_starts_with_hello("Ada")  # True
 greeting_ends_with_name("Ada")  # True
+greeting_has_apostrophe("O'Brien")  # True
+greeting_has_apostrophe("Ada")  # False
+greeting_has_apostrophe("O’Brien")  # False
 greeting_has_ascii_asterisk("Ada*")  # True
 greeting_has_ascii_asterisk("Ada")  # False
 greeting_has_asterisk("Ada*")  # True
@@ -117,6 +121,7 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_has_percent` checks for a literal `%` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_plus` checks for a literal `+` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_slash` checks for a literal `/` in the complete greeting (not the fullwidth `／`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_has_apostrophe` checks for a literal ASCII `'` (U+0027) in the completed greeting (not `’` U+2019, `ʼ` U+02BC, or `` ` `` U+0060) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 
 ## CLI
 
