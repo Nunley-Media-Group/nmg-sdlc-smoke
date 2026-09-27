@@ -240,6 +240,88 @@ def test_cli_rejects_blank_name_with_uppercase(
     assert "name must not be blank" in captured.err
 
 
+@pytest.mark.parametrize(
+    "argv", [["--lowercase", "Ada"], ["Ada", "--lowercase"]]
+)
+def test_cli_prints_lowercase_greeting(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(argv) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "hello, ada\n"
+    assert captured.err == ""
+
+
+def test_cli_lowercase_composes_before_prefix_and_wrappers(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    argv = [
+        "--lowercase",
+        "--prefix",
+        "OK: ",
+        "--parentheses",
+        "--repeat",
+        "2",
+        "--no-newline",
+        "ADA",
+    ]
+    assert main(argv) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "(OK: hello, ada)\n(OK: hello, ada)"
+    assert captured.err == ""
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [("ÅSA", "hello, åsa\n"), ("Straße", "hello, straße\n")],
+)
+def test_cli_lowercase_uses_str_lower_semantics(
+    name: str, expected: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(["--lowercase", name]) == 0
+    assert capsys.readouterr().out == expected
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["--uppercase", "--lowercase", "Ada"],
+        ["--lowercase", "--uppercase", "Ada"],
+    ],
+)
+def test_cli_rejects_uppercase_with_lowercase(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(argv)
+
+    assert exit_info.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "not allowed with argument" in captured.err
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n"])
+def test_cli_rejects_blank_name_with_lowercase(
+    name: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--lowercase", name])
+
+    assert exit_info.value.code == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "name must not be blank" in captured.err
+
+
+def test_cli_help_lists_lowercase(capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--help"])
+
+    assert exit_info.value.code == 0
+    assert "--lowercase" in capsys.readouterr().out
+
+
 @pytest.mark.parametrize("name", ["", " ", "\t", "\n"])
 def test_cli_rejects_blank_name_with_repeat(
     name: str, capsys: pytest.CaptureFixture[str]
