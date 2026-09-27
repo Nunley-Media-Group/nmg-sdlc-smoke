@@ -111,5 +111,9 @@ def greeting_has_slash(name: str) -> bool:
     return "/" in greet(name)
 
 
+def greeting_has_backslash(name: str) -> bool:
+    return "\\" in greet(name)
+
+
 def greeting_has_apostrophe(name: str) -> bool:
     return "'" in greet(name)

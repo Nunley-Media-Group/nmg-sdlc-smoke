@@ -27,6 +27,7 @@ from nmg_sdlc_smoke import (
     greeting_has_ascii_asterisk,
     greeting_has_asterisk,
     greeting_has_at_sign,
+    greeting_has_backslash,
     greeting_has_backtick,
     greeting_has_colon,
     greeting_has_dollar,
@@ -64,6 +65,8 @@ greeting_has_ascii_asterisk("Ada")  # False
 greeting_has_asterisk("Ada*")  # True
 greeting_has_asterisk("Ada")  # False
 greeting_has_asterisk("Ada∗")  # False
+greeting_has_backslash("Ada\\")  # True
+greeting_has_backslash("Ada")  # False
 greeting_has_backtick("Ada`")  # True
 greeting_has_backtick("Ada")  # False
 greeting_has_backtick("Ada｀")  # False
@@ -112,6 +115,8 @@ greeting_word_count("Ada Lovelace")  # 3
 `greeting_has_ascii_asterisk` checks for a literal ASCII `*` in the completed greeting and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_asterisk` matches only a literal ASCII `*` (U+002A) in the completed greeting, not U+2217 `∗`, and inherits `greet`'s `ValueError("name must not be blank")`.
 `greeting_has_backtick` matches only a literal ASCII backtick (U+0060) in the complete greeting, not the fullwidth lookalike U+FF40, and inherits `greet`'s `ValueError("name must not be blank")`.
+
+`greeting_has_backslash` matches only a literal ASCII backslash `\` (U+005C) in the completed greeting, not `/` (U+002F), the fullwidth `＼` (U+FF3C), or `∖` (U+2216), and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_at_sign` checks for a literal `@` in the completed greeting and uses the same name validation as `greet`.
 `greeting_has_equal` matches only a literal ASCII `=` in the complete greeting (not a fullwidth `＝`) and inherits `greet`'s invalid-name `ValueError`.
 `greeting_has_exclamation` checks for a literal `!` in the completed greeting (not the fullwidth `！`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
