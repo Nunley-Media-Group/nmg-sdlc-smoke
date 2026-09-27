@@ -1,0 +1,25 @@
+Feature: Detect a literal ASCII apostrophe in a completed greeting
+
+  @SCN001
+  Scenario: Detect a literal apostrophe in a completed greeting
+    Given the public greeting package and valid name O'Brien
+    When greeting_has_apostrophe is called with O'Brien
+    Then greet returns Hello, O'Brien and the helper returns True
+
+  @SCN002
+  Scenario: Reject absent and lookalike apostrophes
+    Given valid names Ada, O’Brien, OʼBrien, and O`Brien
+    When greeting_has_apostrophe is called with each valid name
+    Then each completed greeting lacks a literal apostrophe and each helper result is False
+
+  @SCN003
+  Scenario: Preserve greet validation for invalid names
+    Given invalid names empty, whitespace-only, None, and 42
+    When greeting_has_apostrophe is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Import and run documented helper examples
+    Given the installed public package and README Library examples O'Brien and Ada
+    When greeting_has_apostrophe is imported from nmg_sdlc_smoke and called with those names
+    Then the helper is listed in __all__ and returns True and False respectively

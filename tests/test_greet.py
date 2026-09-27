@@ -7,6 +7,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
+    greeting_has_apostrophe,
     greeting_has_ascii_asterisk,
     greeting_has_asterisk,
     greeting_has_at_sign,
@@ -520,3 +521,19 @@ def test_greeting_has_double_quote_reports_absence(name: str) -> None:
 def test_greeting_has_double_quote_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_double_quote(name)  # type: ignore[arg-type]
+
+
+def test_greeting_has_apostrophe_detects_literal_apostrophe() -> None:
+    assert greet("O'Brien") == "Hello, O'Brien"
+    assert greeting_has_apostrophe("O'Brien") is True
+
+
+@pytest.mark.parametrize("name", ["Ada", "O\u2019Brien", "O\u02bcBrien", "O`Brien"])
+def test_greeting_has_apostrophe_reports_absence(name: str) -> None:
+    assert greeting_has_apostrophe(name) is False
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_has_apostrophe_preserves_validation(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_has_apostrophe(name)  # type: ignore[arg-type]
