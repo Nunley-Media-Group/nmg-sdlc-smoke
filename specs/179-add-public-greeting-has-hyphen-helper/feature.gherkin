@@ -1,0 +1,32 @@
+**Issue**: #179
+**Date**: 2026-09-26
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_public_greeting_has_hyphen_helper.feature
+# Generated from: specs/179-add-public-greeting-has-hyphen-helper/requirements.md
+Feature: Detect a literal hyphen-minus in a completed greeting
+
+  @SCN001
+  Scenario: Detect literal hyphen-minus in a completed greeting
+    Given the public greeting package and valid name Mary-Jane
+    When greeting_has_hyphen is called with Mary-Jane
+    Then greet returns Hello, Mary-Jane and the helper returns True
+
+  @SCN002
+  Scenario: Reject absent hyphen-minus and Unicode dash lookalikes
+    Given valid names Ada, Ada‐, and Ada–
+    When greeting_has_hyphen is called with each valid name
+    Then each completed greeting lacks literal hyphen-minus and each helper result is False
+
+  @SCN003
+  Scenario: Preserve greet validation for invalid names
+    Given invalid names empty, whitespace-only, None, and 42
+    When greeting_has_hyphen is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Import and run documented helper examples
+    Given the installed public package and README Library examples Mary-Jane and Ada
+    When greeting_has_hyphen is imported from nmg_sdlc_smoke and called with those names
+    Then the imported helper returns True and False respectively
