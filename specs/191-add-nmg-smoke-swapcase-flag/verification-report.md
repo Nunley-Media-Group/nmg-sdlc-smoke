@@ -5,39 +5,38 @@
 **Reviewer**: Codex
 **Scope**: Implementation verification against spec
 
-**Verification head**: d533a4ea9915a85ae7cc3f765d5f6e4c80581132
+**Verification head**: abe52e56a0e0d3f7c61dead9e149f6c1ac8391af
 
 ---
 
 ## Executive Summary
 
-The branch `191-add-nmg-smoke-swapcase-flag` contains no implementation. Local HEAD, `origin/191-add-nmg-smoke-swapcase-flag`, and `main` all resolve to `d533a4ea9915a85ae7cc3f765d5f6e4c80581132` (`docs: approve spec for #191 (#192)`). `git diff main...HEAD` is empty. `src/nmg_sdlc_smoke/cli.py` does not register `--swapcase`, and running the installed console script with it exits 2 with `unrecognized arguments: --swapcase`. None of the four tasks (T001–T004) have been done, and all six delivery acceptance criteria fail. The regression obligations still hold because baseline behavior is unchanged.
+Commit `abe52e5` (`feat: add nmg-smoke --swapcase flag (#191)`) implements the approved spec. `--swapcase` is registered in the existing mutually exclusive `case` group in `src/nmg_sdlc_smoke/cli.py`, and a single `elif args.swapcase` branch applies `str.swapcase()` at the same stage as `--uppercase`/`--lowercase`, before prefix, wrappers, repetition, and newline handling. All six delivery acceptance criteria pass: unit tests cover them, pytest-bdd scenarios SCN001–SCN006 cover them, and direct runs of the installed console script confirm them. All required steering checks are green. `steering/manifest.json` declares no project validations, so deterministic coverage is complete with zero declarations.
 
 | Category | Score (1-5) |
 |----------|-------------|
-| Spec Compliance | 1 |
-| Architecture (SOLID) | 4 |
+| Spec Compliance | 5 |
+| Architecture (SOLID) | 5 |
 | Security | 5 |
 | Performance | 5 |
-| Testability | 2 |
-| Error Handling | 4 |
-| **Overall** | 3.5 |
+| Testability | 5 |
+| Error Handling | 5 |
+| **Overall** | 5.0 |
 
-Architecture, security, performance and error-handling scores apply to the unchanged baseline CLI only. This branch has no delta to review.
-
-### Implementation Status: Fail
-**Total Issues**: 4
+### Implementation Status: Pass
+**Total Issues**: 1 (Low, cosmetic, non-blocking)
 
 ---
 
 ## Deterministic Steering Artifact and Ceiling
 
 - Runner: `sdlc-verify-steering.mjs --project . --issue 191 --spec specs/191-add-nmg-smoke-swapcase-flag --base main --controller-run-id b80da6ff-53ea-4367-8832-20a2c38ea7d1`
-- Artifact: `.omp/sdlc/verification/191.json`
-- Identity: head `d533a4ea9915a85ae7cc3f765d5f6e4c80581132`, steering `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`, spec `sha256:7d1c27662c00d7401faac7b7b381f603c7716b2e72c9db1a733b449ce11c362b`
+- Artifact: `.omp/sdlc/verification/191.json` (`ok: true`)
+- Identity: head `abe52e56a0e0d3f7c61dead9e149f6c1ac8391af`, steering `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`, spec `sha256:7d1c27662c00d7401faac7b7b381f603c7716b2e72c9db1a733b449ce11c362b`
 - Ceiling: `null`
-- Coverage: declared 0, recorded 0, complete `true`. `steering/manifest.json` registers no project validations, so `repository.nmg-sdlc-smoke` is not declared and no real smoke lifecycle evidence is required.
-- Changed paths vs `main`: none
+- Coverage: declared 0, recorded 0, complete `true`; missing/duplicate/unknown are all empty
+- `steering/manifest.json` registers `validations: []`. `repository.nmg-sdlc-smoke` and `project.nmg-sdlc-smoke` are not declared, so no real smoke lifecycle evidence is required.
+- Changed paths vs `main`: `README.md`, `specs/191-add-nmg-smoke-swapcase-flag/verification-report.md`, `src/nmg_sdlc_smoke/cli.py`, `tests/features/add_nmg_smoke_swapcase_flag.feature`, `tests/features/steps/test_swapcase_steps.py`, `tests/test_cli.py`
 
 ---
 
@@ -54,7 +53,7 @@ Architecture, security, performance and error-handling scores apply to the uncha
 
 ## Delivery Validation
 
-- Local verification: Not complete
+- Local verification: Pass
 - PR evidence: Not required
 
 ---
@@ -63,12 +62,22 @@ Architecture, security, performance and error-handling scores apply to the uncha
 
 | AC | Description | Status | Evidence |
 |----|-------------|--------|----------|
-| AC1 | `nmg-smoke --swapcase Ada` → `hELLO, aDA\n`, exit 0 | Fail | Installed script: `nmg-smoke: error: unrecognized arguments: --swapcase`, exit 2; `src/nmg_sdlc_smoke/cli.py` `case` group has only `--uppercase`/`--lowercase` |
-| AC2 | Composes with prefix/parentheses/repeat/no-newline | Fail | Flag unrecognized; there is no swapcase branch in `main()` |
-| AC3 | `str.swapcase` semantics for `ÅSA` / `Straße` | Fail | Flag unrecognized |
-| AC4 | `--swapcase` mutually exclusive with `--uppercase`/`--lowercase` → exit 2, `not allowed with argument` | Fail | Exit 2 comes from `unrecognized arguments`, not the mutual-exclusion error. `--swapcase` is not in the `case` group. |
-| AC5 | `nmg-smoke --swapcase " "` → exit 1, blank-name error | Fail | Exits 2 with `unrecognized arguments: --swapcase` before name validation |
-| AC6 | Default/uppercase/lowercase output preserved; `--help` lists `--swapcase` | Fail | `Hello, Ada`, `HELLO, ADA`, `hello, ada` are preserved, but the usage/help output `[-h] [--uppercase \| --lowercase] ...` does not list `--swapcase` |
+| AC1 | `nmg-smoke --swapcase Ada` prints `hELLO, aDA\n` with empty stderr and exit 0 | Pass | `src/nmg_sdlc_smoke/cli.py:23,44-45`. `tests/test_cli.py:325-334` covers both argument orders, and SCN001 passes. The installed script prints `hELLO, aDA\n` and exits 0. |
+| AC2 | Composes with `--prefix 'OK: ' --parentheses --repeat 2 --no-newline ADA` and the prefix keeps its case | Pass | The swap happens at `cli.py:44-45` before the prefix at `cli.py:46`. `tests/test_cli.py:337-352` and SCN002 pass. The installed script prints `(OK: hELLO, ada)\n(OK: hELLO, ada)` with no final LF and exits 0. |
+| AC3 | `ÅSA` → `hELLO, åsa\n` and `Straße` → `hELLO, sTRASSE\n` | Pass | `str.swapcase()` at `cli.py:45`. `tests/test_cli.py:355-364` and SCN003 (UTF-8 subprocess) pass. The installed script produces exactly these bytes and exits 0 for both names. |
+| AC4 | Combining `--swapcase` with `--uppercase` or `--lowercase` in either order exits 2 with `not allowed with argument` and empty stdout | Pass | The flag is in the `case` mutually exclusive group (`cli.py:20-23`). `tests/test_cli.py:367-385` covers all four orders, and SCN004 passes. Installed example: `argument --uppercase: not allowed with argument --swapcase`, exit 2. |
+| AC5 | `nmg-smoke --swapcase " "` exits 1 with `nmg-smoke: error: name must not be blank` and empty stdout | Pass | The `greet` validation path is unchanged (`cli.py:36-39`). `tests/test_cli.py:388-398` covers `""`, `" "`, `"\t"`, and `"\n"`, and SCN005 passes. The installed script exits 1 with the exact error. |
+| AC6 | Default, `--uppercase`, and `--lowercase` output are unchanged, and `--help` lists `--swapcase` | Pass | The installed script prints `Hello, Ada\n`, `HELLO, ADA\n`, and `hello, ada\n`. Usage shows `[--uppercase \| --lowercase \| --swapcase]`. `tests/test_cli.py:401-406` and SCN006 pass, and the existing uppercase/lowercase tests still pass. |
+
+### Functional Requirements
+
+| FR | Status | Evidence |
+|----|--------|----------|
+| FR1 | Pass | Long-only `store_true` `--swapcase` flag; `message.swapcase()` applied to the `greet(name)` result |
+| FR2 | Pass | The `elif` chain at `cli.py:40-45` runs before prefix, parentheses, braces, quotes, and the repeat/newline loop. AC2 shows the prefix and wrappers are not swapped. |
+| FR3 | Pass | Same `case` group as `--uppercase`/`--lowercase`; argparse exits 2 in both orders |
+| FR4 | Pass | The only changes are the added argument and `elif` branch. Full suite: 447 passed, including all pre-existing CLI contracts. |
+| FR5 | Pass | `README.md:156-165` documents the example, the `str.swapcase()` semantics, that the prefix keeps its case, and that combining with another case flag exits 2 |
 
 ---
 
@@ -76,10 +85,10 @@ Architecture, security, performance and error-handling scores apply to the uncha
 
 | Task | Description | Status | Notes |
 |------|-------------|--------|-------|
-| T001 | Add mutually exclusive `--swapcase` flag in `src/nmg_sdlc_smoke/cli.py` | Incomplete | No change in `cli.py` |
-| T002 | Focused CLI unit tests in `tests/test_cli.py` | Incomplete | `tests/test_cli.py` has 0 `swapcase` references |
-| T003 | `tests/features/add_nmg_smoke_swapcase_flag.feature` + `tests/features/steps/test_swapcase_steps.py` | Incomplete | Neither file exists |
-| T004 | Document `--swapcase` in README `## CLI` | Incomplete | `README.md` has 0 `swapcase` references |
+| T001 | Add mutually exclusive `--swapcase` flag | Complete | Registered directly after `--lowercase` (`cli.py:23`), with an `elif` after the lowercase check (`cli.py:44-45`). No new module, helper, or dependency. |
+| T002 | Focused CLI unit tests | Complete | 14 parametrized cases in `tests/test_cli.py:325-406` match every listed acceptance bullet |
+| T003 | pytest-bdd acceptance scenarios | Complete | `tests/features/add_nmg_smoke_swapcase_flag.feature` scenario content is identical to `feature.gherkin` (SCN001–SCN006). Steps resolve `nmg-smoke`/`nmg-smoke.exe` via `sysconfig.get_path("scripts")` and run with UTF-8 I/O. |
+| T004 | README documentation | Complete | Placed directly after the `--lowercase` documentation in `## CLI`. The rest of the README is unchanged. |
 
 ---
 
@@ -89,19 +98,19 @@ Architecture, security, performance and error-handling scores apply to the uncha
 
 | Principle | Score (1-5) | Notes |
 |-----------|-------------|-------|
-| Single Responsibility | 4 | `greet.py` stays pure, and `cli.py` handles parsing and rendering (baseline) |
-| Open/Closed | 4 | Case flags are added through an argparse mutually exclusive group plus an `if/elif` chain. The design adds `--swapcase` as one more `elif`. |
-| Liskov Substitution | 4 | Not applicable. There is no inheritance. |
-| Interface Segregation | 4 | Minimal public API |
-| Dependency Inversion | 4 | The CLI depends on the library, and the library has no dependency on the CLI |
+| Single Responsibility | 5 | `greet.py` stays pure and untouched. `cli.py` still owns parsing and rendering only. |
+| Open/Closed | 5 | Extends the existing case group and `if/elif` chain without modifying existing branches |
+| Liskov Substitution | 5 | Not applicable; there is no inheritance |
+| Interface Segregation | 5 | The public library API is unchanged (out of scope, as required) |
+| Dependency Inversion | 5 | The CLI depends on the library. The library has no dependency on the CLI, tests, or layout. |
 
 ### Layer Separation
 
-The baseline is compliant: the library does not import the CLI. This branch introduces no change.
+Compliant with structure steering: the library does not import the CLI, and the change adds no utility module, service layer, or alias.
 
 ### Dependency Flow
 
-`cli.py` → `greet.py` only. There are no runtime dependencies.
+`cli.py` → `greet.py` only. No runtime dependencies were added (`pyproject.toml` is unchanged).
 
 ---
 
@@ -109,16 +118,24 @@ The baseline is compliant: the library does not import the CLI. This branch intr
 
 - [x] Authentication: N/A (local CLI)
 - [x] Authorization: N/A
-- [x] Input validation: blank names are rejected by `greet`, and argparse validates flags
-- [x] Injection prevention: no shell, eval, or file I/O
+- [x] Input validation: argparse enforces mutual exclusion, and `greet` rejects blank names before any transform
+- [x] Injection prevention: no shell, eval, or file I/O. The BDD steps call `subprocess.run` with an argv list and no shell.
 - [x] Data protection: N/A
 
 ## Performance Assessment
 
 - [x] Async patterns: N/A
 - [x] Caching: N/A
-- [x] Resource management: no resources are held
+- [x] Resource management: one O(n) `str.swapcase()` over the greeting; no resources held
 - [x] Query optimization: N/A
+
+## Testability Assessment
+
+The pure `main(argv)` entry point is unit-tested with `capsys`. The installed console-script path is exercised in subprocess BDD steps. The tests are deterministic, isolated, and full-suite safe, and they assert on exact behavior (exact bytes, exit codes, stderr substrings).
+
+## Error Handling Assessment
+
+Usage errors use argparse's exit 2. Blank names keep the existing `parser.exit(1, "nmg-smoke: error: ...")` path. No stdout is written on either error path, as AC4 and AC5 verify.
 
 ---
 
@@ -128,20 +145,38 @@ The baseline is compliant: the library does not import the CLI. This branch intr
 
 | Acceptance Criterion | Has Scenario | Has Steps | Passes |
 |---------------------|-------------|-----------|--------|
-| AC1 | No | No | No |
-| AC2 | No | No | No |
-| AC3 | No | No | No |
-| AC4 | No | No | No |
-| AC5 | No | No | No |
-| AC6 | No | No | No |
+| AC1 | Yes (SCN001) | Yes | Yes |
+| AC2 | Yes (SCN002) | Yes | Yes |
+| AC3 | Yes (SCN003) | Yes | Yes |
+| AC4 | Yes (SCN004) | Yes | Yes |
+| AC5 | Yes (SCN005) | Yes | Yes |
+| AC6 | Yes (SCN006) | Yes | Yes |
 
 ### Test Execution (isolated venv, `python -m pip install -e ".[dev]"`, Python 3.14.7)
 
-- `python -m pytest`: 427 passed, 2 skipped
-- `python -m pytest tests/features`: 159 passed, 2 skipped
-- `python -m ruff check .`: All checks passed
+| Command | Result |
+|---------|--------|
+| `python -m pytest` | Exit 0; 447 passed, 2 skipped |
+| `python -m pytest tests/features` | Exit 0; 165 passed, 2 skipped |
+| `python -m ruff check .` | Exit 0; All checks passed |
+| `python -m pytest tests/test_cli.py tests/features/steps/test_swapcase_steps.py -k swapcase` | 20 passed (14 unit + 6 BDD) |
 
-The suite passes only because no #191 tests exist. It provides no delivery evidence for #191.
+The 2 skips are pre-existing issue #85 scenarios gated on parent-run evidence (`requires parent-run issue 85 verification evidence`). They are unrelated to #191.
+
+### Installed Console-Script Smoke
+
+Each case was run directly against the venv's `nmg-smoke` with `PYTHONIOENCODING=utf-8`, and stdout was checked byte-for-byte with `od -c`:
+
+- `--swapcase Ada` → `hELLO, aDA\n`, exit 0
+- `--swapcase --prefix 'OK: ' --parentheses --repeat 2 --no-newline ADA` → `(OK: hELLO, ada)\n(OK: hELLO, ada)`, exit 0
+- `--swapcase ÅSA` → `hELLO, åsa\n`; `--swapcase Straße` → `hELLO, sTRASSE\n`, exit 0
+- `--swapcase --uppercase Ada` and `--lowercase --swapcase Ada` → exit 2, `not allowed with argument`, empty stdout
+- `--swapcase " "` → exit 1, `nmg-smoke: error: name must not be blank`
+- `Ada` / `--uppercase Ada` / `--lowercase Ada` → `Hello, Ada\n` / `HELLO, ADA\n` / `hello, ada\n`, and `--help` lists `--swapcase`
+
+### Exercise Testing
+
+Not applicable. The change touches no plugin `workflows/` or `agents/` files, because this repository is a Python host.
 
 ---
 
@@ -149,76 +184,50 @@ The suite passes only because no #191 tests exist. It provides no delivery evide
 
 | Severity | Category | Location | Original Issue | Fix Applied | Routing |
 |----------|----------|----------|----------------|-------------|---------|
-| — | — | — | None | None. The verify publication scope allows only `verification-report.md`, and the missing implementation is a full implement-step deliverable rather than a safe local fix. | — |
+| — | — | `specs/191-add-nmg-smoke-swapcase-flag/verification-report.md` | The committed report described the pre-implementation head `d533a4e` | Regenerated this report at the implementation head `abe52e5` | direct |
 
 ## Remaining Issues
 
 ### Critical Issues
 
-| Field | Value |
-|-------|-------|
-| **Severity** | Critical |
-| **Category** | Architecture |
-| **Location** | `src/nmg_sdlc_smoke/cli.py` |
-| **Issue** | `--swapcase` is not registered in the `case` group and has no `message.swapcase()` branch (T001; AC1–AC6; FR1–FR3) |
-| **Impact** | Every delivery acceptance criterion fails |
-| **Reason Not Fixed** | Implementation is missing. The verify scope permits only the report, so this routes back to the implement step. |
+None.
 
 ### High Priority
 
-| Field | Value |
-|-------|-------|
-| **Severity** | High |
-| **Category** | Testing |
-| **Location** | `tests/test_cli.py`, `tests/features/add_nmg_smoke_swapcase_flag.feature`, `tests/features/steps/test_swapcase_steps.py` |
-| **Issue** | The unit tests (T002) and the pytest-bdd scenarios SCN001–SCN006 (T003) are missing |
-| **Impact** | No acceptance criterion has executable coverage |
-| **Reason Not Fixed** | Outside the verify publication scope. This is implement-step work. |
-
-| Field | Value |
-|-------|-------|
-| **Severity** | High |
-| **Category** | Documentation |
-| **Location** | `README.md` |
-| **Issue** | The `--swapcase` documentation is missing (T004, FR5) |
-| **Impact** | The user-facing behavior is undocumented |
-| **Reason Not Fixed** | Outside the verify publication scope |
+None.
 
 ### Medium Priority
 
-| Field | Value |
-|-------|-------|
-| **Severity** | Medium |
-| **Category** | Process |
-| **Location** | branch `191-add-nmg-smoke-swapcase-flag` |
-| **Issue** | Verification was invoked on a branch whose HEAD equals `main` (spec-approval commit only) |
-| **Impact** | Verification cannot pass until implementation commits exist |
-| **Reason Not Fixed** | The controller has to route this back to implementation |
+None.
 
 ### Low Priority
 
-None.
+| Field | Value |
+|-------|-------|
+| **Severity** | Low |
+| **Category** | Style |
+| **Location** | `tests/test_cli.py:407-409` |
+| **Issue** | Three blank lines separate `test_cli_help_lists_swapcase` from the next test. PEP 8 expects two. Ruff's configured rule set does not flag it. |
+| **Impact** | Cosmetic only; no behavior or gate effect |
+| **Reason Not Fixed** | The verify publication scope permits writing only `verification-report.md` |
 
 ---
 
 ## Positive Observations
 
-- The approved spec package is internally consistent. All four files declare `**Issue**: #191` and `**Status**: Approved`.
-- The baseline CLI design (mutually exclusive `case` group, `if/elif` transform) makes the specified change a small, single-branch addition.
-- Existing behavior (FR4) is preserved: `Hello, Ada`, `HELLO, ADA`, `hello, ada`.
+- The implementation is minimal: 3 source lines, placed exactly where the design specifies.
+- The feature file matches the approved `feature.gherkin` scenario content exactly.
+- The unit tests cover both flag orders for the mutual-exclusion and argument-position cases, and every blank-name variant.
 
 ---
 
 ## Recommendations Summary
 
 ### Before PR (Must)
-- [ ] T001: add `case.add_argument("--swapcase", action="store_true")` after `--lowercase`, plus `elif args.swapcase: message = message.swapcase()`
-- [ ] T002: add CLI unit tests for AC1–AC6
-- [ ] T003: add the pytest-bdd feature and steps for SCN001–SCN006
-- [ ] T004: add the README `## CLI` documentation for `--swapcase`
+- None
 
 ### Short Term (Should)
-- [ ] Re-run full verification at the new implementation head
+- Collapse the extra blank line at `tests/test_cli.py:409` in a later touch of the file
 
 ### Long Term (Could)
 - None
@@ -229,16 +238,17 @@ None.
 
 | File | Issues | Notes |
 |------|--------|-------|
-| `src/nmg_sdlc_smoke/cli.py` | 1 | `--swapcase` is absent |
-| `tests/test_cli.py` | 1 | No `--swapcase` tests |
-| `tests/features/` | 1 | No #191 feature or steps |
-| `README.md` | 1 | No `--swapcase` docs |
+| `src/nmg_sdlc_smoke/cli.py` | 0 | Flag and transform as designed |
+| `tests/test_cli.py` | 1 | Low: extra blank line |
+| `tests/features/add_nmg_smoke_swapcase_flag.feature` | 0 | Matches the spec gherkin |
+| `tests/features/steps/test_swapcase_steps.py` | 0 | Subprocess, UTF-8, portable script resolution |
+| `README.md` | 0 | FR5 satisfied |
 | `steering/manifest.json` | 0 | Valid; no registered validations |
 
 ---
 
 ## Recommendation
 
-**Major rework needed**
+**Ready for PR**
 
-The implementation for #191 is completely absent at `d533a4ea9915a85ae7cc3f765d5f6e4c80581132`. The status is Fail, and the work routes back to implementation diagnosis. After T001–T004 are committed, the full registered gate has to be re-run.
+All delivery ACs, FRs, tasks, and scenarios pass at `abe52e56a0e0d3f7c61dead9e149f6c1ac8391af`. The required steering checks are green, and deterministic coverage is complete with a `null` ceiling.
