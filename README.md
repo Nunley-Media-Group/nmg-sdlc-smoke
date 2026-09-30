@@ -153,6 +153,17 @@ Lowercasing uses Python `str.lower()` and applies before the literal prefix, so
 prefix text keeps its original case. Combining `--lowercase` with `--uppercase`
 is rejected with exit status 2.
 
+Use `--swapcase` to invert the letter case of the complete greeting:
+
+```console
+$ nmg-smoke --swapcase Ada
+hELLO, aDA
+```
+
+Case swapping uses Python `str.swapcase()` and applies before the literal
+prefix, so prefix text keeps its original case. Combining `--swapcase` with
+`--uppercase` or `--lowercase` is rejected with exit status 2.
+
 Use `--repeat COUNT` to print the greeting once per line:
 
 ```console

@@ -322,6 +322,91 @@ def test_cli_help_lists_lowercase(capsys: pytest.CaptureFixture[str]) -> None:
     assert "--lowercase" in capsys.readouterr().out
 
 
+@pytest.mark.parametrize(
+    "argv", [["--swapcase", "Ada"], ["Ada", "--swapcase"]]
+)
+def test_cli_prints_swapcase_greeting(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(argv) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "hELLO, aDA\n"
+    assert captured.err == ""
+
+
+def test_cli_swapcase_composes_before_prefix_and_wrappers(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    argv = [
+        "--swapcase",
+        "--prefix",
+        "OK: ",
+        "--parentheses",
+        "--repeat",
+        "2",
+        "--no-newline",
+        "ADA",
+    ]
+    assert main(argv) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "(OK: hELLO, ada)\n(OK: hELLO, ada)"
+    assert captured.err == ""
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [("ÅSA", "hELLO, åsa\n"), ("Straße", "hELLO, sTRASSE\n")],
+)
+def test_cli_swapcase_uses_str_swapcase_semantics(
+    name: str, expected: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(["--swapcase", name]) == 0
+    assert capsys.readouterr().out == expected
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["--swapcase", "--uppercase", "Ada"],
+        ["--uppercase", "--swapcase", "Ada"],
+        ["--swapcase", "--lowercase", "Ada"],
+        ["--lowercase", "--swapcase", "Ada"],
+    ],
+)
+def test_cli_rejects_swapcase_with_other_case_flag(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(argv)
+
+    assert exit_info.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "not allowed with argument" in captured.err
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n"])
+def test_cli_rejects_blank_name_with_swapcase(
+    name: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--swapcase", name])
+
+    assert exit_info.value.code == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "name must not be blank" in captured.err
+
+
+def test_cli_help_lists_swapcase(capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--help"])
+
+    assert exit_info.value.code == 0
+    assert "--swapcase" in capsys.readouterr().out
+
+
+
 @pytest.mark.parametrize("name", ["", " ", "\t", "\n"])
 def test_cli_rejects_blank_name_with_repeat(
     name: str, capsys: pytest.CaptureFixture[str]
