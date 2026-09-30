@@ -20,6 +20,7 @@ def main(argv: list[str] | None = None) -> int:
     case = parser.add_mutually_exclusive_group()
     case.add_argument("--uppercase", action="store_true")
     case.add_argument("--lowercase", action="store_true")
+    case.add_argument("--swapcase", action="store_true")
     parser.add_argument(
         "--repeat", type=_positive_count, default=1, metavar="COUNT"
     )
@@ -40,6 +41,8 @@ def main(argv: list[str] | None = None) -> int:
         message = message.upper()
     elif args.lowercase:
         message = message.lower()
+    elif args.swapcase:
+        message = message.swapcase()
     message = args.prefix + message
     if args.parentheses:
         message = f"({message})"
