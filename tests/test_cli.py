@@ -496,6 +496,97 @@ def test_cli_help_lists_titlecase(capsys: pytest.CaptureFixture[str]) -> None:
     assert "--titlecase" in capsys.readouterr().out
 
 
+@pytest.mark.parametrize(
+    "argv", [["--casefold", "Straße"], ["Straße", "--casefold"]]
+)
+def test_cli_prints_casefold_greeting(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(argv) == 0
+    captured = capsys.readouterr()
+    assert captured.out == "hello, strasse\n"
+    assert captured.err == ""
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("ADA", "hello, ada\n"),
+        ("ΣΊΣΥΦΟΣ", "hello, σίσυφοσ\n"),
+    ],
+)
+def test_cli_casefold_uses_str_casefold_semantics(
+    name: str, expected: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert main(["--casefold", name]) == 0
+    assert capsys.readouterr().out == expected
+
+
+def test_cli_casefold_composes_before_prefix_and_wrappers(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    argv = [
+        "--casefold",
+        "--prefix",
+        "OK: ",
+        "--quotes",
+        "--repeat",
+        "2",
+        "--no-newline",
+        "Straße",
+    ]
+    assert main(argv) == 0
+    captured = capsys.readouterr()
+    assert captured.out == '"OK: hello, strasse"\n"OK: hello, strasse"'
+    assert captured.err == ""
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        argv
+        for other in ("--uppercase", "--lowercase", "--swapcase", "--titlecase")
+        for argv in (["--casefold", other, "Ada"], [other, "--casefold", "Ada"])
+    ],
+)
+def test_cli_rejects_casefold_with_other_case_flag(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(argv)
+
+    assert exit_info.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "not allowed with argument" in captured.err
+
+
+@pytest.mark.parametrize("name", ["", " ", "\t", "\n"])
+def test_cli_rejects_blank_name_with_casefold(
+    name: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--casefold", name])
+
+    assert exit_info.value.code == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "name must not be blank" in captured.err
+
+
+def test_cli_lowercase_keeps_sharp_s(capsys: pytest.CaptureFixture[str]) -> None:
+    assert main(["--lowercase", "Straße"]) == 0
+    assert capsys.readouterr().out == "hello, straße\n"
+
+
+def test_cli_help_lists_casefold(capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit) as exit_info:
+        main(["--help"])
+
+    assert exit_info.value.code == 0
+    assert "--casefold" in capsys.readouterr().out
+
+
 @pytest.mark.parametrize("name", ["", " ", "\t", "\n"])
 def test_cli_rejects_blank_name_with_repeat(
     name: str, capsys: pytest.CaptureFixture[str]
