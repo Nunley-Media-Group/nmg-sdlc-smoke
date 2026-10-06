@@ -164,6 +164,17 @@ Case swapping uses Python `str.swapcase()` and applies before the literal
 prefix, so prefix text keeps its original case. Combining `--swapcase` with
 `--uppercase` or `--lowercase` is rejected with exit status 2.
 
+Use `--titlecase` to title-case the complete greeting:
+
+```console
+$ nmg-smoke --titlecase ada
+Hello, Ada
+```
+
+Title-casing uses Python `str.title()` and applies before the literal prefix,
+so prefix text keeps its original case. Combining `--titlecase` with
+`--uppercase`, `--lowercase`, or `--swapcase` is rejected with exit status 2.
+
 Use `--repeat COUNT` to print the greeting once per line:
 
 ```console

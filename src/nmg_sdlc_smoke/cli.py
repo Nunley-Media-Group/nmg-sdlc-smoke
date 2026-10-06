@@ -21,6 +21,7 @@ def main(argv: list[str] | None = None) -> int:
     case.add_argument("--uppercase", action="store_true")
     case.add_argument("--lowercase", action="store_true")
     case.add_argument("--swapcase", action="store_true")
+    case.add_argument("--titlecase", action="store_true")
     parser.add_argument(
         "--repeat", type=_positive_count, default=1, metavar="COUNT"
     )
@@ -43,6 +44,8 @@ def main(argv: list[str] | None = None) -> int:
         message = message.lower()
     elif args.swapcase:
         message = message.swapcase()
+    elif args.titlecase:
+        message = message.title()
     message = args.prefix + message
     if args.parentheses:
         message = f"({message})"
