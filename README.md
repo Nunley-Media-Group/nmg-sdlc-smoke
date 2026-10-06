@@ -175,6 +175,18 @@ Title-casing uses Python `str.title()` and applies before the literal prefix,
 so prefix text keeps its original case. Combining `--titlecase` with
 `--uppercase`, `--lowercase`, or `--swapcase` is rejected with exit status 2.
 
+Use `--casefold` to casefold the complete greeting for caseless comparison:
+
+```console
+$ nmg-smoke --casefold Straße
+hello, strasse
+```
+
+Casefolding uses Python `str.casefold()` and applies before the literal prefix,
+so prefix text keeps its original case. Combining `--casefold` with
+`--uppercase`, `--lowercase`, `--swapcase`, or `--titlecase` is rejected with
+exit status 2.
+
 Use `--repeat COUNT` to print the greeting once per line:
 
 ```console
