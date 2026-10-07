@@ -28,6 +28,7 @@ from nmg_sdlc_smoke import (
     greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
+    greeting_reversed,
     greeting_starts_with_hello,
     greeting_word_count,
 )
@@ -554,3 +555,53 @@ def test_greeting_has_backslash_reports_absence(name: str) -> None:
 def test_greeting_has_backslash_preserves_validation(name: object) -> None:
     with pytest.raises(ValueError, match="^name must not be blank$"):
         greeting_has_backslash(name)  # type: ignore[arg-type]
+
+
+def test_greeting_reversed_reverses_by_code_point() -> None:
+    assert greeting_reversed("Ada") == "adA ,olleH"
+    assert greeting_reversed("Zo\u00eb") == "\u00eboZ ,olleH"
+
+
+@pytest.mark.parametrize("name", ["", "   ", None])
+def test_greeting_reversed_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_reversed(name)  # type: ignore[arg-type]
+
+
+def test_greeting_reversed_is_exported_without_dropping_prior_exports() -> None:
+    import nmg_sdlc_smoke
+
+    prior = [
+        "greet",
+        "greet_many",
+        "greeting_bytes",
+        "greeting_casefold",
+        "greeting_ends_with_exclamation",
+        "greeting_ends_with_name",
+        "greeting_has_apostrophe",
+        "greeting_has_ascii_asterisk",
+        "greeting_has_asterisk",
+        "greeting_has_at_sign",
+        "greeting_has_backslash",
+        "greeting_has_backtick",
+        "greeting_has_colon",
+        "greeting_has_dollar",
+        "greeting_has_double_quote",
+        "greeting_has_equal",
+        "greeting_has_exclamation",
+        "greeting_has_exclamation_or_question",
+        "greeting_has_hash",
+        "greeting_has_percent",
+        "greeting_has_plus",
+        "greeting_has_question_mark",
+        "greeting_has_semicolon",
+        "greeting_has_slash",
+        "greeting_has_underscore",
+        "greeting_is_ascii",
+        "greeting_length",
+        "greeting_starts_with_hello",
+        "greeting_word_count",
+    ]
+    assert "greeting_reversed" in nmg_sdlc_smoke.__all__
+    assert set(prior) <= set(nmg_sdlc_smoke.__all__)
+    assert greet("Ada") == "Hello, Ada"

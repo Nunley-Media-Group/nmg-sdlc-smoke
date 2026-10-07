@@ -38,6 +38,10 @@ def greeting_casefold(name: str) -> str:
     return greet(name).casefold()
 
 
+def greeting_reversed(name: str) -> str:
+    return greet(name)[::-1]
+
+
 def greeting_word_count(name: str) -> int:
     return len(greet(name).split())
 

@@ -44,6 +44,7 @@ from nmg_sdlc_smoke import (
     greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
+    greeting_reversed,
     greeting_starts_with_hello,
     greeting_word_count,
 )
@@ -55,6 +56,7 @@ greeting_length("Ada")  # 10
 greeting_bytes("Ada")  # 10
 greeting_is_ascii("Ada")  # True
 greeting_casefold("Straße")  # "hello, strasse"
+greeting_reversed("Ada")  # "adA ,olleH"
 greeting_starts_with_hello("Ada")  # True
 greeting_ends_with_name("Ada")  # True
 greeting_has_apostrophe("O'Brien")  # True
@@ -106,6 +108,7 @@ greeting_word_count("Ada Lovelace")  # 3
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
 `greeting_casefold` applies Unicode casefolding to the complete greeting and uses the same validation as `greet`; it does not change `greet` or CLI output.
+`greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
 `greeting_has_semicolon` checks for a literal `;` in the complete greeting and uses the same name validation as `greet`.
 `greeting_has_colon` checks for a literal `:` in the complete greeting and uses the same invalid-name validation as `greet`.
