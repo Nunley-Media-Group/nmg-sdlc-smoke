@@ -4,28 +4,26 @@
 **Issue**: #200
 **Reviewer**: Codex
 **Scope**: Implementation verification against spec
-**Verification head**: 28661880c6a97f69453849708819a715e29625b8
+**Verification head**: 04b790e5264ca5b29f3727f7374005342f70c48d
 
 ---
 
 ## Executive Summary
 
-The branch `200-add-public-greeting-reversed-library-helper` is at `28661880c6a97f69453849708819a715e29625b8`, which is the same commit as `main` and `origin/main` (`docs: approve spec for #200 (#201)`). Running `git diff --stat main...HEAD` shows no changes. None of the T001–T003 deliverables exist. `greeting_reversed` is not defined, exported, documented, or tested. Importing it raises `ImportError`. The baseline registered checks still pass, but they cannot show that #200 was delivered. Verify scope only allows `specs/200-add-public-greeting-reversed-library-helper/verification-report.md`, so this worker did not implement the feature.
+Branch `200-add-public-greeting-reversed-library-helper` at `04b790e5264ca5b29f3727f7374005342f70c48d` (`feat: add public greeting_reversed library helper (#200)`) implements T001–T003 exactly as designed. `greeting_reversed(name)` returns `greet(name)[::-1]`, is re-exported and listed in `__all__`, and is documented in the README Library section. Unit tests and three pytest-bdd scenarios cover AC1–AC3. All registered technical steering commands pass, the deterministic steering gate is complete with no ceiling, and a direct smoke probe of the installed package and `nmg-smoke` console script confirms every acceptance criterion. No findings required fixes.
 
 | Category | Score (1-5) |
 |----------|-------------|
-| Spec Compliance | 1 |
-| Architecture (SOLID) | 1 |
-| Security | 1 |
-| Performance | 1 |
-| Testability | 1 |
-| Error Handling | 1 |
-| **Overall** | 1.0 |
+| Spec Compliance | 5 |
+| Architecture (SOLID) | 5 |
+| Security | 5 |
+| Performance | 5 |
+| Testability | 5 |
+| Error Handling | 5 |
+| **Overall** | 5.0 |
 
-All architecture scores are 1 because there is no implementation to review.
-
-### Implementation Status: Fail
-**Total Issues**: 3
+### Implementation Status: Pass
+**Total Issues**: 0
 
 ---
 
@@ -42,22 +40,22 @@ All architecture scores are 1 because there is no implementation to review.
 
 ## Delivery Validation
 
-- Local verification: Not complete
+- Local verification: Pass
 - PR evidence: Not required
 
 ---
 
 ## Deterministic Steering Artifact and Ceiling
 
-- Runner: `sdlc-verify-steering.mjs --project . --issue 200 --spec specs/200-add-public-greeting-reversed-library-helper --base main --controller-run-id 9e6e0256-7089-4bf6-af5f-dd2df01c9fc2`. It returned `ok: true` and `ceiling: null`.
+- Runner: `sdlc-verify-steering.mjs --project . --issue 200 --spec specs/200-add-public-greeting-reversed-library-helper --base main --controller-run-id 9e6e0256-7089-4bf6-af5f-dd2df01c9fc2` returned `ok: true`, `ceiling: null`.
 - Artifact: `.omp/sdlc/verification/200.json`
-  - `headSha`: `28661880c6a97f69453849708819a715e29625b8`
+  - `headSha`: `04b790e5264ca5b29f3727f7374005342f70c48d`
   - `steeringHash`: `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`
   - `specHash`: `sha256:286a48feb9ba659251152e92a332ac9a0b0ef17f68571eef11140a59df8f66f4`
-  - `changedPaths`: `[]`
-- Coverage is `declared: 0`, `recorded: 0`, `complete: true`. `steering/manifest.json` registers no project validations, so the gate is complete. There are no project-specific validations, and the runner set no ceiling.
-- No `repository.nmg-sdlc-smoke` or `project.nmg-sdlc-smoke` validation is declared, so no real smoke lifecycle evidence is required. The `manifest.json` `validations` list is `[]`.
-- Ceiling from acceptance review: **Fail**. All delivery acceptance criteria are unimplemented.
+  - `changedPaths`: `README.md`, `specs/200-add-public-greeting-reversed-library-helper/verification-report.md`, `src/nmg_sdlc_smoke/__init__.py`, `src/nmg_sdlc_smoke/greet.py`, `tests/features/add_public_greeting_reversed_library_helper.feature`, `tests/features/steps/test_greeting_reversed_steps.py`, `tests/test_greet.py`
+- Coverage: `declared: 0`, `recorded: 0`, `complete: true`, no missing/duplicate/unknown results. `steering/manifest.json` registers four valid modules, three snippets, no extensions, and `validations: []`, so the gate is complete with no project-specific validations.
+- Smoke: no `repository.nmg-sdlc-smoke` or `project.nmg-sdlc-smoke` validation is declared, so no real smoke lifecycle evidence is required.
+- Ceiling: none.
 
 ---
 
@@ -65,9 +63,9 @@ All architecture scores are 1 because there is no implementation to review.
 
 | AC | Description | Status | Evidence |
 |----|-------------|--------|----------|
-| AC1 | `greeting_reversed("Ada")` → `"adA ,olleH"`; `greeting_reversed("Zoë")` (U+00EB) → `"ëoZ ,olleH"` | Fail | `src/nmg_sdlc_smoke/greet.py` has no `greeting_reversed`. The only nearby helper is `greeting_casefold`, which ends at line 37 or later. `from nmg_sdlc_smoke import greeting_reversed` raises `ImportError: cannot import name 'greeting_reversed'`. |
-| AC2 | `""`, `"   "`, `None` raise `ValueError("name must not be blank")` | Fail | The function does not exist, so the validation path cannot be called. |
-| AC3 | Importable and listed in `__all__`, prior exports kept, `greet("Ada")` and `nmg-smoke Ada` unchanged | Fail | Probe result: `'greeting_reversed' in nmg_sdlc_smoke.__all__` → `False` and `len(__all__)` → `29`, so the export is missing. The unchanged surfaces still hold: all 29 prior exports are present, and `nmg-smoke Ada` printed exactly `Hello, Ada\n` with exit 0. The new export is required, so this AC fails. |
+| AC1 | `greeting_reversed("Ada")` → `"adA ,olleH"`; `greeting_reversed("Zoë")` (U+00EB) → `"ëoZ ,olleH"` | Pass | `src/nmg_sdlc_smoke/greet.py:41-42` returns `greet(name)[::-1]`. Installed-package probe returned `'adA ,olleH'` and `'ëoZ ,olleH'` (equal to `"\u00eboZ ,olleH"`). Covered by `tests/test_greet.py:560-562` and SCN001. |
+| AC2 | `""`, `"   "`, `None` raise `ValueError("name must not be blank")` | Pass | Validation is delegated to `greet`. Probe: each input raised `ValueError('name must not be blank')`. Covered by `tests/test_greet.py:565-568` (`match="^name must not be blank$"`) and SCN002. |
+| AC3 | Importable and in `__all__`; prior exports kept; `greet("Ada")` and `nmg-smoke Ada` unchanged | Pass | `src/nmg_sdlc_smoke/__init__.py:29` import and `__all__` entry at line 61. Probe: `'greeting_reversed' in __all__` → `True`, `len(__all__)` 29 → 30, all 29 names from `main`'s `__all__` still present, `greet("Ada")` → `Hello, Ada`, installed `nmg-smoke Ada` → bytes `Hello, Ada\n`, exit 0. Covered by `tests/test_greet.py:571-607` and SCN003 (checks `(0, "Hello, Ada\n", "")`). |
 
 ---
 
@@ -75,9 +73,9 @@ All architecture scores are 1 because there is no implementation to review.
 
 | Task | Description | Status | Notes |
 |------|-------------|--------|-------|
-| T001 | Implement, export, and document `greeting_reversed` | Incomplete | Nothing in `greet.py`. `src/nmg_sdlc_smoke/__init__.py` has no import after line 28 (`greeting_length`) and no `__all__` entry after line 59. The README `## Library` section (line 16) has not changed. |
-| T002 | Cover the helper with pytest unit tests | Incomplete | `tests/test_greet.py` does not reference `greeting_reversed`. |
-| T003 | Exercise three AC-linked pytest-bdd scenarios | Incomplete | `tests/features/add_public_greeting_reversed_library_helper.feature` and `tests/features/steps/test_greeting_reversed_steps.py` are missing. pytest reports `ERROR: file or directory not found`. |
+| T001 | Implement, export, and document `greeting_reversed` | Complete | Function directly after `greeting_casefold`; self-aliased import after `greeting_length` import; `__all__` entry after `"greeting_length"`; README import list (line 47), example after `greeting_casefold("Straße")` (line 59), prose line after the `greeting_casefold` prose (line 111) with the exact design wording. |
+| T002 | Cover the helper with pytest unit tests | Complete | `greeting_reversed` in the import list after `greeting_length`; code-point, parametrized validation (`""`, `"   "`, `None`), and export/prior-export/`greet` tests. `pytest tests/test_greet.py -k greeting_reversed`: 5 passed. |
+| T003 | Exercise three AC-linked pytest-bdd scenarios | Complete | Feature file copies SCN001–SCN003 without frontmatter; steps use `scenarios(...)`, public imports, `PRIOR_EXPORTS` with the 29 prior names, and the installed `nmg-smoke` script resolved via `sysconfig.get_path("scripts")` with `.exe` fallback. 3 passed. |
 
 ---
 
@@ -87,42 +85,42 @@ All architecture scores are 1 because there is no implementation to review.
 
 | Principle | Score (1-5) | Notes |
 |-----------|-------------|-------|
-| Single Responsibility | 1 | No delivered code. The design adds a one-line pure helper in `greet.py`, which follows SRP once it is implemented. |
-| Open/Closed | 1 | No delivered code |
-| Liskov Substitution | 1 | No delivered code |
-| Interface Segregation | 1 | No delivered code |
-| Dependency Inversion | 1 | No delivered code |
+| Single Responsibility | 5 | One-line pure helper; validation stays in `greet`. |
+| Open/Closed | 5 | Purely additive; `greet`, other helpers, and the CLI are unchanged. |
+| Liskov Substitution | 5 | N/A beyond a plain typed function; signature `(name: str) -> str` matches the sibling derived-string helpers. |
+| Interface Segregation | 5 | Single-purpose public function added to the minimal package API. |
+| Dependency Inversion | 5 | Library depends only on `greet`; no dependency on CLI, tests, or layout. |
 
 ### Layer Separation
 
-The library/CLI boundary has not changed: `cli.py` → `greet.py` only. The required library addition has not been made.
+The library/CLI boundary is unchanged: `cli.py` → `greet.py`. The new helper lives in `greet.py` and is exported from `__init__.py`, matching the structure steering responsibilities.
 
 ### Dependency Flow
 
-Unchanged. There are zero runtime dependencies (`pyproject.toml`).
+No new imports or runtime dependencies. Test-only dependencies remain in the `dev` extra.
 
 ---
 
 ## Security Assessment
 
-There is no new code. The input validation for the new helper (AC2) has not been implemented.
+Pure in-memory string transform with no I/O, subprocess, or deserialization in library code. Input validation is inherited from `greet` and verified for blank, whitespace-only, and non-string input.
 
-- [ ] Authentication: N/A
-- [ ] Authorization: N/A
-- [ ] Input validation: Missing (helper absent)
-- [ ] Injection prevention: N/A
-- [ ] Data protection: N/A
+- [x] Authentication: N/A
+- [x] Authorization: N/A
+- [x] Input validation: Delegated to `greet`; verified
+- [x] Injection prevention: N/A (no shell/query use in library code; the BDD step runs `nmg-smoke` with an argument list, not a shell string)
+- [x] Data protection: N/A
 
 ---
 
 ## Performance Assessment
 
-There is no new code to assess.
+`str[::-1]` is O(n) over a short greeting; no caching or resource concerns.
 
-- [ ] Async patterns: N/A
-- [ ] Caching: N/A
-- [ ] Resource management: N/A
-- [ ] Query optimization: N/A
+- [x] Async patterns: N/A
+- [x] Caching: N/A
+- [x] Resource management: N/A
+- [x] Query optimization: N/A
 
 ---
 
@@ -132,27 +130,39 @@ There is no new code to assess.
 
 | Acceptance Criterion | Has Scenario | Has Steps | Passes |
 |---------------------|-------------|-----------|--------|
-| AC1 (SCN001) | No | No | No |
-| AC2 (SCN002) | No | No | No |
-| AC3 (SCN003) | No | No | No |
+| AC1 (SCN001) | Yes | Yes | Yes |
+| AC2 (SCN002) | Yes | Yes | Yes |
+| AC3 (SCN003) | Yes | Yes | Yes |
 
 ### Coverage Summary
 
-- Feature files: 0 of 3 required scenarios for #200
-- Step definitions: Missing
-- Unit tests: 0 for `greeting_reversed`
-- Integration tests: 0
+- Feature files: 3 scenarios in `tests/features/add_public_greeting_reversed_library_helper.feature`
+- Step definitions: Implemented (`tests/features/steps/test_greeting_reversed_steps.py`)
+- Unit tests: 5 tests for `greeting_reversed` (1 code-point, 3 parametrized validation, 1 export/surface)
+- Integration tests: SCN003 runs the installed `nmg-smoke` console script
 
 ### Registered Technical Steering Commands
 
-These ran in an isolated venv (Python 3.14.7) after `python -m pip install -e ".[dev]"`, at HEAD `28661880c6a97f69453849708819a715e29625b8`. They are baseline results only and do not cover the #200 change.
+Run in an isolated venv (Python 3.14.7) after `python -m pip install -e ".[dev]"` at HEAD `04b790e5264ca5b29f3727f7374005342f70c48d`.
 
 | Command | Result |
 |---------|--------|
-| `python -m pytest` | 495 passed, 2 skipped |
-| `python -m pytest tests/features` | 177 passed, 2 skipped |
+| `python -m pytest` | 503 passed, 2 skipped |
+| `python -m pytest tests/features` | 180 passed, 2 skipped |
 | `python -m ruff check .` | All checks passed |
-| `python -m pytest tests/features/steps/test_greeting_reversed_steps.py` | ERROR: file or directory not found |
+| `python -m pytest tests/test_greet.py -k greeting_reversed` | 5 passed |
+| `python -m pytest tests/features/steps/test_greeting_reversed_steps.py` | 3 passed |
+
+The 2 skips are pre-existing (`requires parent-run issue 85 verification evidence`). The 3 `PytestUnknownMarkWarning` warnings come from the pre-existing `@AC1`–`@AC3` tags in `add_greeting_has_question_mark_library_probe.feature`, not from #200.
+
+### Smoke Probe
+
+Direct run of the installed package from outside the repository:
+
+- `greeting_reversed("Ada")` → `'adA ,olleH'`; `greeting_reversed("Zo\u00eb")` → `'ëoZ ,olleH'`, equal to `"\u00eboZ ,olleH"`
+- `""`, `"   "`, `None` → `ValueError('name must not be blank')`
+- `"greeting_reversed" in __all__` → `True`; `len(__all__)` → 30; `greet("Ada")` → `Hello, Ada`
+- `nmg-smoke Ada` → `H e l l o ,   A d a \n`, exit 0
 
 ---
 
@@ -160,38 +170,12 @@ These ran in an isolated venv (Python 3.14.7) after `python -m pip install -e ".
 
 | Severity | Category | Location | Original Issue | Fix Applied | Routing |
 |----------|----------|----------|----------------|-------------|---------|
-| — | — | — | None | Verify publication scope allows only this report. The whole implementation is missing, which is not a safe local verifier fix. | — |
+| — | — | — | None | No findings required fixes | — |
 
 ## Remaining Issues
 
 ### Critical Issues
-
-| Field | Value |
-|-------|-------|
-| **Severity** | Critical |
-| **Category** | Architecture |
-| **Location** | `src/nmg_sdlc_smoke/greet.py`, `src/nmg_sdlc_smoke/__init__.py`, `README.md` |
-| **Issue** | T001 is not implemented: no `greeting_reversed`, no package export or `__all__` entry, no README documentation (FR1, FR2, FR3, FR5) |
-| **Impact** | AC1–AC3 fail, and `from nmg_sdlc_smoke import greeting_reversed` raises `ImportError` |
-| **Reason Not Fixed** | The verify publication scope only allows `verification-report.md`, and implementing the feature belongs to the write-code step |
-
-| Field | Value |
-|-------|-------|
-| **Severity** | Critical |
-| **Category** | Testing |
-| **Location** | `tests/test_greet.py` |
-| **Issue** | T002 unit tests are absent (FR4) |
-| **Impact** | No unit-level regression protection for AC1–AC3 |
-| **Reason Not Fixed** | Outside the verify publication scope; belongs to the implementation step |
-
-| Field | Value |
-|-------|-------|
-| **Severity** | Critical |
-| **Category** | Testing |
-| **Location** | `tests/features/add_public_greeting_reversed_library_helper.feature`, `tests/features/steps/test_greeting_reversed_steps.py` |
-| **Issue** | The T003 pytest-bdd feature and steps for SCN001–SCN003 are absent (FR4) |
-| **Impact** | No executable acceptance coverage |
-| **Reason Not Fixed** | Outside the verify publication scope; belongs to the implementation step |
+None.
 
 ### High Priority
 None.
@@ -206,19 +190,17 @@ None.
 
 ## Positive Observations
 
-- The approved spec is complete and consistent. All four files declare `**Issue**: #200` and `**Status**: Approved`.
-- The existing surfaces that AC3 must preserve are intact: 29 `__all__` exports, `greet("Ada") == "Hello, Ada"`, and `nmg-smoke Ada` → `Hello, Ada\n`, exit 0.
-- The baseline suite and Ruff are green.
+- The implementation matches the design line for line, including placement and exact README wording.
+- Validation reuse through `greet` keeps one source of truth for the error message.
+- Tests pin prior exports explicitly, so AC3's "every previously listed export" is enforced rather than inferred.
+- The CLI scenario uses the installed console script with an argument list and checks stdout, stderr, and exit code together.
 
 ---
 
 ## Recommendations Summary
 
 ### Before PR (Must)
-- [ ] Implement T001: `greeting_reversed` in `greet.py`, the package export and `__all__` entry, and the README Library section entries.
-- [ ] Implement T002: unit tests in `tests/test_greet.py`.
-- [ ] Implement T003: the executable feature file and step definitions for SCN001–SCN003.
-- [ ] Run fresh full verification at the new implementation head.
+- None.
 
 ### Short Term (Should)
 - None.
@@ -232,17 +214,18 @@ None.
 
 | File | Issues | Notes |
 |------|--------|-------|
-| `src/nmg_sdlc_smoke/greet.py` | 1 | `greeting_reversed` missing |
-| `src/nmg_sdlc_smoke/__init__.py` | 1 | Import and `__all__` entry missing |
-| `README.md` | 1 | Library docs missing |
-| `tests/test_greet.py` | 1 | Unit tests missing |
-| `tests/features/` | 1 | Feature and steps missing |
+| `src/nmg_sdlc_smoke/greet.py` | 0 | `greeting_reversed` after `greeting_casefold` |
+| `src/nmg_sdlc_smoke/__init__.py` | 0 | Import and `__all__` entry after `greeting_length` |
+| `README.md` | 0 | Import list, example, prose line |
+| `tests/test_greet.py` | 0 | 5 unit tests |
+| `tests/features/add_public_greeting_reversed_library_helper.feature` | 0 | SCN001–SCN003 |
+| `tests/features/steps/test_greeting_reversed_steps.py` | 0 | Deterministic steps |
 | `steering/manifest.json` | 0 | Valid; 0 validations declared |
 
 ---
 
 ## Recommendation
 
-**Major rework needed**
+**Ready for PR**
 
-The implementation for #200 has not been committed. The branch head equals `main`. Overall status is **Fail**, and the work goes back to implementation.
+All three acceptance criteria, five functional requirements, and three tasks are delivered and verified at `04b790e5264ca5b29f3727f7374005342f70c48d`. The registered commands are green and the deterministic steering gate is complete with no ceiling. Overall status is **Pass**.
