@@ -1,0 +1,37 @@
+Feature: Encode the completed greeting as standard Base64 text
+
+  @SCN001
+  Scenario: Return the Base64 text of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_base64 is called with Ada
+    Then the result is the Python str SGVsbG8sIEFkYQ==
+    And decoding it with the standard Base64 alphabet yields exactly the 10 UTF-8 bytes of Hello, Ada
+
+  @SCN002
+  Scenario: Use the standard alphabet with = padding
+    Given the installed nmg_sdlc_smoke package
+    When greeting_base64 is called with a?>, a>>, Bo, and Bob~
+    Then the results are SGVsbG8sIGE/Pg==, SGVsbG8sIGE+Pg==, SGVsbG8sIEJv, and SGVsbG8sIEJvYn4=
+    And no result uses the URL-safe characters _ or -
+
+  @SCN003
+  Scenario: Encode exact UTF-8 code points without line breaks
+    Given the installed nmg_sdlc_smoke package
+    When greeting_base64 is called with Zo followed by precomposed U+00EB, with Zoe followed by combining U+0308, and with A repeated 60 times
+    Then the results for the precomposed and decomposed names are SGVsbG8sIFpvw6s= and SGVsbG8sIFpvZcyI
+    And the result for A repeated 60 times is the single 92-character line SGVsbG8sIEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQQ== with no line breaks
+
+  @SCN004
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_base64 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN005
+  Scenario: Expose and document the helper without changing existing surfaces
+    Given the README Library section
+    When the README Library example runs and prints greeting_base64 of Ada, and nmg-smoke Ada runs
+    Then the example prints SGVsbG8sIEFkYQ==
+    And greeting_base64 is listed in nmg_sdlc_smoke.__all__ alongside every previously listed export
+    And nmg-smoke prints Hello, Ada with one newline and exit status 0
+    And the README documents UTF-8 encoding of the complete greeting, the standard padded unwrapped Base64 alphabet, the str result without Unicode normalization, and the inherited invalid-name error
