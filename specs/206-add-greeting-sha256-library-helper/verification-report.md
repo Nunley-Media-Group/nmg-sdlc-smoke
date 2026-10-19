@@ -4,28 +4,35 @@
 **Issue**: #206
 **Reviewer**: Codex
 **Scope**: Implementation verification against spec
-**Verification head**: aee20d6aef1d6b794f320e2af99910552de87cbe
+**Verification head**: 90ee5cc44b6976d04f87bcd68dd2d03e782faf0b
 
 ---
 
 ## Executive Summary
 
-The branch `206-add-greeting-sha256-library-helper` contains no implementation for #206. Its head `aee20d6` is identical to `main` and `origin/main`; the latest commit is the spec approval (#207). `git diff main...HEAD` is empty. The tree has no `greeting_sha256` symbol, no export, no README documentation, no unit tests, and no pytest-bdd feature or steps. All four acceptance criteria fail.
-
-The existing suite still passes, and the registered steering gate passes with no declared project validations.
-
 | Category | Score (1-5) |
 |----------|-------------|
-| Spec Compliance | 1 |
-| Architecture (SOLID) | N/A (no change) |
-| Security | N/A (no change) |
-| Performance | N/A (no change) |
-| Testability | 1 |
-| Error Handling | N/A (no change) |
-| **Overall** | 1.0 (scored categories only) |
+| Spec Compliance | 5 |
+| Architecture (SOLID) | 5 |
+| Security | 5 |
+| Performance | 5 |
+| Testability | 5 |
+| Error Handling | 5 |
+| **Overall** | 5.0 |
 
-### Implementation Status: Fail
-**Total Issues**: 3 (T001, T002, and T003 not implemented)
+### Implementation Status: Pass
+**Total Issues**: 0
+
+All four acceptance criteria, three functional requirements, and three tasks are implemented at the verification head. Registered steering checks (`python -m pytest`, `python -m pytest tests/features`, `python -m ruff check .`) pass in an isolated environment.
+
+---
+
+## Deterministic Steering Artifact and Ceiling
+
+- Runner: `sdlc-verify-steering.mjs --project . --issue 206 --spec specs/206-add-greeting-sha256-library-helper --base main --controller-run-id 4c807202-e59b-4887-9400-9b29f23a79f4`
+- Artifact: `.omp/sdlc/verification/206.json` — `ok: true`, `ceiling: null`
+- Identity: head `90ee5cc44b6976d04f87bcd68dd2d03e782faf0b`, steering `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`, spec `sha256:577b394f8574da21f2eb47ad1f6a1f1b7827723a260748243684868c9eff5671`
+- Coverage: `declared: 0`, `recorded: 0`, `complete: true` — complete gate with no project-specific manifest validations; no `repository.nmg-sdlc-smoke` or `project.nmg-sdlc-smoke` provider is declared in `steering/manifest.json`, so no real smoke lifecycle result is required.
 
 ---
 
@@ -42,18 +49,8 @@ The existing suite still passes, and the registered steering gate passes with no
 
 ## Delivery Validation
 
-- Local verification: Not complete
+- Local verification: Pass
 - PR evidence: Not required
-
----
-
-## Deterministic Steering Artifact and Ceiling
-
-- Command: `sdlc-verify-steering.mjs --project . --issue 206 --spec specs/206-add-greeting-sha256-library-helper --base main --controller-run-id 4c807202-e59b-4887-9400-9b29f23a79f4`
-- Artifact: `.omp/sdlc/verification/206.json`. Identity: head `aee20d6aef1d6b794f320e2af99910552de87cbe`, steering hash `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`, spec hash `sha256:577b394f8574da21f2eb47ad1f6a1f1b7827723a260748243684868c9eff5671`.
-- Result: `ok: true`, `ceiling: null`, `changedPaths: []`.
-- Coverage: `declared: 0`, `recorded: 0`, `complete: true`. The gate is complete, but `steering/manifest.json` declares no project-specific validations, including no `repository.nmg-sdlc-smoke`.
-- Ceiling: none from steering. The overall status is Fail because the acceptance criteria fail.
 
 ---
 
@@ -61,10 +58,14 @@ The existing suite still passes, and the registered steering gate passes with no
 
 | AC | Description | Status | Evidence |
 |----|-------------|--------|----------|
-| AC1 | `greeting_sha256("Ada")` returns the 64-character lowercase SHA-256 hex digest of `Hello, Ada` | Fail | `src/nmg_sdlc_smoke/greet.py` defines no `greeting_sha256`. A grep for `sha256` finds no matches in `src/`, `tests/`, or `README.md`. |
-| AC2 | The helper hashes exact UTF-8 code points without normalization (`Zo\u00eb` and `Zoe\u0308`) | Fail | The helper is absent. |
-| AC3 | Invalid names `""`, `" \t"`, `None`, and `42` raise `ValueError("name must not be blank")` | Fail | The helper is absent, so its validation cannot be tested. |
-| AC4 | The helper is exported in `__all__` and documented in the README, and `nmg-smoke Ada` is unchanged | Fail | The installed package prints `'greeting_sha256' in nmg_sdlc_smoke.__all__` → `False` and `hasattr(nmg_sdlc_smoke, 'greeting_sha256')` → `False`. The README has no `greeting_sha256` example or prose. The CLI is unchanged because the change is absent. |
+| AC1 | `greeting_sha256("Ada")` returns the 64-char lowercase hex SHA-256 of the 10 UTF-8 bytes of `Hello, Ada` | Pass | `src/nmg_sdlc_smoke/greet.py:54-55`; observed `7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66`; `tests/test_greet.py:651`; SCN001 |
+| AC2 | Precomposed and decomposed `Zoë` hash without normalization | Pass | `greet.py:55` encodes `greet(name)` directly; observed `aadd4ee8…2524` and `af1a0a3b…2064`; `tests/test_greet.py:651`; SCN002 |
+| AC3 | `""`, `" \t"`, `None`, `42` raise `ValueError("name must not be blank")` | Pass | Inherited from `greet` call in `greet.py:55`; `tests/test_greet.py:659`; SCN003 |
+| AC4 | Exported, in `__all__` with prior names, README documented, CLI unchanged | Pass | `src/nmg_sdlc_smoke/__init__.py:30,64`; `README.md:48,110,118`; `nmg-smoke Ada` → `Hello, Ada\n`, exit 0; SCN004 |
+
+## Regression Obligations
+
+None declared for this implicit single-issue spec.
 
 ---
 
@@ -72,9 +73,9 @@ The existing suite still passes, and the registered steering gate passes with no
 
 | Task | Description | Status | Notes |
 |------|-------------|--------|-------|
-| T001 | Implement, export, and document `greeting_sha256` | Incomplete | `greet.py`, `__init__.py`, and `README.md` are unchanged from `main`. |
-| T002 | Cover the helper with pytest unit tests | Incomplete | `tests/test_greet.py` has no `greeting_sha256` cases. |
-| T003 | Exercise four AC-linked pytest-bdd scenarios | Incomplete | `tests/features/add_greeting_sha256_library_helper.feature` and `tests/features/steps/test_greeting_sha256_steps.py` do not exist. |
+| T001 | Implement, export, and document greeting_sha256 | Complete | `import hashlib` first line; helper after `greeting_vowel_count`; README prose matches design.md line 38 verbatim |
+| T002 | Cover the helper with pytest unit tests | Complete | Parameterized valid/invalid cases and export test in `tests/test_greet.py:640-670` |
+| T003 | Exercise four AC-linked pytest-bdd scenarios | Complete | `tests/features/add_greeting_sha256_library_helper.feature` (4 scenarios); `tests/features/steps/test_greeting_sha256_steps.py` |
 
 ---
 
@@ -82,23 +83,21 @@ The existing suite still passes, and the registered steering gate passes with no
 
 ### SOLID Compliance
 
-There is no diff to assess. The existing layout is unchanged. The approved design keeps the pure `greet` helper, a thin CLI, and zero runtime dependencies (`hashlib` is in the standard library), and it complies with steering.
-
 | Principle | Score (1-5) | Notes |
 |-----------|-------------|-------|
-| Single Responsibility | N/A | No change |
-| Open/Closed | N/A | No change |
-| Liskov Substitution | N/A | No change |
-| Interface Segregation | N/A | No change |
-| Dependency Inversion | N/A | No change |
+| Single Responsibility | 5 | One-line pure derivation from `greet` |
+| Open/Closed | 5 | Additive; `greet` and existing helpers untouched |
+| Liskov Substitution | 5 | N/A — no inheritance |
+| Interface Segregation | 5 | Single-purpose public function |
+| Dependency Inversion | 5 | Library depends only on stdlib `hashlib` |
 
 ### Layer Separation
 
-The library and CLI boundaries are unchanged on `main`.
+Library remains independent of the CLI; CLI unchanged.
 
 ### Dependency Flow
 
-The library does not depend on the CLI. No runtime dependency was added.
+`__init__` → `greet` → stdlib. Zero runtime dependencies preserved.
 
 ---
 
@@ -106,9 +105,9 @@ The library does not depend on the CLI. No runtime dependency was added.
 
 - [x] Authentication: N/A
 - [x] Authorization: N/A
-- [ ] Input validation: not verifiable because the helper is absent
-- [x] Injection prevention: N/A
-- [x] Data protection: N/A. The digest is a non-secret fingerprint.
+- [x] Input validation: inherited from `greet`
+- [x] Injection prevention: no shell/eval; tests use `sys.executable -c` with fixed README text
+- [x] Data protection: unkeyed SHA-256 fingerprint only, as specified (not a security primitive)
 
 ---
 
@@ -116,109 +115,69 @@ The library does not depend on the CLI. No runtime dependency was added.
 
 - [x] Async patterns: N/A
 - [x] Caching: N/A
-- [x] Resource management: N/A
-- [x] Query optimization: N/A
+- [x] Resource management: no I/O in library
+- [x] Query optimization: N/A — O(len(greeting))
 
 ---
 
 ## Test Coverage
 
-### Required Local Checks (technical steering)
-
-Ran in an isolated venv built with `python -m pip install -e ".[dev]"` on Python 3.14.7, at head `aee20d6`.
-
-| Command | Result |
-|---------|--------|
-| `python -m pytest` | 518 passed, 2 skipped |
-| `python -m pytest tests/features` | 184 passed, 2 skipped |
-| `python -m ruff check .` | All checks passed |
-
-These checks cover only pre-existing behavior. None of them exercises #206.
-
 ### BDD Scenarios
 
 | Acceptance Criterion | Has Scenario | Has Steps | Passes |
 |---------------------|-------------|-----------|--------|
-| AC1 | No | No | No |
-| AC2 | No | No | No |
-| AC3 | No | No | No |
-| AC4 | No | No | No |
+| AC1 | Yes (SCN001) | Yes | Yes |
+| AC2 | Yes (SCN002) | Yes | Yes |
+| AC3 | Yes (SCN003) | Yes | Yes |
+| AC4 | Yes (SCN004) | Yes | Yes |
 
 ### Coverage Summary
 
-- Feature files: 0 of 4 required #206 scenarios
-- Step definitions: Missing
-- Unit tests: 0 `greeting_sha256` tests
-- Integration tests: 0
+- Feature files: 4 scenarios
+- Step definitions: Implemented
+- Unit tests: 8 `greeting_sha256` cases (12 sha256-selected tests including BDD)
+- Integration tests: SCN004 runs the README example and installed `nmg-smoke` script
+
+### Test Results
+
+| Command | Result |
+|---------|--------|
+| `python -m pip install -e ".[dev]"` (fresh venv) | Pass |
+| `python -m pytest` | 530 passed, 2 skipped |
+| `python -m pytest tests/features` | 188 passed, 2 skipped |
+| `python -m ruff check .` | All checks passed |
+| `python -m pytest -k sha256 tests/test_greet.py tests/features/steps/test_greeting_sha256_steps.py` | 12 passed |
+
+The 2 skips are pre-existing issue-85 scenarios (`requires parent-run issue 85 verification evidence`), unrelated to #206.
 
 ---
 
-## Exercise Test Results
+## Steering Doc Verification Gates
 
-Not applicable. This is a Python host project, not a plugin, and there are no changes under `workflows/` or `agents/`.
+| Gate | Status | Evidence |
+|------|--------|----------|
+| `python -m pytest` | Pass | 530 passed, 2 skipped |
+| `python -m pytest tests/features` | Pass | 188 passed, 2 skipped |
+| `python -m ruff check .` | Pass | All checks passed! |
 
-## Real Smoke Lifecycle Evidence
-
-Not required. `steering/manifest.json` declares no validations, so `repository.nmg-sdlc-smoke` and `project.nmg-sdlc-smoke` are not registered, and the steering gate recorded none.
+**Gate Summary**: 3/3 gates passed, 0 failed, 0 incomplete
 
 ---
 
 ## Fixes Applied
 
-| Severity | Category | Location | Original Issue | Fix Applied | Routing |
-|----------|----------|----------|----------------|-------------|---------|
-| — | — | — | None | No fix was applied. The whole feature is missing, which is a job for the implementation step, not a local verification fix. The verify publication scope allows writes only to `specs/206-add-greeting-sha256-library-helper/verification-report.md`. | — |
+None required.
 
 ## Remaining Issues
 
-### Critical Issues
-
-| Field | Value |
-|-------|-------|
-| **Severity** | Critical |
-| **Category** | Architecture |
-| **Location** | `src/nmg_sdlc_smoke/greet.py`, `src/nmg_sdlc_smoke/__init__.py`, `README.md` |
-| **Issue** | T001 is not implemented: no `greeting_sha256`, no export, no README documentation. |
-| **Impact** | AC1–AC4 and FR1–FR3 fail. |
-| **Reason Not Fixed** | Implementation work is outside the verify scope. The verify publication scope allows writes only to the report. |
-
-| Field | Value |
-|-------|-------|
-| **Severity** | Critical |
-| **Category** | Testing |
-| **Location** | `tests/test_greet.py`, `tests/features/add_greeting_sha256_library_helper.feature`, `tests/features/steps/test_greeting_sha256_steps.py` |
-| **Issue** | T002 and T003 are not implemented: no unit tests, and none of the four required pytest-bdd scenarios. |
-| **Impact** | No acceptance criterion has executable coverage. |
-| **Reason Not Fixed** | Implementation work is outside the verify scope. |
-
-### High Priority
-None.
-
-### Medium Priority
-None.
-
-### Low Priority
 None.
 
 ---
 
 ## Positive Observations
 
-- The approved spec gives exact digests, file locations, and step contracts, so implementation is mechanical.
-- The existing suite and Ruff are green at the base head.
-
----
-
-## Recommendations Summary
-
-### Before PR (Must)
-- [ ] Implement T001–T003 as specified in `tasks.md`, then rerun the full registered gate and verification.
-
-### Short Term (Should)
-- None.
-
-### Long Term (Could)
-- None.
+- Implementation mirrors sibling helpers exactly (self-aliased re-export, `__all__`, README example + prose).
+- BDD AC1 cross-checks the literal digest against `hashlib` and byte length.
 
 ---
 
@@ -226,16 +185,17 @@ None.
 
 | File | Issues | Notes |
 |------|--------|-------|
-| `src/nmg_sdlc_smoke/greet.py` | 1 | `greeting_sha256` missing |
-| `src/nmg_sdlc_smoke/__init__.py` | 1 | Export missing |
-| `README.md` | 1 | Documentation missing |
-| `tests/test_greet.py` | 1 | Unit tests missing |
-| `tests/features/` | 1 | Feature and steps missing |
+| `src/nmg_sdlc_smoke/greet.py` | 0 | |
+| `src/nmg_sdlc_smoke/__init__.py` | 0 | |
+| `README.md` | 0 | |
+| `tests/test_greet.py` | 0 | |
+| `tests/features/add_greeting_sha256_library_helper.feature` | 0 | |
+| `tests/features/steps/test_greeting_sha256_steps.py` | 0 | |
 
 ---
 
 ## Recommendation
 
-**Major rework needed**
+**Ready for PR**
 
-The implementation for #206 is absent: the branch head equals `main`. Return to implementation, then rerun the full verification gate at the new head.
+All delivery ACs, FRs, tasks, and scenarios pass with complete steering coverage at head `90ee5cc44b6976d04f87bcd68dd2d03e782faf0b`.
