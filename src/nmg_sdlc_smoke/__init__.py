@@ -1,4 +1,5 @@
 from .greet import greet, greet_many
+from .greet import greeting_base64 as greeting_base64
 from .greet import greeting_bytes as greeting_bytes
 from .greet import greeting_casefold as greeting_casefold
 from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamation
@@ -35,6 +36,7 @@ from .greet import greeting_word_count as greeting_word_count
 __all__ = [
     "greet",
     "greet_many",
+    "greeting_base64",
     "greeting_bytes",
     "greeting_casefold",
     "greeting_ends_with_exclamation",

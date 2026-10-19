@@ -3,6 +3,7 @@ import pytest
 from nmg_sdlc_smoke import (
     greet,
     greet_many,
+    greeting_base64,
     greeting_bytes,
     greeting_casefold,
     greeting_ends_with_exclamation,
@@ -669,3 +670,42 @@ def test_greeting_sha256_is_exported() -> None:
         nmg_sdlc_smoke.greeting_sha256("Ada")
         == "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66"
     )
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "SGVsbG8sIEFkYQ=="),
+        ("a?>", "SGVsbG8sIGE/Pg=="),
+        ("a>>", "SGVsbG8sIGE+Pg=="),
+        ("Bo", "SGVsbG8sIEJv"),
+        ("Bob~", "SGVsbG8sIEJvYn4="),
+        ("Zo\u00eb", "SGVsbG8sIFpvw6s="),
+        ("Zoe\u0308", "SGVsbG8sIFpvZcyI"),
+        (
+            "A" * 60,
+            (
+                "SGVsbG8sIEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB"
+                "QUFBQUFBQUFBQUFBQUFBQUFBQUFBQQ=="
+            ),
+        ),
+    ],
+)
+def test_greeting_base64_encodes_utf8_greeting(name: str, expected: str) -> None:
+    result = greeting_base64(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_base64_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_base64(name)  # type: ignore[arg-type]
+
+
+def test_greeting_base64_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_base64" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_base64("Ada") == "SGVsbG8sIEFkYQ=="

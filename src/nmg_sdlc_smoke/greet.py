@@ -1,3 +1,4 @@
+import base64
 import hashlib
 from collections.abc import Iterable
 
@@ -53,6 +54,10 @@ def greeting_vowel_count(name: str) -> int:
 
 def greeting_sha256(name: str) -> str:
     return hashlib.sha256(greet(name).encode("utf-8")).hexdigest()
+
+
+def greeting_base64(name: str) -> str:
+    return base64.b64encode(greet(name).encode("utf-8")).decode("ascii")
 
 
 def greeting_has_semicolon(name: str) -> bool:

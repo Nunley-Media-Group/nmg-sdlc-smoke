@@ -19,6 +19,7 @@ python -m pip install -e ".[dev]"
 from nmg_sdlc_smoke import (
     greet,
     greet_many,
+    greeting_base64,
     greeting_bytes,
     greeting_casefold,
     greeting_ends_with_exclamation,
@@ -108,6 +109,7 @@ greeting_word_count("Ada")  # 2
 greeting_word_count("Ada Lovelace")  # 3
 greeting_vowel_count("Ada")  # 4
 greeting_sha256("Ada")  # "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66"
+greeting_base64("Ada")  # "SGVsbG8sIEFkYQ=="
 ```
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
@@ -116,6 +118,7 @@ greeting_sha256("Ada")  # "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac70
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
 `greeting_vowel_count` counts the ten ASCII vowels `a e i o u A E I O U` in the complete greeting (not the name alone); `y`, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_sha256` encodes the complete greeting (not the name alone) as UTF-8 and returns its SHA-256 digest as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_base64` encodes the complete greeting (not the name alone) as UTF-8 and returns its standard Base64 encoding as a `str`, using the RFC 4648 alphabet with `+` and `/`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_semicolon` checks for a literal `;` in the complete greeting and uses the same name validation as `greet`.
 `greeting_has_colon` checks for a literal `:` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_dollar` checks for a literal `$` in the complete greeting (not the fullwidth `＄`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
