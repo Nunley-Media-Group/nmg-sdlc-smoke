@@ -46,6 +46,7 @@ from nmg_sdlc_smoke import (
     greeting_length,
     greeting_reversed,
     greeting_starts_with_hello,
+    greeting_vowel_count,
     greeting_word_count,
 )
 
@@ -104,12 +105,14 @@ greeting_has_underscore("Ada_")  # True
 greeting_has_underscore("Ada")  # False
 greeting_word_count("Ada")  # 2
 greeting_word_count("Ada Lovelace")  # 3
+greeting_vowel_count("Ada")  # 4
 ```
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
 `greeting_casefold` applies Unicode casefolding to the complete greeting and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
+`greeting_vowel_count` counts the ten ASCII vowels `a e i o u A E I O U` in the complete greeting (not the name alone); `y`, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_semicolon` checks for a literal `;` in the complete greeting and uses the same name validation as `greet`.
 `greeting_has_colon` checks for a literal `:` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_dollar` checks for a literal `$` in the complete greeting (not the fullwidth `＄`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
