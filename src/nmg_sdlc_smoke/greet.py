@@ -1,3 +1,4 @@
+import hashlib
 from collections.abc import Iterable
 
 
@@ -48,6 +49,10 @@ def greeting_word_count(name: str) -> int:
 
 def greeting_vowel_count(name: str) -> int:
     return sum(character in "aeiouAEIOU" for character in greet(name))
+
+
+def greeting_sha256(name: str) -> str:
+    return hashlib.sha256(greet(name).encode("utf-8")).hexdigest()
 
 
 def greeting_has_semicolon(name: str) -> bool:
