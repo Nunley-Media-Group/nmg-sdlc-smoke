@@ -1,0 +1,33 @@
+**Issue**: #203
+**Date**: 2026-10-18
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_vowel_count_library_helper.feature
+# Generated from: specs/203-add-greeting-vowel-count-library-helper/requirements.md
+Feature: Count ASCII vowels in the completed greeting
+
+  @SCN001
+  Scenario: Count ASCII vowels in the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_vowel_count is called with Ada and with AEIOU aeiou
+    Then the results are the Python int values 4 and 12
+
+  @SCN002
+  Scenario: Ignore characters outside the ten ASCII vowels
+    Given the installed nmg_sdlc_smoke package
+    When greeting_vowel_count is called with Bcd, Ady, Émile spelled with precomposed U+00C9, and fullwidth U+FF21 U+FF44 U+FF41
+    Then the results are 2, 3, 4, and 2
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_vowel_count is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_vowel_count of Ada
+    Then it prints 4 and greeting_vowel_count is listed in nmg_sdlc_smoke.__all__
+    And the README documents the ASCII vowel set, completed-greeting scope, and inherited invalid-name error
