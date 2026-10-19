@@ -30,6 +30,7 @@ from nmg_sdlc_smoke import (
     greeting_length,
     greeting_reversed,
     greeting_starts_with_hello,
+    greeting_vowel_count,
     greeting_word_count,
 )
 
@@ -605,3 +606,34 @@ def test_greeting_reversed_is_exported_without_dropping_prior_exports() -> None:
     assert "greeting_reversed" in nmg_sdlc_smoke.__all__
     assert set(prior) <= set(nmg_sdlc_smoke.__all__)
     assert greet("Ada") == "Hello, Ada"
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 4),
+        ("AEIOU aeiou", 12),
+        ("Bcd", 2),
+        ("Ady", 3),
+        ("\u00c9mile", 4),
+        ("\uff21\uff44\uff41", 2),
+    ],
+)
+def test_greeting_vowel_count_counts_ascii_vowels(name: str, expected: int) -> None:
+    result = greeting_vowel_count(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_vowel_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_vowel_count(name)  # type: ignore[arg-type]
+
+
+def test_greeting_vowel_count_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_vowel_count" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_vowel_count("Ada") == 4
