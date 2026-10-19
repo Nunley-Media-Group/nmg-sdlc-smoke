@@ -29,6 +29,7 @@ from nmg_sdlc_smoke import (
     greeting_is_ascii,
     greeting_length,
     greeting_reversed,
+    greeting_sha256,
     greeting_starts_with_hello,
     greeting_vowel_count,
     greeting_word_count,
@@ -637,3 +638,34 @@ def test_greeting_vowel_count_is_exported() -> None:
 
     assert "greeting_vowel_count" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_vowel_count("Ada") == 4
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66"),
+        ("Zo\u00eb", "aadd4ee82814c54de89ac9cd0e8f089a485196e4952ee920db669caccb7c2524"),
+        ("Zoe\u0308", "af1a0a3bab8dec9c18ed0501706ead61457c718667ae4bcfd5a7dbd525192064"),
+    ],
+)
+def test_greeting_sha256_hashes_utf8_greeting(name: str, expected: str) -> None:
+    result = greeting_sha256(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_sha256_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_sha256(name)  # type: ignore[arg-type]
+
+
+def test_greeting_sha256_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_sha256" in nmg_sdlc_smoke.__all__
+    assert (
+        nmg_sdlc_smoke.greeting_sha256("Ada")
+        == "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66"
+    )
