@@ -1,0 +1,36 @@
+**Issue**: #206
+**Date**: 2026-10-18
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_sha256_library_helper.feature
+# Generated from: specs/206-add-greeting-sha256-library-helper/requirements.md
+Feature: Fingerprint the completed greeting with SHA-256
+
+  @SCN001
+  Scenario: Return the SHA-256 hex digest of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha256 is called with Ada
+    Then the result is the Python str 7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66
+    And it is the SHA-256 digest of the 10 UTF-8 bytes of Hello, Ada written as 64 lowercase hexadecimal characters
+
+  @SCN002
+  Scenario: Hash the exact UTF-8 code points without normalization
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha256 is called with Zo followed by precomposed U+00EB and with Zoe followed by combining U+0308
+    Then the results are aadd4ee82814c54de89ac9cd0e8f089a485196e4952ee920db669caccb7c2524 and af1a0a3bab8dec9c18ed0501706ead61457c718667ae4bcfd5a7dbd525192064
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_sha256 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing existing surfaces
+    Given the README Library section
+    When the README Library example runs and prints greeting_sha256 of Ada, and nmg-smoke Ada runs
+    Then the example prints 7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66
+    And greeting_sha256 is listed in nmg_sdlc_smoke.__all__ alongside every previously listed export
+    And nmg-smoke prints Hello, Ada with one newline and exit status 0
+    And the README documents the 64-character lowercase hex format, UTF-8 encoding of the complete greeting, absence of Unicode normalization, and the inherited invalid-name error
