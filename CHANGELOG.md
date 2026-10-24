@@ -10,9 +10,15 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.46.0] - 2026-10-24
+
 ### Fixed
 
 - Ignore the nmg-sdlc v4 runtime directory `.nmg-sdlc/` in place of the v3 `.omp/sdlc/` rule (#219)
+
+### Changed
+
+- Add greeting_space_count library helper (#230)
 
 ## [3.45.0] - 2026-09-25
 
