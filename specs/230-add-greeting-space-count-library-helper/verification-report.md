@@ -4,7 +4,7 @@
 **Issue**: #230
 **Reviewer**: Claude (nmg-sdlc verify worker)
 **Scope**: Implementation verification against spec
-**Verification head**: 95ee4a2432d8b1a6e16a5c3b439ff409a40ec282
+**Verification head**: 9d5e91cb8089c889bd5dc47e6f311268dde952fb
 
 ---
 
@@ -23,7 +23,7 @@
 ### Implementation Status: Pass
 **Total Issues**: 0
 
-`greeting_space_count(name)` is implemented as `greet(name).count(" ")`, exported from the package root, listed in `__all__`, and documented in the README Library section exactly as the design specifies. Every approved AC, FR, task, and scenario has passing evidence at the verification head.
+`greeting_space_count(name)` is implemented as `greet(name).count(" ")`, exported from the package root, listed in `__all__`, and documented in the README Library section exactly as the design specifies. Every approved AC, FR, task, and scenario has passing evidence at the verification head. That head adds the release commit `9d5e91c`, which bumps `VERSION` from 3.45.0 to 3.46.0 and adds a `## [3.46.0] - 2026-10-24` CHANGELOG entry for #230. This report re-verifies the full gate at that head.
 
 ---
 
@@ -49,7 +49,7 @@
 
 - Runner: `sdlc-verify-steering.mjs --project . --issue 230 --spec specs/230-add-greeting-space-count-library-helper --base main --controller-run-id 1fa8c971-e9ef-4e24-aab5-fa1be45dd354`
 - Artifact: `.nmg-sdlc/verification/230.json` (`ok: true`)
-- Identity: head `95ee4a2432d8b1a6e16a5c3b439ff409a40ec282`, steering `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`, spec `sha256:a769510f59297fb8792e0ada61edc0e5373ff3a75a0a37b3148c23e2adbd1026`
+- Identity: head `9d5e91cb8089c889bd5dc47e6f311268dde952fb`, steering `sha256:96bcc8489c8cf612473fd4847d1341aad49d59dc42286b0252d26613318aa4cf`, spec `sha256:a769510f59297fb8792e0ada61edc0e5373ff3a75a0a37b3148c23e2adbd1026`
 - Ceiling: `null` (none)
 - Coverage: `declared: 0`, `recorded: 0`, `complete: true`, so the gate is complete and the project registers no project-specific validations
 - Smoke provider: `steering/manifest.json` declares no `repository.nmg-sdlc-smoke` or `project.nmg-sdlc-smoke` validation (`validations: []`), so the smoke requirement does not apply
@@ -63,7 +63,7 @@
 | AC1 | Counts ASCII spaces in the completed greeting: `Ada`→1, `Ada Lovelace`→2, `Grace Brewster Hopper`→3, each an `int` | Pass | `src/nmg_sdlc_smoke/greet.py:67-68`; `tests/test_greet.py` `test_greeting_space_count_counts_ascii_spaces`; SCN001 passes |
 | AC2 | Counts only U+0020; tab, newline, and NBSP names give 1 | Pass | `str.count(" ")` matches one code point only; unit params `\t`, `\n`, ` `; SCN002 passes |
 | AC3 | `""`, `" \t"`, `None`, and `42` raise `ValueError("name must not be blank")` | Pass | `greet(name)` validates first; `test_greeting_space_count_rejects_invalid_names` (anchored match); SCN003 passes |
-| AC4 | Exported, in `__all__` with every prior name, documented in README; CLI unchanged | Pass | `src/nmg_sdlc_smoke/__init__.py:34,73`; `README.md:52,118,131`; SCN004 runs the README example in a subprocess (`(0, "2\n", "")`), checks `PRIOR_EXPORTS ⊆ __all__`, checks the exact prose line, and checks `cli.main(["Ada"])` writes `Hello, Ada\n` with exit 0; installed `nmg-smoke Ada` outputs `Hello, Ada\n`, exit 0 |
+| AC4 | Exported, in `__all__` with every prior name, documented in README; CLI unchanged | Pass | `src/nmg_sdlc_smoke/__init__.py:34,73`; `README.md:52,118,131`; SCN004 runs the README example in a subprocess (`(0, "2\n", "")`), checks `PRIOR_EXPORTS ⊆ __all__`, checks the exact prose line, and checks `cli.main(["Ada"])` writes `Hello, Ada\n` with exit 0; installed `nmg-smoke Ada` outputs `Hello, Ada\n`, exit 0; installed distribution reports version 3.46.0 |
 
 ### Functional Requirements
 
@@ -209,6 +209,8 @@ None.
 | `tests/test_greet.py` | 0 | |
 | `tests/features/add_greeting_space_count_library_helper.feature` | 0 | Matches spec feature.gherkin scenarios |
 | `tests/features/steps/test_greeting_space_count_steps.py` | 0 | |
+| `VERSION` | 0 | `3.46.0` with one trailing LF; `pyproject.toml` still reads it dynamically |
+| `CHANGELOG.md` | 0 | Additions only; released headings such as `## [3.45.0]` are intact |
 
 ---
 
@@ -216,4 +218,4 @@ None.
 
 **Ready for PR**
 
-Every delivery AC, FR, task, and scenario passes at `95ee4a2432d8b1a6e16a5c3b439ff409a40ec282`. The deterministic steering gate is complete with no ceiling, all technical-steering checks are green, and no findings remain.
+Every delivery AC, FR, task, and scenario passes at `9d5e91cb8089c889bd5dc47e6f311268dde952fb`. The deterministic steering gate is complete with no ceiling, all technical-steering checks are green, and no findings remain.
