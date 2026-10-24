@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.47.0] - 2026-10-24
+
+### Changed
+
+- Add greeting_punctuation_count library helper (#233)
+
 ## [3.46.0] - 2026-10-24
 
 ### Fixed
