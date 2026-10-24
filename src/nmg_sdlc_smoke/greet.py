@@ -56,6 +56,10 @@ def greeting_uppercase_count(name: str) -> int:
     return sum("A" <= character <= "Z" for character in greet(name))
 
 
+def greeting_lowercase_count(name: str) -> int:
+    return sum("a" <= character <= "z" for character in greet(name))
+
+
 def greeting_sha256(name: str) -> str:
     return hashlib.sha256(greet(name).encode("utf-8")).hexdigest()
 
