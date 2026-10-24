@@ -6,6 +6,7 @@ from nmg_sdlc_smoke import (
     greeting_base64,
     greeting_bytes,
     greeting_casefold,
+    greeting_digit_count,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
     greeting_has_apostrophe,
@@ -775,3 +776,34 @@ def test_greeting_base64_is_exported() -> None:
 
     assert "greeting_base64" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_base64("Ada") == "SGVsbG8sIEFkYQ=="
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("R2D2", 2),
+        ("Agent 007", 3),
+        ("Ada", 0),
+        ("\uff11\uff12", 0),
+        ("\u0663", 0),
+        ("x\u00b2", 0),
+    ],
+)
+def test_greeting_digit_count_counts_ascii_digits(name: str, expected: int) -> None:
+    result = greeting_digit_count(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_digit_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_digit_count(name)  # type: ignore[arg-type]
+
+
+def test_greeting_digit_count_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_digit_count" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_digit_count("R2D2") == 2

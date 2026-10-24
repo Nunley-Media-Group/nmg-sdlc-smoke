@@ -60,6 +60,10 @@ def greeting_lowercase_count(name: str) -> int:
     return sum("a" <= character <= "z" for character in greet(name))
 
 
+def greeting_digit_count(name: str) -> int:
+    return sum("0" <= character <= "9" for character in greet(name))
+
+
 def greeting_sha256(name: str) -> str:
     return hashlib.sha256(greet(name).encode("utf-8")).hexdigest()
 
