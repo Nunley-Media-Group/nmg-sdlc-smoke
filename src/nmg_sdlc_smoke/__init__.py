@@ -2,6 +2,7 @@ from .greet import greet, greet_many
 from .greet import greeting_base64 as greeting_base64
 from .greet import greeting_bytes as greeting_bytes
 from .greet import greeting_casefold as greeting_casefold
+from .greet import greeting_digit_count as greeting_digit_count
 from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamation
 from .greet import greeting_ends_with_name as greeting_ends_with_name
 from .greet import greeting_has_apostrophe as greeting_has_apostrophe
@@ -41,6 +42,7 @@ __all__ = [
     "greeting_base64",
     "greeting_bytes",
     "greeting_casefold",
+    "greeting_digit_count",
     "greeting_ends_with_exclamation",
     "greeting_ends_with_name",
     "greeting_has_apostrophe",
