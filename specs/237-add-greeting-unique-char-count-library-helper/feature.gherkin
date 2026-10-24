@@ -1,0 +1,35 @@
+**Issue**: #237
+**Date**: 2026-10-24
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/233-add-greeting-punctuation-count-library-helper/
+
+# File: tests/features/add_greeting_unique_char_count_library_helper.feature
+# Generated from: specs/237-add-greeting-unique-char-count-library-helper/requirements.md
+Feature: Count distinct characters in the completed greeting
+
+  @SCN001
+  Scenario: Count distinct characters in the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_unique_char_count is called with Ada, Bob, and Ada Lovelace
+    Then the results are the Python int values 9, 8, and 12
+
+  @SCN002
+  Scenario: Count is case-sensitive and per Unicode code point
+    Given the installed nmg_sdlc_smoke package
+    When greeting_unique_char_count is called with ADA and Zo plus U+00EB
+    Then the results are 8 and 8
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_unique_char_count is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_unique_char_count of Ada
+    Then it prints 9 and greeting_unique_char_count is listed in nmg_sdlc_smoke.__all__
+    And the README documents code-point case-sensitive distinctness, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
