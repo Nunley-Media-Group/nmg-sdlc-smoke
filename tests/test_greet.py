@@ -31,6 +31,7 @@ from nmg_sdlc_smoke import (
     greeting_is_ascii,
     greeting_length,
     greeting_lowercase_count,
+    greeting_punctuation_count,
     greeting_reversed,
     greeting_sha256,
     greeting_space_count,
@@ -839,3 +840,38 @@ def test_greeting_space_count_is_exported() -> None:
 
     assert "greeting_space_count" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_space_count("Ada Lovelace") == 2
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 1),
+        ("O'Brien", 2),
+        ("Ada!?", 3),
+        ("a.b-c_d", 4),
+        ("Ada！", 1),
+        ("O’Brien", 1),
+        ("Ada、", 1),
+        ("Ada Lovelace 42", 1),
+    ],
+)
+def test_greeting_punctuation_count_counts_ascii_punctuation(
+    name: str, expected: int
+) -> None:
+    result = greeting_punctuation_count(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_punctuation_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_punctuation_count(name)  # type: ignore[arg-type]
+
+
+def test_greeting_punctuation_count_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_punctuation_count" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_punctuation_count("O'Brien") == 2
