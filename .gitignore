@@ -6,4 +6,4 @@ __pycache__/
 dist/
 build/
 .venv/
-.omp/sdlc/
+.nmg-sdlc/

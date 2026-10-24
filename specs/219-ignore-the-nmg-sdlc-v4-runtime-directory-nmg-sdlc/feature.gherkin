@@ -1,0 +1,15 @@
+**Issue**: #219
+**Date**: 2026-10-24
+**Status**: Approved
+**Author**: NMG
+
+# File: .gitignore
+# Generated from: specs/219-ignore-the-nmg-sdlc-v4-runtime-directory-nmg-sdlc/requirements.md
+Feature: Ignore the nmg-sdlc v4 runtime directory .nmg-sdlc/
+
+  @SCN001 @regression
+  Scenario: The v4 runtime directory is ignored
+    Given a file ".nmg-sdlc/prompt-provenance/sdlc-write-spec.json"
+    When "git status --porcelain" runs
+    Then it lists nothing
+    And "git check-ignore -q .nmg-sdlc" exits 0

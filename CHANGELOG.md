@@ -10,6 +10,10 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+### Fixed
+
+- Ignore the nmg-sdlc v4 runtime directory `.nmg-sdlc/` in place of the v3 `.omp/sdlc/` rule (#219)
+
 ## [3.45.0] - 2026-09-25
 
 ### Changed
