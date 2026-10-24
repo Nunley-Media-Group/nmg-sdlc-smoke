@@ -1,0 +1,42 @@
+**Issue**: #215
+**Date**: 2026-10-24
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_rot13_library_helper.feature
+# Generated from: specs/215-add-greeting-rot13-library-helper/requirements.md
+Feature: Apply ROT13 to the completed greeting
+
+  @SCN001
+  Scenario: Return the ROT13 form of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_rot13 is called with Ada
+    Then the result is the Python str Uryyb, Nqn
+
+  @SCN002
+  Scenario: Rotate only ASCII letters and leave every other character unchanged
+    Given the installed nmg_sdlc_smoke package
+    When greeting_rot13 is called with Mary-Jane O'Neil, with Zo followed by precomposed U+00EB, and with fullwidth U+FF3A followed by ed 42
+    Then the results are Uryyb, Znel-Wnar B'Arvy and Uryyb, Mb followed by U+00EB and Uryyb, followed by U+FF3A and rq 42
+    And every character that is not an ASCII letter is unchanged at the same position
+
+  @SCN003
+  Scenario: Applying ROT13 twice restores the greeting
+    Given the installed nmg_sdlc_smoke package
+    When ROT13 is applied again to greeting_rot13 of Ada, Zo followed by U+00EB, and Mary-Jane O'Neil
+    Then each result equals greet of the same name
+
+  @SCN004
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_rot13 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN005
+  Scenario: Expose and document the helper without changing existing surfaces
+    Given the README Library section
+    When the README Library example runs and prints greeting_rot13 of Ada, and nmg-smoke Ada runs
+    Then the example prints Uryyb, Nqn
+    And greeting_rot13 is listed in nmg_sdlc_smoke.__all__ alongside every previously listed export
+    And nmg-smoke prints Hello, Ada with one newline and exit status 0
+    And the README documents ASCII-only ROT13 of the complete greeting, unchanged other characters, and the inherited invalid-name error
