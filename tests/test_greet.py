@@ -29,6 +29,7 @@ from nmg_sdlc_smoke import (
     greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
+    greeting_lowercase_count,
     greeting_reversed,
     greeting_sha256,
     greeting_starts_with_hello,
@@ -672,6 +673,38 @@ def test_greeting_uppercase_count_is_exported() -> None:
 
     assert "greeting_uppercase_count" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_uppercase_count("Ada") == 2
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 6),
+        ("abc xyz", 10),
+        ("BOB 42!", 4),
+        ("\u00e9", 4),
+        ("\uff42\uff43", 4),
+    ],
+)
+def test_greeting_lowercase_count_counts_ascii_lowercase(
+    name: str, expected: int
+) -> None:
+    result = greeting_lowercase_count(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_lowercase_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_lowercase_count(name)  # type: ignore[arg-type]
+
+
+def test_greeting_lowercase_count_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_lowercase_count" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_lowercase_count("Ada") == 6
 
 
 @pytest.mark.parametrize(

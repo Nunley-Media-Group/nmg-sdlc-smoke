@@ -27,6 +27,7 @@ from .greet import greeting_has_slash as greeting_has_slash
 from .greet import greeting_has_underscore as greeting_has_underscore
 from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_length as greeting_length
+from .greet import greeting_lowercase_count as greeting_lowercase_count
 from .greet import greeting_reversed as greeting_reversed
 from .greet import greeting_sha256 as greeting_sha256
 from .greet import greeting_starts_with_hello as greeting_starts_with_hello
@@ -63,6 +64,7 @@ __all__ = [
     "greeting_has_underscore",
     "greeting_is_ascii",
     "greeting_length",
+    "greeting_lowercase_count",
     "greeting_reversed",
     "greeting_sha256",
     "greeting_starts_with_hello",
