@@ -1,0 +1,27 @@
+Feature: Count ASCII spaces in the completed greeting
+
+  @SCN001
+  Scenario: Count ASCII spaces in the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_space_count is called with Ada, Ada Lovelace, and Grace Brewster Hopper
+    Then the results are the Python int values 1, 2, and 3
+
+  @SCN002
+  Scenario: Count only U+0020
+    Given the installed nmg_sdlc_smoke package
+    When greeting_space_count is called with Ada and Lovelace joined by tab U+0009, newline U+000A, and no-break space U+00A0
+    Then the results are 1, 1, and 1
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_space_count is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_space_count of Ada Lovelace
+    Then it prints 2 and greeting_space_count is listed in nmg_sdlc_smoke.__all__
+    And the README documents the U+0020-only set, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0

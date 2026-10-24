@@ -33,6 +33,7 @@ from nmg_sdlc_smoke import (
     greeting_lowercase_count,
     greeting_reversed,
     greeting_sha256,
+    greeting_space_count,
     greeting_starts_with_hello,
     greeting_uppercase_count,
     greeting_vowel_count,
@@ -807,3 +808,34 @@ def test_greeting_digit_count_is_exported() -> None:
 
     assert "greeting_digit_count" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_digit_count("R2D2") == 2
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 1),
+        ("Ada Lovelace", 2),
+        ("Grace Brewster Hopper", 3),
+        ("Ada\tLovelace", 1),
+        ("Ada\nLovelace", 1),
+        ("Ada\u00a0Lovelace", 1),
+    ],
+)
+def test_greeting_space_count_counts_ascii_spaces(name: str, expected: int) -> None:
+    result = greeting_space_count(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_space_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_space_count(name)  # type: ignore[arg-type]
+
+
+def test_greeting_space_count_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_space_count" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_space_count("Ada Lovelace") == 2
