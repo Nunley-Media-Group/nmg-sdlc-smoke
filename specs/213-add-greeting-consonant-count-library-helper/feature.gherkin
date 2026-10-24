@@ -1,0 +1,35 @@
+**Issue**: #213
+**Date**: 2026-10-24
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/203-add-greeting-vowel-count-library-helper/
+
+# File: tests/features/add_greeting_consonant_count_library_helper.feature
+# Generated from: specs/213-add-greeting-consonant-count-library-helper/requirements.md
+Feature: Count ASCII consonants in the completed greeting
+
+  @SCN001
+  Scenario: Count ASCII consonants in the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_consonant_count is called with Ada and with all 42 ASCII consonants
+    Then the results are the Python int values 4 and 45
+
+  @SCN002
+  Scenario: Treat y and Y as consonants and ignore every other character
+    Given the installed nmg_sdlc_smoke package
+    When greeting_consonant_count is called with Ady, Yy, Bob 42!, Émile spelled with precomposed U+00C9, and fullwidth U+FF22 U+FF43 U+FF44
+    Then the results are 5, 5, 5, 5, and 3
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_consonant_count is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing existing surfaces
+    Given the README Library section
+    When the README Library example runs and prints greeting_consonant_count of Ada, and nmg-smoke Ada runs
+    Then the example prints 4 and greeting_consonant_count is listed in nmg_sdlc_smoke.__all__
+    And nmg-smoke prints Hello, Ada with one newline and exit status 0
+    And the README documents the 42-letter ASCII consonant set including y and Y, completed-greeting scope, and inherited invalid-name error
