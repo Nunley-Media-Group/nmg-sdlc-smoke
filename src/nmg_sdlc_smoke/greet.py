@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import string
 from collections.abc import Iterable
 
 
@@ -66,6 +67,10 @@ def greeting_digit_count(name: str) -> int:
 
 def greeting_space_count(name: str) -> int:
     return greet(name).count(" ")
+
+
+def greeting_punctuation_count(name: str) -> int:
+    return sum(character in string.punctuation for character in greet(name))
 
 
 def greeting_sha256(name: str) -> str:
