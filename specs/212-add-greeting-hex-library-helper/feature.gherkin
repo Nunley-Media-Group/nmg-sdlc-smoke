@@ -1,0 +1,38 @@
+**Issue**: #212
+**Date**: 2026-10-24
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/209-add-greeting-base64-library-helper/
+
+# File: tests/features/add_greeting_hex_library_helper.feature
+# Generated from: specs/212-add-greeting-hex-library-helper/requirements.md
+Feature: Encode the completed greeting as lowercase hexadecimal text
+
+  @SCN001
+  Scenario: Return the hex text of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_hex is called with Ada
+    Then the result is the Python str 48656c6c6f2c20416461
+    And it is 20 characters long, two per UTF-8 byte of Hello, Ada
+
+  @SCN002
+  Scenario: Encode exact UTF-8 code points as lowercase hex without separators
+    Given the installed nmg_sdlc_smoke package
+    When greeting_hex is called with Zo followed by precomposed U+00EB, with Zoe followed by combining U+0308, and with U+00E9 followed by U+4E2D
+    Then the results are 48656c6c6f2c205a6fc3ab, 48656c6c6f2c205a6f65cc88, and 48656c6c6f2c20c3a9e4b8ad
+    And every result contains only the characters 0-9 and a-f with no separators
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_hex is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing existing surfaces
+    Given the README Library section
+    When the README Library example runs and prints greeting_hex of Ada, and nmg-smoke Ada runs
+    Then the example prints 48656c6c6f2c20416461
+    And greeting_hex is listed in nmg_sdlc_smoke.__all__ alongside every previously listed export
+    And nmg-smoke prints Hello, Ada with one newline and exit status 0
+    And the README documents UTF-8 encoding of the complete greeting, the lowercase two-characters-per-byte format without separators or prefix, the absence of Unicode normalization, and the inherited invalid-name error
