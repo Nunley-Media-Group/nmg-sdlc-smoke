@@ -36,6 +36,7 @@ from nmg_sdlc_smoke import (
     greeting_sha256,
     greeting_space_count,
     greeting_starts_with_hello,
+    greeting_unique_char_count,
     greeting_uppercase_count,
     greeting_vowel_count,
     greeting_word_count,
@@ -875,3 +876,35 @@ def test_greeting_punctuation_count_is_exported() -> None:
 
     assert "greeting_punctuation_count" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_punctuation_count("O'Brien") == 2
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 9),
+        ("Bob", 8),
+        ("Ada Lovelace", 12),
+        ("ADA", 8),
+        ("Zoë", 8),
+    ],
+)
+def test_greeting_unique_char_count_counts_distinct_code_points(
+    name: str, expected: int
+) -> None:
+    result = greeting_unique_char_count(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_unique_char_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_unique_char_count(name)  # type: ignore[arg-type]
+
+
+def test_greeting_unique_char_count_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_unique_char_count" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_unique_char_count("Ada") == 9
