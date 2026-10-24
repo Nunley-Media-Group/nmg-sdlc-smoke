@@ -1,0 +1,35 @@
+**Issue**: #227
+**Date**: 2026-10-24
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/224-add-greeting-lowercase-count-library-helper/
+
+# File: tests/features/add_greeting_digit_count_library_helper.feature
+# Generated from: specs/227-add-greeting-digit-count-library-helper/requirements.md
+Feature: Count ASCII digits in the completed greeting
+
+  @SCN001
+  Scenario: Count ASCII digits in the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_digit_count is called with R2D2, Agent 007, and Ada
+    Then the results are the Python int values 2, 3, and 0
+
+  @SCN002
+  Scenario: Count only the ten ASCII digits
+    Given the installed nmg_sdlc_smoke package
+    When greeting_digit_count is called with fullwidth U+FF11 U+FF12, Arabic-Indic U+0663, and x with superscript U+00B2
+    Then the results are 0, 0, and 0
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_digit_count is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_digit_count of R2D2
+    Then it prints 2 and greeting_digit_count is listed in nmg_sdlc_smoke.__all__
+    And the README documents the ASCII 0-9 set, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
