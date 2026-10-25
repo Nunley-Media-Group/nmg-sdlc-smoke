@@ -38,6 +38,7 @@ from .greet import greeting_punctuation_count as greeting_punctuation_count
 from .greet import greeting_reversed as greeting_reversed
 from .greet import greeting_rot13 as greeting_rot13
 from .greet import greeting_sha1 as greeting_sha1
+from .greet import greeting_sha3_256 as greeting_sha3_256
 from .greet import greeting_sha224 as greeting_sha224
 from .greet import greeting_sha256 as greeting_sha256
 from .greet import greeting_sha384 as greeting_sha384
@@ -90,6 +91,7 @@ __all__ = [
     "greeting_reversed",
     "greeting_rot13",
     "greeting_sha1",
+    "greeting_sha3_256",
     "greeting_sha224",
     "greeting_sha256",
     "greeting_sha384",

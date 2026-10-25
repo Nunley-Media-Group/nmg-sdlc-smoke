@@ -1,0 +1,27 @@
+Feature: Return the SHA3-256 hex digest of the completed greeting
+
+  @SCN001
+  Scenario: Return the SHA3-256 hex digest of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha3_256 is called with Ada and Ada Lovelace
+    Then the results are the 64-character hex strings 8fe4a55d0487c2a730a2f841a99b44d01ca1f235c30ab3a452af08ca7cd531d4 and ed2c041556311b6fbeeb0b0ad3b43137e0f19942b95af2a11ee339891ac156f6
+
+  @SCN002
+  Scenario: Hash the UTF-8 encoding of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha3_256 is called with Zo plus U+00EB
+    Then the result is 322c52c08abd384c5dba08404a5fa620875c317c8b346a9ed6b0f945d6304f1e, the hashlib SHA3-256 hex digest of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_sha3_256 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_sha3_256 of Ada
+    Then it prints the Ada SHA3-256 digest and greeting_sha3_256 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the lowercase hex UTF-8 SHA3-256 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0

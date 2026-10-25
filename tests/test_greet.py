@@ -46,6 +46,7 @@ from nmg_sdlc_smoke import (
     greeting_reversed,
     greeting_rot13,
     greeting_sha1,
+    greeting_sha3_256,
     greeting_sha224,
     greeting_sha256,
     greeting_sha384,
@@ -1264,6 +1265,47 @@ def test_greeting_sha224_is_exported() -> None:
 
     assert "greeting_sha224" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_sha224("Ada") == expected
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "8fe4a55d0487c2a730a2f841a99b44d01ca1f235c30ab3a452af08ca7cd531d4"),
+        (
+            "Ada Lovelace",
+            "ed2c041556311b6fbeeb0b0ad3b43137e0f19942b95af2a11ee339891ac156f6",
+        ),
+        ("Zoë", "322c52c08abd384c5dba08404a5fa620875c317c8b346a9ed6b0f945d6304f1e"),
+    ],
+)
+def test_greeting_sha3_256_returns_hex_digest(name: str, expected: str) -> None:
+    result = greeting_sha3_256(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+def test_greeting_sha3_256_hashes_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_sha3_256("Zoë") == (
+        hashlib.sha3_256(greeting.encode("utf-8")).hexdigest()
+    )
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_sha3_256_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_sha3_256(name)  # type: ignore[arg-type]
+
+
+def test_greeting_sha3_256_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    expected = "8fe4a55d0487c2a730a2f841a99b44d01ca1f235c30ab3a452af08ca7cd531d4"
+
+    assert "greeting_sha3_256" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_sha3_256("Ada") == expected
 
 
 @pytest.mark.parametrize(
