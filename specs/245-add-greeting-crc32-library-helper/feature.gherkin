@@ -1,0 +1,35 @@
+**Issue**: #245
+**Date**: 2026-10-25
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/206-add-greeting-sha256-library-helper/
+
+# File: tests/features/add_greeting_crc32_library_helper.feature
+# Generated from: specs/245-add-greeting-crc32-library-helper/requirements.md
+Feature: Return the CRC-32 checksum of the completed greeting
+
+  @SCN001
+  Scenario: Return the CRC-32 checksum of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_crc32 is called with Ada and Ada Lovelace
+    Then the results are the Python int values 2761732226 and 2495651459
+
+  @SCN002
+  Scenario: Checksum the UTF-8 encoding of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_crc32 is called with Zo plus U+00EB
+    Then the result is 2271742533, the zlib CRC-32 of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_crc32 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_crc32 of Ada
+    Then it prints 2761732226 and greeting_crc32 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the unsigned UTF-8 CRC-32 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
