@@ -1,4 +1,5 @@
 import codecs
+import zlib
 from urllib.parse import unquote
 
 import pytest
@@ -9,6 +10,7 @@ from nmg_sdlc_smoke import (
     greeting_base64,
     greeting_bytes,
     greeting_casefold,
+    greeting_crc32,
     greeting_digit_count,
     greeting_ends_with_exclamation,
     greeting_ends_with_name,
@@ -1007,3 +1009,37 @@ def test_greeting_letter_count_is_exported() -> None:
 
     assert "greeting_letter_count" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_letter_count("Ada") == 8
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 2761732226),
+        ("Ada Lovelace", 2495651459),
+        ("Zoë", 2271742533),
+    ],
+)
+def test_greeting_crc32_returns_unsigned_checksum(name: str, expected: int) -> None:
+    result = greeting_crc32(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+def test_greeting_crc32_checksums_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_crc32("Zoë") == zlib.crc32(greeting.encode("utf-8"))
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_crc32_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_crc32(name)  # type: ignore[arg-type]
+
+
+def test_greeting_crc32_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_crc32" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_crc32("Ada") == 2761732226
