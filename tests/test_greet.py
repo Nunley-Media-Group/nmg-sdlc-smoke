@@ -1,3 +1,4 @@
+import base64
 import codecs
 import hashlib
 import zlib
@@ -9,6 +10,7 @@ from nmg_sdlc_smoke import (
     greet,
     greet_many,
     greeting_adler32,
+    greeting_base32,
     greeting_base64,
     greeting_bytes,
     greeting_casefold,
@@ -1225,3 +1227,39 @@ def test_greeting_sha384_is_exported() -> None:
 
     assert "greeting_sha384" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_sha384("Ada") == expected
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "JBSWY3DPFQQECZDB"),
+        ("Ada Lovelace", "JBSWY3DPFQQECZDBEBGG65TFNRQWGZI="),
+        ("Zoë", "JBSWY3DPFQQFU36DVM======"),
+    ],
+)
+def test_greeting_base32_encodes_utf8_greeting(name: str, expected: str) -> None:
+    result = greeting_base32(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+def test_greeting_base32_encodes_precomposed_utf8_bytes() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_base32("Zoë") == (
+        base64.b32encode(greeting.encode("utf-8")).decode("ascii")
+    )
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_base32_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_base32(name)  # type: ignore[arg-type]
+
+
+def test_greeting_base32_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_base32" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_base32("Ada") == "JBSWY3DPFQQECZDB"
