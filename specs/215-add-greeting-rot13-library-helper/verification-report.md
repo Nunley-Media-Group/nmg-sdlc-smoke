@@ -5,28 +5,26 @@
 **Reviewer**: Claude (nmg-sdlc verify worker)
 **Scope**: Implementation verification against spec
 
-**Verification head**: 42533cb9bcf92e24afb1de67324e8e6bfc4911b3
+**Verification head**: b45ea060c8556f4e01f5f378545dfb2b7c73bc32
 
 ---
 
 ## Executive Summary
 
-The implementation commit `42533cb` ("feat: deliver issue #215") only changes `VERSION` (3.49.0 → 3.50.0) and `CHANGELOG.md`. None of the spec's work is in the tree. `greeting_rot13` is not in `src/nmg_sdlc_smoke/greet.py`, `nmg_sdlc_smoke/__init__.py`, `__all__`, or `README.md`, and the T002/T003 tests are missing. Every acceptance criterion fails.
+Commit `b45ea06` delivers the full #215 contract and fixes the gap reported by the earlier Fail report at `42533cb`. `greeting_rot13(name)` is a one-line pure helper, `codecs.encode(greet(name), "rot13")`, placed directly after `greeting_base64`. It is re-exported with a self-aliased import, listed in `__all__`, and documented in the README Library section with the exact prose line from design.md. Unit tests and five AC-linked pytest-bdd scenarios cover it. All required checks pass and the CLI is unchanged.
 
 | Category | Score (1-5) |
 |----------|-------------|
-| Spec Compliance | 1 |
-| Architecture (SOLID) | 3 |
+| Spec Compliance | 5 |
+| Architecture (SOLID) | 5 |
 | Security | 5 |
 | Performance | 5 |
-| Testability | 1 |
-| Error Handling | 3 |
-| **Overall** | 3.0 |
+| Testability | 5 |
+| Error Handling | 5 |
+| **Overall** | 5.0 |
 
-Only the existing code was scored for architecture; no new code exists to review.
-
-### Implementation Status: Fail
-**Total Issues**: 4
+### Implementation Status: Pass
+**Total Issues**: 0
 
 ---
 
@@ -43,18 +41,17 @@ Only the existing code was scored for architecture; no new code exists to review
 
 ## Delivery Validation
 
-- Local verification: Not complete
+- Local verification: Pass
 - PR evidence: Not required
 
 ---
 
-## Deterministic Steering Artifact and Ceiling
+## Deterministic Steering Artifact
 
-- Runner: `sdlc-verify-steering.mjs --project . --issue 215 --spec specs/215-add-greeting-rot13-library-helper --base main --controller-run-id 47f89399-a72e-4596-b452-160ef1c3909b`
-- Artifact: `.nmg-sdlc/verification/215.json`, `ok: true`, `ceiling: null`
-- Identity: head `42533cb9bcf92e24afb1de67324e8e6bfc4911b3`, steering `sha256:96bcc848…`, spec `sha256:f76d2582…`
-- Coverage: `declared: 0`, `recorded: 0`, `complete: true`. The manifest declares no project-specific validations, so `repository.nmg-sdlc-smoke` is not registered for this project.
-- Note: the local `main` ref is one commit behind `origin/main` (it is missing #240), so the artifact's `changedPaths` includes #217 files. Compared with `origin/main`, the branch changes only `CHANGELOG.md` and `VERSION`.
+- Runner: `sdlc-verify-steering.mjs --base main --controller-run-id 47f89399-a72e-4596-b452-160ef1c3909b`
+- Artifact: `.nmg-sdlc/verification/215.json`. Head `b45ea060c8556f4e01f5f378545dfb2b7c73bc32`, steering `sha256:96bcc848…aa4cf`, spec `sha256:f76d2582…89099`
+- `ok: true`, `ceiling: null`
+- Coverage: `declared: 0`, `recorded: 0`, `complete: true`. `steering/manifest.json` registers no project validations (`validations: []`), so this is a complete gate with nothing project-specific to run. No `repository.nmg-sdlc-smoke` or `project.nmg-sdlc-smoke` validation is declared, so no smoke lifecycle evidence is required.
 
 ---
 
@@ -62,21 +59,17 @@ Only the existing code was scored for architecture; no new code exists to review
 
 | AC | Description | Status | Evidence |
 |----|-------------|--------|----------|
-| AC1 | `greeting_rot13("Ada")` returns `Uryyb, Nqn` | Fail | `grep -rn rot13 src` finds nothing. `hasattr(nmg_sdlc_smoke, "greeting_rot13")` is `False`. |
-| AC2 | Only ASCII letters are rotated | Fail | The helper does not exist. |
-| AC3 | Applying ROT13 twice restores `greet(name)` | Fail | The helper does not exist. |
-| AC4 | Invalid names raise `ValueError("name must not be blank")` | Fail | The helper does not exist. |
-| AC5 | Exported, in `__all__`, README documented, CLI unchanged | Fail | `"greeting_rot13" in __all__` is `False` (`__all__` has 40 names). The README has no `greeting_rot13` import, example, or prose line. The CLI part passes: `nmg-smoke Ada` prints `Hello, Ada` and exits 0. |
+| AC1 | `greeting_rot13("Ada")` returns the `str` `Uryyb, Nqn` | Pass | `src/nmg_sdlc_smoke/greet.py:90`; `tests/test_greet.py:798`; SCN001 |
+| AC2 | Only ASCII letters rotate; punctuation, digits, `ë` and `Ｚ` are unchanged and case is preserved | Pass | `rot13` codec maps only `A–Z`/`a–z`; `tests/test_greet.py:789-803` (all three names); SCN002 asserts the exact results and checks each non-ASCII-letter character by index |
+| AC3 | Applying ROT13 twice restores `greet(name)` | Pass | `tests/test_greet.py:803`; SCN003 (`Ada`, `Zoë`, `Mary-Jane O'Neil`) |
+| AC4 | Invalid names raise `ValueError("name must not be blank")` | Pass | `greet(name)` runs first (`greet.py:91`); `tests/test_greet.py:806-809`; SCN004 (`""`, `" \t"`, `None`, `42`) |
+| AC5 | Exported, in `__all__` with prior exports, README documented, CLI unchanged | Pass | `src/nmg_sdlc_smoke/__init__.py:34,77`; `README.md:52,128,144`; SCN005 runs the README example (`Uryyb, Nqn\n`), checks the 33 prior exports, and runs the installed `nmg-smoke Ada` (`Hello, Ada\n`, exit 0, empty stderr) |
 
-| Scenario | Status | Evidence |
-|----------|--------|----------|
-| SCN001–SCN005 | Fail | Neither `tests/features/add_greeting_rot13_library_helper.feature` nor `tests/features/steps/test_greeting_rot13_steps.py` exists. |
-
-| FR | Status |
-|----|--------|
-| FR1 | Fail: no `greeting_rot13` in `greet.py`, no `import codecs` |
-| FR2 | Fail: the helper does not exist |
-| FR3 | Fail: no export, no `__all__` entry, no README documentation |
+| FR | Status | Evidence |
+|----|--------|----------|
+| FR1 | Pass | Standard-library `codecs` only; no new runtime dependency |
+| FR2 | Pass | Inherits `greet`'s validation unchanged |
+| FR3 | Pass | Export, `__all__`, README import, example and prose line all present |
 
 ---
 
@@ -84,64 +77,122 @@ Only the existing code was scored for architecture; no new code exists to review
 
 | Task | Description | Status | Notes |
 |------|-------------|--------|-------|
-| T001 | Implement, export, and document `greeting_rot13` | Incomplete | `greet.py`, `__init__.py`, and `README.md` are unchanged. |
-| T002 | pytest unit tests | Incomplete | `tests/test_greet.py` has no rot13 cases. |
-| T003 | Five AC-linked pytest-bdd scenarios | Incomplete | The feature and step files are missing. |
-
-The only changes are the release bookkeeping in `VERSION` and `CHANGELOG.md` (`[3.50.0]`, "Add greeting_rot13 library helper (#215)"). The CHANGELOG entry claims a feature that has not been delivered.
+| T001 | Implement, export, and document greeting_rot13 | Complete | `import codecs` is sorted after `base64`; the helper follows `greeting_base64`; the import and `__all__` entry follow `greeting_reversed`; the README prose follows the `greeting_base64` line |
+| T002 | Cover the helper with pytest unit tests | Complete | Parametrized rotation and round-trip test, invalid-name test, export test |
+| T003 | Exercise five AC-linked pytest-bdd scenarios | Complete | The `.feature` body matches the spec `feature.gherkin` exactly; steps use `scenarios(...)` and public imports |
 
 ---
 
 ## Architecture Assessment
 
-| Area | Score (1-5) | Notes |
-|------|-------------|-------|
-| SOLID Principles | 3 | Nothing new to assess. The existing `greet`/CLI separation is intact. |
-| Security | 5 | No new surface. No runtime dependencies. |
-| Performance | 5 | No change. |
-| Testability | 1 | None of the required tests exist, so every AC is untested. |
-| Error Handling | 3 | Nothing new to assess. `greet` validation is unchanged. |
+### SOLID Compliance
+
+| Principle | Score (1-5) | Notes |
+|-----------|-------------|-------|
+| Single Responsibility | 5 | One transformation per helper, matching its siblings |
+| Open/Closed | 5 | Added beside existing helpers without changing `greet` or any other helper |
+| Liskov Substitution | 5 | N/A, no inheritance; follows the same `str -> str` signature as its siblings |
+| Interface Segregation | 5 | Minimal public function |
+| Dependency Inversion | 5 | Library has no dependency on the CLI, tests or repository layout |
+
+### Layer Separation
+
+The library stays pure. `cli.py` is untouched, and the CLI output is confirmed unchanged.
+
+### Dependency Flow
+
+`__init__` → `greet` only. There are no new modules or runtime dependencies.
 
 ---
 
-## Test Results
+## Security Assessment
 
-Run in an isolated venv (Python 3.14.7) after `pip install -e ".[dev]"`:
+- [x] Authentication: N/A
+- [x] Authorization: N/A
+- [x] Input validation: delegated to `greet` (non-string, blank and whitespace-only names are rejected)
+- [x] Injection prevention: N/A, pure string transformation
+- [x] Data protection: ROT13 is documented as reversible obfuscation, not protection
+
+## Performance Assessment
+
+- [x] Async patterns: N/A
+- [x] Caching: N/A
+- [x] Resource management: O(n) single pass, no I/O
+- [x] Query optimization: N/A
+
+## Testability / Error Handling
+
+Testability: the helper is a deterministic pure function, covered by unit and BDD tests with exact assertions. Error handling: the `ValueError` propagates unchanged from `greet`. Nothing is swallowed or re-wrapped.
+
+---
+
+## Test Coverage
+
+### BDD Scenarios
+
+| Acceptance Criterion | Has Scenario | Has Steps | Passes |
+|---------------------|-------------|-----------|--------|
+| AC1 | Yes (SCN001) | Yes | Yes |
+| AC2 | Yes (SCN002) | Yes | Yes |
+| AC3 | Yes (SCN003) | Yes | Yes |
+| AC4 | Yes (SCN004) | Yes | Yes |
+| AC5 | Yes (SCN005) | Yes | Yes |
+
+### Test Results
+
+These were run at `b45ea06` in an isolated venv after `python -m pip install -e ".[dev]"`, using Python 3.14.7, which meets the 3.12+ requirement:
 
 | Command | Result |
 |---------|--------|
-| `python -m pytest` | 650 passed, 2 skipped |
-| `python -m pytest tests/features` | 222 passed, 2 skipped |
+| `python -m pytest` | 664 passed, 2 skipped |
+| `python -m pytest tests/features` | 227 passed, 2 skipped |
+| `python -m pytest tests/features/steps/test_greeting_rot13_steps.py` | 5 passed |
 | `python -m ruff check .` | All checks passed |
-| `nmg-smoke Ada` | `Hello, Ada`, exit 0 |
 
-These are only regression checks on existing behavior. None of them exercises #215.
+The skips and warnings are not related to #215.
 
-Exercise testing: not applicable. This is not a plugin change; no `workflows/` or `agents/` files changed.
+---
 
-Smoke lifecycle: `repository.nmg-sdlc-smoke` is not declared in `steering/manifest.json` (`validations: []`), so this report has no registered smoke result.
+## Exercise Test Results
+
+Not applicable. This project is not a plugin and there are no `workflows/` or `agents/` changes.
 
 ---
 
 ## Fixes Applied
 
-| Severity | Category | Location | Issue | Fix | Routing |
-|----------|----------|----------|-------|-----|---------|
-| — | — | — | None | Verify's publication scope only allows writing `verification-report.md`. Delivering T001–T003 is implementation work, not a small local fix. | — |
-
----
+None. No findings needed a fix.
 
 ## Remaining Issues
 
-| Severity | Category | Location | Issue | Reason Not Fixed |
-|----------|----------|----------|-------|------------------|
-| Critical | Spec compliance | `src/nmg_sdlc_smoke/greet.py` | `greeting_rot13` and `import codecs` are missing (T001, FR1, FR2) | Outside the verify scope. Route to implementation. |
-| Critical | Spec compliance | `src/nmg_sdlc_smoke/__init__.py`, `README.md` | Export, `__all__` entry, and README import, example, and prose line are missing (T001, FR3) | Outside the verify scope. Route to implementation. |
-| High | Testability | `tests/test_greet.py`, `tests/features/` | Unit tests and the SCN001–SCN005 feature and steps are missing (T002, T003) | Outside the verify scope. Route to implementation. |
-| Medium | Release hygiene | `CHANGELOG.md`, `VERSION` | The 3.50.0 entry claims a feature that has not been delivered | Will be accurate once the implementation lands. |
+None.
+
+---
+
+## Positive Observations
+
+- The change is exactly what design.md lays out: one line of implementation and the smallest possible diff.
+- The BDD steps check each non-ASCII-letter character by index, which directly guards the ASCII-only contract.
+- `VERSION` (3.50.0) and the `CHANGELOG.md` entry are updated together, and released history is intact.
+
+---
+
+## Files Reviewed
+
+| File | Issues | Notes |
+|------|--------|-------|
+| `src/nmg_sdlc_smoke/greet.py` | 0 | |
+| `src/nmg_sdlc_smoke/__init__.py` | 0 | |
+| `README.md` | 0 | |
+| `tests/test_greet.py` | 0 | |
+| `tests/features/add_greeting_rot13_library_helper.feature` | 0 | |
+| `tests/features/steps/test_greeting_rot13_steps.py` | 0 | |
+| `VERSION`, `CHANGELOG.md` | 0 | |
 
 ---
 
 ## Recommendation
 
-Major rework needed. Return to implementation for T001–T003, then run the full gate again at the new head.
+**Ready for PR**
+
+Every delivery AC, FR, task and scenario passes with local evidence at the verification head. The registered steering gate is complete with no declared validations.
