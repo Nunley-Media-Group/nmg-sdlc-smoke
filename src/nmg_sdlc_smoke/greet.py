@@ -112,6 +112,10 @@ def greeting_sha3_256(name: str) -> str:
     return hashlib.sha3_256(greet(name).encode("utf-8")).hexdigest()
 
 
+def greeting_sha3_384(name: str) -> str:
+    return hashlib.sha3_384(greet(name).encode("utf-8")).hexdigest()
+
+
 def greeting_sha3_512(name: str) -> str:
     return hashlib.sha3_512(greet(name).encode("utf-8")).hexdigest()
 
