@@ -33,6 +33,7 @@ from nmg_sdlc_smoke import (
     greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
+    greeting_letter_count,
     greeting_lowercase_count,
     greeting_punctuation_count,
     greeting_reversed,
@@ -974,3 +975,35 @@ def test_greeting_url_encoded_is_exported() -> None:
 
     assert "greeting_url_encoded" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_url_encoded("Ada") == "Hello%2C%20Ada"
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 8),
+        ("Ada Lovelace", 16),
+        ("R2D2", 7),
+        ("Zoë", 8),
+        ("O'Brien", 11),
+    ],
+)
+def test_greeting_letter_count_counts_alphabetic_characters(
+    name: str, expected: int
+) -> None:
+    result = greeting_letter_count(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_letter_count_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_letter_count(name)  # type: ignore[arg-type]
+
+
+def test_greeting_letter_count_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_letter_count" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_letter_count("Ada") == 8

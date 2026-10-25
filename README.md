@@ -46,6 +46,7 @@ from nmg_sdlc_smoke import (
     greeting_has_underscore,
     greeting_is_ascii,
     greeting_length,
+    greeting_letter_count,
     greeting_lowercase_count,
     greeting_punctuation_count,
     greeting_reversed,
@@ -122,6 +123,7 @@ greeting_digit_count("R2D2")  # 2
 greeting_space_count("Ada Lovelace")  # 2
 greeting_punctuation_count("O'Brien")  # 2
 greeting_unique_char_count("Ada")  # 9
+greeting_letter_count("Ada")  # 8
 greeting_sha256("Ada")  # "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66"
 greeting_base64("Ada")  # "SGVsbG8sIEFkYQ=="
 greeting_url_encoded("Ada")  # "Hello%2C%20Ada"
@@ -139,6 +141,7 @@ greeting_rot13("Ada")  # "Uryyb, Nqn"
 `greeting_space_count` counts the ASCII space U+0020 in the complete greeting (not the name alone), including the space after `Hello,`; tabs, newlines, no-break spaces, and other Unicode whitespace are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_punctuation_count` counts the 32 ASCII punctuation characters in Python's `string.punctuation` in the complete greeting (not the name alone), including the comma after `Hello`; non-ASCII punctuation and look-alikes such as `！`, `’`, and `、` are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_unique_char_count` counts the distinct Unicode code points in the complete greeting (not the name alone), including the characters of `Hello, `; the count is case-sensitive and applies no Unicode normalization, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_letter_count` counts the characters in the complete greeting (not the name alone) for which `str.isalpha()` is true, including the five letters of `Hello`; non-ASCII letters such as `ë` are counted, while digits, spaces, and punctuation are not, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_sha256` encodes the complete greeting (not the name alone) as UTF-8 and returns its SHA-256 digest as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base64` encodes the complete greeting (not the name alone) as UTF-8 and returns its standard Base64 encoding as a `str`, using the RFC 4648 alphabet with `+` and `/`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_rot13` applies ROT13 to the complete greeting (not the name alone), rotating only the ASCII letters `A`–`Z` and `a`–`z` by 13 places within their case and leaving every other character, including non-ASCII letters, unchanged; applying ROT13 again restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
