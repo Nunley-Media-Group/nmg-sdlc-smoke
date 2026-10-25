@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.50.0] - 2026-10-25
+
+### Changed
+
+- Add greeting_rot13 library helper (#215)
+
 ## [3.49.0] - 2026-10-25
 
 ### Changed
