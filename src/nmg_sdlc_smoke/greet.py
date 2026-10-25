@@ -79,6 +79,10 @@ def greeting_unique_char_count(name: str) -> int:
     return len(set(greet(name)))
 
 
+def greeting_letter_count(name: str) -> int:
+    return sum(character.isalpha() for character in greet(name))
+
+
 def greeting_sha256(name: str) -> str:
     return hashlib.sha256(greet(name).encode("utf-8")).hexdigest()
 
