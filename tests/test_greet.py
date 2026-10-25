@@ -1,3 +1,4 @@
+import codecs
 from urllib.parse import unquote
 
 import pytest
@@ -35,6 +36,7 @@ from nmg_sdlc_smoke import (
     greeting_lowercase_count,
     greeting_punctuation_count,
     greeting_reversed,
+    greeting_rot13,
     greeting_sha256,
     greeting_space_count,
     greeting_starts_with_hello,
@@ -782,6 +784,36 @@ def test_greeting_base64_is_exported() -> None:
 
     assert "greeting_base64" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_base64("Ada") == "SGVsbG8sIEFkYQ=="
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "Uryyb, Nqn"),
+        ("Mary-Jane O'Neil", "Uryyb, Znel-Wnar B'Arvy"),
+        ("Zo\u00eb", "Uryyb, Mb\u00eb"),
+        ("\uff3aed 42", "Uryyb, \uff3arq 42"),
+    ],
+)
+def test_greeting_rot13_rotates_ascii_letters(name: str, expected: str) -> None:
+    result = greeting_rot13(name)
+
+    assert type(result) is str
+    assert result == expected
+    assert codecs.encode(result, "rot13") == greet(name)
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_rot13_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_rot13(name)  # type: ignore[arg-type]
+
+
+def test_greeting_rot13_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_rot13" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_rot13("Ada") == "Uryyb, Nqn"
 
 
 @pytest.mark.parametrize(

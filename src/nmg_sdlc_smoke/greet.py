@@ -1,4 +1,5 @@
 import base64
+import codecs
 import hashlib
 import string
 from collections.abc import Iterable
@@ -84,6 +85,10 @@ def greeting_sha256(name: str) -> str:
 
 def greeting_base64(name: str) -> str:
     return base64.b64encode(greet(name).encode("utf-8")).decode("ascii")
+
+
+def greeting_rot13(name: str) -> str:
+    return codecs.encode(greet(name), "rot13")
 
 
 def greeting_url_encoded(name: str) -> str:
