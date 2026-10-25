@@ -43,6 +43,7 @@ from nmg_sdlc_smoke import (
     greeting_punctuation_count,
     greeting_reversed,
     greeting_rot13,
+    greeting_sha1,
     greeting_sha256,
     greeting_space_count,
     greeting_starts_with_hello,
@@ -1114,3 +1115,39 @@ def test_greeting_md5_is_exported() -> None:
 
     assert "greeting_md5" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_md5("Ada") == "a4f502ca98cce831af61b0fe0a319382"
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "991f190147e71279d8656214e556b36a22bf73e4"),
+        ("Ada Lovelace", "8dde18c21e3195df968018b6213efc61d033ec4f"),
+        ("Zoë", "5e2bef193596dd46528fb36c4ef8625f71c84577"),
+    ],
+)
+def test_greeting_sha1_returns_hex_digest(name: str, expected: str) -> None:
+    result = greeting_sha1(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+def test_greeting_sha1_hashes_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_sha1("Zoë") == hashlib.sha1(greeting.encode("utf-8")).hexdigest()
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_sha1_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_sha1(name)  # type: ignore[arg-type]
+
+
+def test_greeting_sha1_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    expected = "991f190147e71279d8656214e556b36a22bf73e4"
+
+    assert "greeting_sha1" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_sha1("Ada") == expected
