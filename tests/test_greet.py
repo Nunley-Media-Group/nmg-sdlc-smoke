@@ -1,3 +1,5 @@
+from urllib.parse import unquote
+
 import pytest
 
 from nmg_sdlc_smoke import (
@@ -38,6 +40,7 @@ from nmg_sdlc_smoke import (
     greeting_starts_with_hello,
     greeting_unique_char_count,
     greeting_uppercase_count,
+    greeting_url_encoded,
     greeting_vowel_count,
     greeting_word_count,
 )
@@ -908,3 +911,34 @@ def test_greeting_unique_char_count_is_exported() -> None:
 
     assert "greeting_unique_char_count" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_unique_char_count("Ada") == 9
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "Hello%2C%20Ada"),
+        ("A/B&C~d_e.f", "Hello%2C%20A%2FB%26C~d_e.f"),
+        ("Zoë", "Hello%2C%20Zo%C3%AB"),
+    ],
+)
+def test_greeting_url_encoded_percent_encodes_utf8_greeting(
+    name: str, expected: str
+) -> None:
+    result = greeting_url_encoded(name)
+
+    assert type(result) is str
+    assert result == expected
+    assert unquote(result) == greet(name)
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_url_encoded_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_url_encoded(name)  # type: ignore[arg-type]
+
+
+def test_greeting_url_encoded_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_url_encoded" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_url_encoded("Ada") == "Hello%2C%20Ada"

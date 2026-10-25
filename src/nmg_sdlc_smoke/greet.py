@@ -2,6 +2,7 @@ import base64
 import hashlib
 import string
 from collections.abc import Iterable
+from urllib.parse import quote
 
 
 def greet(name: str) -> str:
@@ -83,6 +84,10 @@ def greeting_sha256(name: str) -> str:
 
 def greeting_base64(name: str) -> str:
     return base64.b64encode(greet(name).encode("utf-8")).decode("ascii")
+
+
+def greeting_url_encoded(name: str) -> str:
+    return quote(greet(name), safe="")
 
 
 def greeting_has_semicolon(name: str) -> bool:

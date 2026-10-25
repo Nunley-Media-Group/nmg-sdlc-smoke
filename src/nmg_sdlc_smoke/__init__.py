@@ -36,6 +36,7 @@ from .greet import greeting_space_count as greeting_space_count
 from .greet import greeting_starts_with_hello as greeting_starts_with_hello
 from .greet import greeting_unique_char_count as greeting_unique_char_count
 from .greet import greeting_uppercase_count as greeting_uppercase_count
+from .greet import greeting_url_encoded as greeting_url_encoded
 from .greet import greeting_vowel_count as greeting_vowel_count
 from .greet import greeting_word_count as greeting_word_count
 
@@ -77,6 +78,7 @@ __all__ = [
     "greeting_starts_with_hello",
     "greeting_unique_char_count",
     "greeting_uppercase_count",
+    "greeting_url_encoded",
     "greeting_vowel_count",
     "greeting_word_count",
 ]
