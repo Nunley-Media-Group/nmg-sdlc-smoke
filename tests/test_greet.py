@@ -47,6 +47,7 @@ from nmg_sdlc_smoke import (
     greeting_rot13,
     greeting_sha1,
     greeting_sha3_256,
+    greeting_sha3_512,
     greeting_sha224,
     greeting_sha256,
     greeting_sha384,
@@ -1342,3 +1343,50 @@ def test_greeting_base32_is_exported() -> None:
 
     assert "greeting_base32" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_base32("Ada") == "JBSWY3DPFQQECZDB"
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        (
+            "Ada",
+            "0817552f59fade788cc6bfaff1161167b75c5f73a5c0f314be498ad984301ae1a4adf9b9770cd68d4af5d3093d061a5e3b6b306117803a6f359d98cb862a8611",
+        ),
+        (
+            "Ada Lovelace",
+            "bf622c26b158a44d6a61e0bd31c47969aba0d2e1109acc5156d0f7c451ad696d297677c9d6653d8eedcfd3d9e1ccc8d7efb15e6ab533d5bc44e166c1504556d6",
+        ),
+        (
+            "Zoë",
+            "ca8d59e8b815479a8cfffe904e4bd8320d68db5529d4e07ad24b507a4feb48ee8babafe94bc865e8c1211281c038a339eb9e5e40a25335bfa01325de6fae177c",
+        ),
+    ],
+)
+def test_greeting_sha3_512_returns_hex_digest(name: str, expected: str) -> None:
+    result = greeting_sha3_512(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+def test_greeting_sha3_512_hashes_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_sha3_512("Zoë") == (
+        hashlib.sha3_512(greeting.encode("utf-8")).hexdigest()
+    )
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_sha3_512_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_sha3_512(name)  # type: ignore[arg-type]
+
+
+def test_greeting_sha3_512_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    expected = "0817552f59fade788cc6bfaff1161167b75c5f73a5c0f314be498ad984301ae1a4adf9b9770cd68d4af5d3093d061a5e3b6b306117803a6f359d98cb862a8611"
+
+    assert "greeting_sha3_512" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_sha3_512("Ada") == expected
