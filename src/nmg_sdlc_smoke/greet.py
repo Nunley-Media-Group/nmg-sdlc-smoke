@@ -104,6 +104,10 @@ def greeting_crc32(name: str) -> int:
     return zlib.crc32(greet(name).encode("utf-8"))
 
 
+def greeting_adler32(name: str) -> int:
+    return zlib.adler32(greet(name).encode("utf-8"))
+
+
 def greeting_has_semicolon(name: str) -> bool:
     return ";" in greet(name)
 
