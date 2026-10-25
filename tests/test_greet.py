@@ -1,4 +1,5 @@
 import codecs
+import hashlib
 import zlib
 from urllib.parse import unquote
 
@@ -38,6 +39,7 @@ from nmg_sdlc_smoke import (
     greeting_length,
     greeting_letter_count,
     greeting_lowercase_count,
+    greeting_md5,
     greeting_punctuation_count,
     greeting_reversed,
     greeting_rot13,
@@ -1078,3 +1080,37 @@ def test_greeting_adler32_is_exported() -> None:
 
     assert "greeting_adler32" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_adler32("Ada") == 312279879
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "a4f502ca98cce831af61b0fe0a319382"),
+        ("Ada Lovelace", "bd0b2e5ea5baf6775e93262ce37d5a4a"),
+        ("Zoë", "26ed66c6559b1e033c70ef2301fe0beb"),
+    ],
+)
+def test_greeting_md5_returns_hex_digest(name: str, expected: str) -> None:
+    result = greeting_md5(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+def test_greeting_md5_hashes_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_md5("Zoë") == hashlib.md5(greeting.encode("utf-8")).hexdigest()
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_md5_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_md5(name)  # type: ignore[arg-type]
+
+
+def test_greeting_md5_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_md5" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_md5("Ada") == "a4f502ca98cce831af61b0fe0a319382"
