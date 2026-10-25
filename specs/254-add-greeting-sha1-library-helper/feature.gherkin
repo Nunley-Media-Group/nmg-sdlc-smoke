@@ -1,0 +1,35 @@
+**Issue**: #254
+**Date**: 2026-10-25
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/251-add-greeting-md5-library-helper/
+
+# File: tests/features/add_greeting_sha1_library_helper.feature
+# Generated from: specs/254-add-greeting-sha1-library-helper/requirements.md
+Feature: Return the SHA-1 hex digest of the completed greeting
+
+  @SCN001
+  Scenario: Return the SHA-1 hex digest of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha1 is called with Ada and Ada Lovelace
+    Then the results are the hex strings 991f190147e71279d8656214e556b36a22bf73e4 and 8dde18c21e3195df968018b6213efc61d033ec4f
+
+  @SCN002
+  Scenario: Hash the UTF-8 encoding of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha1 is called with Zo plus U+00EB
+    Then the result is 5e2bef193596dd46528fb36c4ef8625f71c84577, the hashlib SHA-1 hex digest of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_sha1 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_sha1 of Ada
+    Then it prints 991f190147e71279d8656214e556b36a22bf73e4 and greeting_sha1 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the lowercase hex UTF-8 SHA-1 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
