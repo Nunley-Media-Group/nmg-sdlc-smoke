@@ -32,6 +32,7 @@ from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_length as greeting_length
 from .greet import greeting_letter_count as greeting_letter_count
 from .greet import greeting_lowercase_count as greeting_lowercase_count
+from .greet import greeting_md5 as greeting_md5
 from .greet import greeting_punctuation_count as greeting_punctuation_count
 from .greet import greeting_reversed as greeting_reversed
 from .greet import greeting_rot13 as greeting_rot13
@@ -78,6 +79,7 @@ __all__ = [
     "greeting_length",
     "greeting_letter_count",
     "greeting_lowercase_count",
+    "greeting_md5",
     "greeting_punctuation_count",
     "greeting_reversed",
     "greeting_rot13",
