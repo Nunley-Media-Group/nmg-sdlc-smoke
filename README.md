@@ -54,6 +54,7 @@ from nmg_sdlc_smoke import (
     greeting_punctuation_count,
     greeting_reversed,
     greeting_rot13,
+    greeting_sha1,
     greeting_sha256,
     greeting_space_count,
     greeting_starts_with_hello,
@@ -129,6 +130,7 @@ greeting_unique_char_count("Ada")  # 9
 greeting_letter_count("Ada")  # 8
 greeting_sha256("Ada")  # "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66"
 greeting_md5("Ada")  # "a4f502ca98cce831af61b0fe0a319382"
+greeting_sha1("Ada")  # "991f190147e71279d8656214e556b36a22bf73e4"
 greeting_base64("Ada")  # "SGVsbG8sIEFkYQ=="
 greeting_url_encoded("Ada")  # "Hello%2C%20Ada"
 greeting_rot13("Ada")  # "Uryyb, Nqn"
@@ -150,6 +152,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_letter_count` counts the characters in the complete greeting (not the name alone) for which `str.isalpha()` is true, including the five letters of `Hello`; non-ASCII letters such as `ë` are counted, while digits, spaces, and punctuation are not, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_sha256` encodes the complete greeting (not the name alone) as UTF-8 and returns its SHA-256 digest as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_md5` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its MD5 digest from `hashlib.md5` as 32 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_sha1` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its SHA-1 digest from `hashlib.sha1` as 40 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base64` encodes the complete greeting (not the name alone) as UTF-8 and returns its standard Base64 encoding as a `str`, using the RFC 4648 alphabet with `+` and `/`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_rot13` applies ROT13 to the complete greeting (not the name alone), rotating only the ASCII letters `A`–`Z` and `a`–`z` by 13 places within their case and leaving every other character, including non-ASCII letters, unchanged; applying ROT13 again restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_url_encoded` percent-encodes the complete greeting (not the name alone) as UTF-8 with uppercase hex digits, leaving only `A`–`Z`, `a`–`z`, `0`–`9`, `-`, `.`, `_`, and `~` unencoded (so a space becomes `%20` and `/` becomes `%2F`); `urllib.parse.unquote` restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
