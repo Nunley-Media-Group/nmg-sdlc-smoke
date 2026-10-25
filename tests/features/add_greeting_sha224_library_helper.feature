@@ -1,0 +1,27 @@
+Feature: Return the SHA-224 hex digest of the completed greeting
+
+  @SCN001
+  Scenario: Return the SHA-224 hex digest of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha224 is called with Ada and Ada Lovelace
+    Then the results are the 56-character hex strings 316233754fcc3ee5160b0102d33639e694a894f689633ca5d2d679ad and 6c95a9a2f1662a38e55f0dae7e56c9709d0fdd7d04e3223b20042cdb
+
+  @SCN002
+  Scenario: Hash the UTF-8 encoding of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha224 is called with Zo plus U+00EB
+    Then the result is b35858e7d09007e76d4b898e16cb61920b4dd2a04b3fc64cdbf0fe68, the hashlib SHA-224 hex digest of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_sha224 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_sha224 of Ada
+    Then it prints the Ada SHA-224 digest and greeting_sha224 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the lowercase hex UTF-8 SHA-224 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
