@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.54.0] - 2026-10-25
+
+### Changed
+
+- Add greeting_md5 library helper (#251)
+
 ## [3.53.0] - 2026-10-25
 
 ### Changed
