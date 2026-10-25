@@ -38,6 +38,7 @@ from .greet import greeting_reversed as greeting_reversed
 from .greet import greeting_rot13 as greeting_rot13
 from .greet import greeting_sha1 as greeting_sha1
 from .greet import greeting_sha256 as greeting_sha256
+from .greet import greeting_sha512 as greeting_sha512
 from .greet import greeting_space_count as greeting_space_count
 from .greet import greeting_starts_with_hello as greeting_starts_with_hello
 from .greet import greeting_unique_char_count as greeting_unique_char_count
@@ -86,6 +87,7 @@ __all__ = [
     "greeting_rot13",
     "greeting_sha1",
     "greeting_sha256",
+    "greeting_sha512",
     "greeting_space_count",
     "greeting_starts_with_hello",
     "greeting_unique_char_count",
