@@ -108,6 +108,10 @@ def greeting_sha224(name: str) -> str:
     return hashlib.sha224(greet(name).encode("utf-8")).hexdigest()
 
 
+def greeting_sha3_224(name: str) -> str:
+    return hashlib.sha3_224(greet(name).encode("utf-8")).hexdigest()
+
+
 def greeting_sha3_256(name: str) -> str:
     return hashlib.sha3_256(greet(name).encode("utf-8")).hexdigest()
 
