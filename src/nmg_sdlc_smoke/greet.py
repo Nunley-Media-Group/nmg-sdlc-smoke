@@ -2,6 +2,7 @@ import base64
 import codecs
 import hashlib
 import string
+import zlib
 from collections.abc import Iterable
 from urllib.parse import quote
 
@@ -97,6 +98,10 @@ def greeting_rot13(name: str) -> str:
 
 def greeting_url_encoded(name: str) -> str:
     return quote(greet(name), safe="")
+
+
+def greeting_crc32(name: str) -> int:
+    return zlib.crc32(greet(name).encode("utf-8"))
 
 
 def greeting_has_semicolon(name: str) -> bool:
