@@ -1,0 +1,35 @@
+**Issue**: #260
+**Date**: 2026-10-25
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/257-add-greeting-sha512-library-helper/
+
+# File: tests/features/add_greeting_sha384_library_helper.feature
+# Generated from: specs/260-add-greeting-sha384-library-helper/requirements.md
+Feature: Return the SHA-384 hex digest of the completed greeting
+
+  @SCN001
+  Scenario: Return the SHA-384 hex digest of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha384 is called with Ada and Ada Lovelace
+    Then the results are the 96-character hex strings 81cbed2fa5e07b7ec1d2a13da4de9584c07ddbbb2748dc5711aaafb067c07b03c120099ddcd53135b382c0e3c6198f5d and c2dde392dc096399214577c5f80007a7d8a19067f1519f01f84d9c196c17af898991685a268fefc92d7830b3572795db
+
+  @SCN002
+  Scenario: Hash the UTF-8 encoding of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha384 is called with Zo plus U+00EB
+    Then the result is b40fde84416eb63cd597533882ee9cd075caa751a9adb0aca24f7a23b6c642d140574c9dde5bb9aa7ac4e9a91209051d, the hashlib SHA-384 hex digest of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_sha384 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_sha384 of Ada
+    Then it prints the Ada SHA-384 digest and greeting_sha384 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the lowercase hex UTF-8 SHA-384 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
