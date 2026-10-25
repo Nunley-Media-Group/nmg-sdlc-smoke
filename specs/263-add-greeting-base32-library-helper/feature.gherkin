@@ -1,0 +1,35 @@
+**Issue**: #263
+**Date**: 2026-10-25
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/209-add-greeting-base64-library-helper/
+
+# File: tests/features/add_greeting_base32_library_helper.feature
+# Generated from: specs/263-add-greeting-base32-library-helper/requirements.md
+Feature: Return the Base32 encoding of the completed greeting
+
+  @SCN001
+  Scenario: Return the Base32 encoding of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_base32 is called with Ada and Ada Lovelace
+    Then the results are the Base32 strings JBSWY3DPFQQECZDB and JBSWY3DPFQQECZDBEBGG65TFNRQWGZI=
+
+  @SCN002
+  Scenario: Encode the UTF-8 bytes of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_base32 is called with Zo plus U+00EB
+    Then the result is JBSWY3DPFQQFU36DVM======, the base64 module Base32 encoding of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_base32 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_base32 of Ada
+    Then it prints JBSWY3DPFQQECZDB and greeting_base32 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the padded RFC 4648 Base32 UTF-8 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
