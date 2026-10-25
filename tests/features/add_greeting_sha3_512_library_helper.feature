@@ -1,0 +1,27 @@
+Feature: Return the SHA3-512 hex digest of the completed greeting
+
+  @SCN001
+  Scenario: Return the SHA3-512 hex digest of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha3_512 is called with Ada and Ada Lovelace
+    Then the results are the 128-character hex strings 0817552f59fade788cc6bfaff1161167b75c5f73a5c0f314be498ad984301ae1a4adf9b9770cd68d4af5d3093d061a5e3b6b306117803a6f359d98cb862a8611 and bf622c26b158a44d6a61e0bd31c47969aba0d2e1109acc5156d0f7c451ad696d297677c9d6653d8eedcfd3d9e1ccc8d7efb15e6ab533d5bc44e166c1504556d6
+
+  @SCN002
+  Scenario: Hash the UTF-8 encoding of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_sha3_512 is called with Zo plus U+00EB
+    Then the result is ca8d59e8b815479a8cfffe904e4bd8320d68db5529d4e07ad24b507a4feb48ee8babafe94bc865e8c1211281c038a339eb9e5e40a25335bfa01325de6fae177c, the hashlib SHA3-512 hex digest of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_sha3_512 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_sha3_512 of Ada
+    Then it prints the Ada SHA3-512 digest and greeting_sha3_512 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the lowercase hex UTF-8 SHA3-512 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
