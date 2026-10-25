@@ -19,6 +19,7 @@ python -m pip install -e ".[dev]"
 from nmg_sdlc_smoke import (
     greet,
     greet_many,
+    greeting_adler32,
     greeting_base64,
     greeting_bytes,
     greeting_casefold,
@@ -130,6 +131,7 @@ greeting_base64("Ada")  # "SGVsbG8sIEFkYQ=="
 greeting_url_encoded("Ada")  # "Hello%2C%20Ada"
 greeting_rot13("Ada")  # "Uryyb, Nqn"
 greeting_crc32("Ada")  # 2761732226
+greeting_adler32("Ada")  # 312279879
 ```
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
@@ -149,6 +151,7 @@ greeting_crc32("Ada")  # 2761732226
 `greeting_rot13` applies ROT13 to the complete greeting (not the name alone), rotating only the ASCII letters `A`–`Z` and `a`–`z` by 13 places within their case and leaving every other character, including non-ASCII letters, unchanged; applying ROT13 again restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_url_encoded` percent-encodes the complete greeting (not the name alone) as UTF-8 with uppercase hex digits, leaving only `A`–`Z`, `a`–`z`, `0`–`9`, `-`, `.`, `_`, and `~` unencoded (so a space becomes `%20` and `/` becomes `%2F`); `urllib.parse.unquote` restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_crc32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its unsigned CRC-32 checksum from `zlib.crc32` as an `int` between `0` and `4294967295`; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different checksums, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_adler32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its unsigned Adler-32 checksum from `zlib.adler32` as an `int` between `0` and `4294967295`; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different checksums, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_semicolon` checks for a literal `;` in the complete greeting and uses the same name validation as `greet`.
 `greeting_has_colon` checks for a literal `:` in the complete greeting and uses the same invalid-name validation as `greet`.
 `greeting_has_dollar` checks for a literal `$` in the complete greeting (not the fullwidth `＄`) and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.

@@ -7,6 +7,7 @@ import pytest
 from nmg_sdlc_smoke import (
     greet,
     greet_many,
+    greeting_adler32,
     greeting_base64,
     greeting_bytes,
     greeting_casefold,
@@ -1043,3 +1044,37 @@ def test_greeting_crc32_is_exported() -> None:
 
     assert "greeting_crc32" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_crc32("Ada") == 2761732226
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", 312279879),
+        ("Ada Lovelace", 1063257746),
+        ("Zoë", 400032888),
+    ],
+)
+def test_greeting_adler32_returns_unsigned_checksum(name: str, expected: int) -> None:
+    result = greeting_adler32(name)
+
+    assert type(result) is int
+    assert result == expected
+
+
+def test_greeting_adler32_checksums_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_adler32("Zoë") == zlib.adler32(greeting.encode("utf-8"))
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_adler32_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_adler32(name)  # type: ignore[arg-type]
+
+
+def test_greeting_adler32_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_adler32" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_adler32("Ada") == 312279879
