@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.52.0] - 2026-10-25
+
+### Changed
+
+- Add greeting_crc32 library helper (#245)
+
 ## [3.51.0] - 2026-10-25
 
 ### Changed
