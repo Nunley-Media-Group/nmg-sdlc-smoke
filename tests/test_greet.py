@@ -12,6 +12,7 @@ from nmg_sdlc_smoke import (
     greeting_adler32,
     greeting_base32,
     greeting_base64,
+    greeting_blake2b,
     greeting_bytes,
     greeting_casefold,
     greeting_crc32,
@@ -1477,3 +1478,51 @@ def test_greeting_sha3_224_is_exported() -> None:
 
     assert "greeting_sha3_224" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_sha3_224("Ada") == expected
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        (
+            "Ada",
+            "dacd0313406557f10115a4268fb435f4452c16872be1455fdf41b27fdcd3d1e6dba61210d8b48f846b7c23c68527c53c13bb10e794168d286a376d63513939d4",
+        ),
+        (
+            "Ada Lovelace",
+            "ebd70a8d05430c07e7297ed2b628032e0b795e0c0992d231b3c266f8c84f4b2c90c85ef5ef66c4ce46f821abd5cc39e356339406f1a760e13577e051a30b0e28",
+        ),
+        (
+            "Zoë",
+            "b49235eea9e9b2d59d50adee4a2c9c3a47b147d9667afa992d01399bbe083c6e82273588ae669168438369b25238627d10cd0b1511bb5a4735af1780afd55264",
+        ),
+    ],
+)
+def test_greeting_blake2b_returns_hex_digest(name: str, expected: str) -> None:
+    result = greeting_blake2b(name)
+
+    assert type(result) is str
+    assert len(result) == 128
+    assert result == expected
+
+
+def test_greeting_blake2b_hashes_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_blake2b("Zoë") == (
+        hashlib.blake2b(greeting.encode("utf-8")).hexdigest()
+    )
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_blake2b_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_blake2b(name)  # type: ignore[arg-type]
+
+
+def test_greeting_blake2b_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    expected = "dacd0313406557f10115a4268fb435f4452c16872be1455fdf41b27fdcd3d1e6dba61210d8b48f846b7c23c68527c53c13bb10e794168d286a376d63513939d4"
+
+    assert "greeting_blake2b" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_blake2b("Ada") == expected
