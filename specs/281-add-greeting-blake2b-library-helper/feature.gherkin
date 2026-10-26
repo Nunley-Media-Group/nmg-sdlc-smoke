@@ -1,0 +1,35 @@
+**Issue**: #281
+**Date**: 2026-10-25
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/278-add-greeting-sha3-224-library-helper/
+
+# File: tests/features/add_greeting_blake2b_library_helper.feature
+# Generated from: specs/281-add-greeting-blake2b-library-helper/requirements.md
+Feature: Return the BLAKE2b hex digest of the completed greeting
+
+  @SCN001
+  Scenario: Return the BLAKE2b hex digest of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_blake2b is called with Ada and Ada Lovelace
+    Then the results are the 128-character hex strings dacd0313406557f10115a4268fb435f4452c16872be1455fdf41b27fdcd3d1e6dba61210d8b48f846b7c23c68527c53c13bb10e794168d286a376d63513939d4 and ebd70a8d05430c07e7297ed2b628032e0b795e0c0992d231b3c266f8c84f4b2c90c85ef5ef66c4ce46f821abd5cc39e356339406f1a760e13577e051a30b0e28
+
+  @SCN002
+  Scenario: Hash the UTF-8 encoding of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_blake2b is called with Zo plus U+00EB
+    Then the result is b49235eea9e9b2d59d50adee4a2c9c3a47b147d9667afa992d01399bbe083c6e82273588ae669168438369b25238627d10cd0b1511bb5a4735af1780afd55264, the hashlib BLAKE2b hex digest of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_blake2b is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_blake2b of Ada
+    Then it prints the Ada BLAKE2b digest and greeting_blake2b is listed in nmg_sdlc_smoke.__all__
+    And the README documents the lowercase hex UTF-8 default-parameter BLAKE2b result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
