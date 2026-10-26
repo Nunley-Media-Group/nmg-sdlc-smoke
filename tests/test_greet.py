@@ -13,6 +13,7 @@ from nmg_sdlc_smoke import (
     greeting_base32,
     greeting_base64,
     greeting_blake2b,
+    greeting_blake2s,
     greeting_bytes,
     greeting_casefold,
     greeting_crc32,
@@ -1526,3 +1527,51 @@ def test_greeting_blake2b_is_exported() -> None:
 
     assert "greeting_blake2b" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_blake2b("Ada") == expected
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        (
+            "Ada",
+            "68d52139de7dbb117ec790dad9989297d2dc4914ebd9b4d177d0e5da344edb14",
+        ),
+        (
+            "Ada Lovelace",
+            "22f894a44c4420a35fdf533cbb7b73908b46f9e0733f84cc89e964994a9631e7",
+        ),
+        (
+            "Zoë",
+            "8092041e5f4bb16247b07aa2d091daf95dae26f1a9ad10f3def9ebfe616b4b3b",
+        ),
+    ],
+)
+def test_greeting_blake2s_returns_hex_digest(name: str, expected: str) -> None:
+    result = greeting_blake2s(name)
+
+    assert type(result) is str
+    assert len(result) == 64
+    assert result == expected
+
+
+def test_greeting_blake2s_hashes_utf8_encoding() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_blake2s("Zoë") == (
+        hashlib.blake2s(greeting.encode("utf-8")).hexdigest()
+    )
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_blake2s_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_blake2s(name)  # type: ignore[arg-type]
+
+
+def test_greeting_blake2s_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    expected = "68d52139de7dbb117ec790dad9989297d2dc4914ebd9b4d177d0e5da344edb14"
+
+    assert "greeting_blake2s" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_blake2s("Ada") == expected
