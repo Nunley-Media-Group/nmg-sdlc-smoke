@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.66.0] - 2026-10-26
+
+### Changed
+
+- Add greeting_base85 library helper (#287)
+
 ## [3.65.0] - 2026-10-26
 
 ### Changed

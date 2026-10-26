@@ -1,0 +1,27 @@
+Feature: Return the Base85 encoding of the completed greeting
+
+  @SCN001
+  Scenario: Return the Base85 encoding of the completed greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_base85 is called with Ada and Ada Lovelace
+    Then the results are the Base85 strings NM&qnZ!91|WMK and NM&qnZ!91|WMLpoZ+2yDVPj<
+
+  @SCN002
+  Scenario: Encode the UTF-8 bytes of non-ASCII greetings
+    Given the installed nmg_sdlc_smoke package
+    When greeting_base85 is called with Zo plus U+00EB
+    Then the result is NM&qnZ!92MZ^Nq, the base64 module Base85 encoding of the UTF-8 encoded greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_base85 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_base85 of Ada
+    Then it prints NM&qnZ!91|WMK and greeting_base85 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the unpadded RFC 1924 Base85 UTF-8 result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0

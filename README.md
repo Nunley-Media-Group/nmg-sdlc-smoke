@@ -22,6 +22,7 @@ from nmg_sdlc_smoke import (
     greeting_adler32,
     greeting_base32,
     greeting_base64,
+    greeting_base85,
     greeting_blake2b,
     greeting_blake2s,
     greeting_bytes,
@@ -152,6 +153,7 @@ greeting_blake2b("Ada")  # "dacd0313406557f10115a4268fb435f4452c16872be1455fdf41
 greeting_blake2s("Ada")  # "68d52139de7dbb117ec790dad9989297d2dc4914ebd9b4d177d0e5da344edb14"
 greeting_base64("Ada")  # "SGVsbG8sIEFkYQ=="
 greeting_base32("Ada")  # "JBSWY3DPFQQECZDB"
+greeting_base85("Ada")  # "NM&qnZ!91|WMK"
 greeting_url_encoded("Ada")  # "Hello%2C%20Ada"
 greeting_rot13("Ada")  # "Uryyb, Nqn"
 greeting_crc32("Ada")  # 2761732226
@@ -184,6 +186,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_blake2s` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its BLAKE2s digest from `hashlib.blake2s` with default parameters (32-byte digest, no key, salt, or personalization) as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base64` encodes the complete greeting (not the name alone) as UTF-8 and returns its standard Base64 encoding as a `str`, using the RFC 4648 alphabet with `+` and `/`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its standard Base32 encoding from `base64.b32encode` as a `str`, using the RFC 4648 alphabet of uppercase `A`–`Z` and `2`–`7`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_base85` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its Base85 encoding from `base64.b85encode` as a `str`, using the RFC 1924 alphabet with no padding, no `<~ ~>` delimiters, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_rot13` applies ROT13 to the complete greeting (not the name alone), rotating only the ASCII letters `A`–`Z` and `a`–`z` by 13 places within their case and leaving every other character, including non-ASCII letters, unchanged; applying ROT13 again restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_url_encoded` percent-encodes the complete greeting (not the name alone) as UTF-8 with uppercase hex digits, leaving only `A`–`Z`, `a`–`z`, `0`–`9`, `-`, `.`, `_`, and `~` unencoded (so a space becomes `%20` and `/` becomes `%2F`); `urllib.parse.unquote` restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_crc32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its unsigned CRC-32 checksum from `zlib.crc32` as an `int` between `0` and `4294967295`; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different checksums, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.

@@ -2,6 +2,7 @@ from .greet import greet, greet_many
 from .greet import greeting_adler32 as greeting_adler32
 from .greet import greeting_base32 as greeting_base32
 from .greet import greeting_base64 as greeting_base64
+from .greet import greeting_base85 as greeting_base85
 from .greet import greeting_blake2b as greeting_blake2b
 from .greet import greeting_blake2s as greeting_blake2s
 from .greet import greeting_bytes as greeting_bytes
@@ -62,6 +63,7 @@ __all__ = [
     "greeting_adler32",
     "greeting_base32",
     "greeting_base64",
+    "greeting_base85",
     "greeting_blake2b",
     "greeting_blake2s",
     "greeting_bytes",
