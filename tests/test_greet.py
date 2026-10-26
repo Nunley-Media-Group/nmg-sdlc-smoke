@@ -12,6 +12,7 @@ from nmg_sdlc_smoke import (
     greeting_adler32,
     greeting_base32,
     greeting_base64,
+    greeting_base85,
     greeting_blake2b,
     greeting_blake2s,
     greeting_bytes,
@@ -1575,3 +1576,39 @@ def test_greeting_blake2s_is_exported() -> None:
 
     assert "greeting_blake2s" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_blake2s("Ada") == expected
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "NM&qnZ!91|WMK"),
+        ("Ada Lovelace", "NM&qnZ!91|WMLpoZ+2yDVPj<"),
+        ("Zoë", "NM&qnZ!92MZ^Nq"),
+    ],
+)
+def test_greeting_base85_encodes_utf8_greeting(name: str, expected: str) -> None:
+    result = greeting_base85(name)
+
+    assert type(result) is str
+    assert result == expected
+
+
+def test_greeting_base85_encodes_precomposed_utf8_bytes() -> None:
+    greeting = "Hello, Zoë"
+
+    assert greeting_base85("Zoë") == (
+        base64.b85encode(greeting.encode("utf-8")).decode("ascii")
+    )
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_base85_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_base85(name)  # type: ignore[arg-type]
+
+
+def test_greeting_base85_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_base85" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_base85("Ada") == "NM&qnZ!91|WMK"

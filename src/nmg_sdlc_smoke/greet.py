@@ -140,6 +140,10 @@ def greeting_base64(name: str) -> str:
     return base64.b64encode(greet(name).encode("utf-8")).decode("ascii")
 
 
+def greeting_base85(name: str) -> str:
+    return base64.b85encode(greet(name).encode("utf-8")).decode("ascii")
+
+
 def greeting_rot13(name: str) -> str:
     return codecs.encode(greet(name), "rot13")
 
