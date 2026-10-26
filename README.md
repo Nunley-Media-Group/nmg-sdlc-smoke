@@ -23,6 +23,7 @@ from nmg_sdlc_smoke import (
     greeting_base32,
     greeting_base64,
     greeting_blake2b,
+    greeting_blake2s,
     greeting_bytes,
     greeting_casefold,
     greeting_crc32,
@@ -148,6 +149,7 @@ greeting_sha3_256("Ada")  # "8fe4a55d0487c2a730a2f841a99b44d01ca1f235c30ab3a452a
 greeting_sha3_384("Ada")  # "1a0e27fabec84a7b6ff60b8feb3cb3a8f6c3838c4242005c74f61de0149c524ac44e5f4d417d35726285bd9ee10b470b"
 greeting_sha3_512("Ada")  # "0817552f59fade788cc6bfaff1161167b75c5f73a5c0f314be498ad984301ae1a4adf9b9770cd68d4af5d3093d061a5e3b6b306117803a6f359d98cb862a8611"
 greeting_blake2b("Ada")  # "dacd0313406557f10115a4268fb435f4452c16872be1455fdf41b27fdcd3d1e6dba61210d8b48f846b7c23c68527c53c13bb10e794168d286a376d63513939d4"
+greeting_blake2s("Ada")  # "68d52139de7dbb117ec790dad9989297d2dc4914ebd9b4d177d0e5da344edb14"
 greeting_base64("Ada")  # "SGVsbG8sIEFkYQ=="
 greeting_base32("Ada")  # "JBSWY3DPFQQECZDB"
 greeting_url_encoded("Ada")  # "Hello%2C%20Ada"
@@ -179,6 +181,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_sha3_384` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its SHA3-384 digest from `hashlib.sha3_384` as 96 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_sha3_512` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its SHA3-512 digest from `hashlib.sha3_512` as 128 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_blake2b` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its BLAKE2b digest from `hashlib.blake2b` with default parameters (64-byte digest, no key, salt, or personalization) as 128 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_blake2s` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its BLAKE2s digest from `hashlib.blake2s` with default parameters (32-byte digest, no key, salt, or personalization) as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base64` encodes the complete greeting (not the name alone) as UTF-8 and returns its standard Base64 encoding as a `str`, using the RFC 4648 alphabet with `+` and `/`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its standard Base32 encoding from `base64.b32encode` as a `str`, using the RFC 4648 alphabet of uppercase `A`–`Z` and `2`–`7`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_rot13` applies ROT13 to the complete greeting (not the name alone), rotating only the ASCII letters `A`–`Z` and `a`–`z` by 13 places within their case and leaving every other character, including non-ASCII letters, unchanged; applying ROT13 again restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
