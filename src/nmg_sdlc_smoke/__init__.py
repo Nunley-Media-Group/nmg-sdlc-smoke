@@ -1,5 +1,6 @@
 from .greet import greet, greet_many
 from .greet import greeting_adler32 as greeting_adler32
+from .greet import greeting_ascii85 as greeting_ascii85
 from .greet import greeting_base32 as greeting_base32
 from .greet import greeting_base64 as greeting_base64
 from .greet import greeting_base85 as greeting_base85
@@ -61,6 +62,7 @@ __all__ = [
     "greet",
     "greet_many",
     "greeting_adler32",
+    "greeting_ascii85",
     "greeting_base32",
     "greeting_base64",
     "greeting_base85",
