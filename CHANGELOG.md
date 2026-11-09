@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.68.0] - 2026-11-09
+
+### Changed
+
+- Add greeting_html_escaped library helper (#293)
+
 ## [3.67.0] - 2026-11-07
 
 ### Changed

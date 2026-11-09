@@ -33,6 +33,7 @@ from .greet import greeting_has_question_mark as greeting_has_question_mark
 from .greet import greeting_has_semicolon as greeting_has_semicolon
 from .greet import greeting_has_slash as greeting_has_slash
 from .greet import greeting_has_underscore as greeting_has_underscore
+from .greet import greeting_html_escaped as greeting_html_escaped
 from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_length as greeting_length
 from .greet import greeting_letter_count as greeting_letter_count
@@ -93,6 +94,7 @@ __all__ = [
     "greeting_has_semicolon",
     "greeting_has_slash",
     "greeting_has_underscore",
+    "greeting_html_escaped",
     "greeting_is_ascii",
     "greeting_length",
     "greeting_letter_count",

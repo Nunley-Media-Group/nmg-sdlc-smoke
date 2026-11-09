@@ -1,6 +1,7 @@
 import base64
 import codecs
 import hashlib
+import html
 import zlib
 from urllib.parse import unquote
 
@@ -41,6 +42,7 @@ from nmg_sdlc_smoke import (
     greeting_has_semicolon,
     greeting_has_slash,
     greeting_has_underscore,
+    greeting_html_escaped,
     greeting_is_ascii,
     greeting_length,
     greeting_letter_count,
@@ -994,6 +996,41 @@ def test_greeting_url_encoded_is_exported() -> None:
 
     assert "greeting_url_encoded" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_url_encoded("Ada") == "Hello%2C%20Ada"
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "Hello, Ada"),
+        ("Zoë", "Hello, Zoë"),
+        ("<Ada & Bo>", "Hello, &lt;Ada &amp; Bo&gt;"),
+        ('O\'Brien "Jr"', "Hello, O&#x27;Brien &quot;Jr&quot;"),
+    ],
+)
+def test_greeting_html_escaped_escapes_completed_greeting(
+    name: str, expected: str
+) -> None:
+    result = greeting_html_escaped(name)
+
+    assert type(result) is str
+    assert result == expected
+    assert result == html.escape(greet(name))
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_html_escaped_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_html_escaped(name)  # type: ignore[arg-type]
+
+
+def test_greeting_html_escaped_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_html_escaped" in nmg_sdlc_smoke.__all__
+    assert (
+        nmg_sdlc_smoke.greeting_html_escaped("<Ada & Bo>")
+        == "Hello, &lt;Ada &amp; Bo&gt;"
+    )
 
 
 @pytest.mark.parametrize(
