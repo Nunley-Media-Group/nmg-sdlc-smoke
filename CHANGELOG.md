@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.69.0] - 2026-11-09
+
+### Changed
+
+- Add greeting_shake_128 library helper (#296)
+
 ## [3.68.0] - 2026-11-09
 
 ### Changed
