@@ -133,6 +133,10 @@ def greeting_blake2s(name: str) -> str:
     return hashlib.blake2s(greet(name).encode("utf-8")).hexdigest()
 
 
+def greeting_shake_128(name: str) -> str:
+    return hashlib.shake_128(greet(name).encode("utf-8")).hexdigest(32)
+
+
 def greeting_base32(name: str) -> str:
     return base64.b32encode(greet(name).encode("utf-8")).decode("ascii")
 
