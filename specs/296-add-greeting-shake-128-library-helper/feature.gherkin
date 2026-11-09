@@ -1,0 +1,34 @@
+**Issue**: #296
+**Date**: 2026-11-09
+**Status**: Approved
+**Author**: NMG
+**Related Spec**: specs/284-add-greeting-blake2s-library-helper/
+
+# File: tests/features/add_greeting_shake_128_library_helper.feature
+# Generated from: specs/296-add-greeting-shake-128-library-helper/requirements.md
+Feature: Return the SHAKE-128 hex digest of the completed greeting
+
+  @SCN001
+  Scenario: Return the 32-byte SHAKE-128 hex digest of the greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_shake_128 is called with Ada and Zo plus U+00EB
+    Then the results are a3930308111b74c13946954b166ee4057689ba55b2b95de0cebdf8f299818774 and 8479a68098ec2f7e622cd2c40a917d3a8b79221a308ebde33c5825dc6f0b4b3f
+    And each result is 64 lowercase hexadecimal characters equal to the 32-byte SHAKE-128 hex digest of the UTF-8 greeting
+
+  @SCN002
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_shake_128 is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN003
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_shake_128 of Ada
+    Then it prints a3930308111b74c13946954b166ee4057689ba55b2b95de0cebdf8f299818774 and greeting_shake_128 is listed in nmg_sdlc_smoke.__all__
+    And the README documents the fixed 32-byte SHAKE-128 hex output over the UTF-8 greeting and the inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
+
+| Issue | Date | Summary |
+|-------|------|---------|
+| #296 | 2026-11-09 | Initial feature spec |
