@@ -1,6 +1,7 @@
 import base64
 import codecs
 import hashlib
+import html
 import string
 import zlib
 from collections.abc import Iterable
@@ -154,6 +155,10 @@ def greeting_rot13(name: str) -> str:
 
 def greeting_url_encoded(name: str) -> str:
     return quote(greet(name), safe="")
+
+
+def greeting_html_escaped(name: str) -> str:
+    return html.escape(greet(name))
 
 
 def greeting_crc32(name: str) -> int:

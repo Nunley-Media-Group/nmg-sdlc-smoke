@@ -1,0 +1,27 @@
+Feature: Return the HTML-escaped completed greeting
+
+  @SCN001
+  Scenario: Return the greeting unchanged when no HTML-special characters are present
+    Given the installed nmg_sdlc_smoke package
+    When greeting_html_escaped is called with Ada and Zo plus U+00EB
+    Then the results are the strings Hello, Ada and Hello, Zo plus U+00EB
+
+  @SCN002
+  Scenario: Escape HTML-special characters in the greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_html_escaped is called with names containing ampersand, angle brackets, apostrophe, and double quotes
+    Then the results are Hello, &lt;Ada &amp; Bo&gt; and Hello, O&#x27;Brien &quot;Jr&quot;, each equal to html.escape of the greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_html_escaped is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_html_escaped of <Ada & Bo>
+    Then it prints Hello, &lt;Ada &amp; Bo&gt; and greeting_html_escaped is listed in nmg_sdlc_smoke.__all__
+    And the README documents the html.escape quote=True result, completed-greeting scope, and inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
