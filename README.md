@@ -70,6 +70,7 @@ from nmg_sdlc_smoke import (
     greeting_sha3_512,
     greeting_sha512,
     greeting_shake_128,
+    greeting_shake_256,
     greeting_space_count,
     greeting_starts_with_hello,
     greeting_url_encoded,
@@ -155,6 +156,7 @@ greeting_sha3_512("Ada")  # "0817552f59fade788cc6bfaff1161167b75c5f73a5c0f314be4
 greeting_blake2b("Ada")  # "dacd0313406557f10115a4268fb435f4452c16872be1455fdf41b27fdcd3d1e6dba61210d8b48f846b7c23c68527c53c13bb10e794168d286a376d63513939d4"
 greeting_blake2s("Ada")  # "68d52139de7dbb117ec790dad9989297d2dc4914ebd9b4d177d0e5da344edb14"
 greeting_shake_128("Ada")  # "a3930308111b74c13946954b166ee4057689ba55b2b95de0cebdf8f299818774"
+greeting_shake_256("Ada")  # "51412b094871bbe3e276da7fa1fad8bd4bfae7cfbeb88db9e732d1f32461e67c41e270771c528e629790ba47af4772e92632de0b5b8f63cf801ef7eb8d6a29a7"
 greeting_base64("Ada")  # "SGVsbG8sIEFkYQ=="
 greeting_base32("Ada")  # "JBSWY3DPFQQECZDB"
 greeting_base85("Ada")  # "NM&qnZ!91|WMK"
@@ -191,6 +193,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_blake2b` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its BLAKE2b digest from `hashlib.blake2b` with default parameters (64-byte digest, no key, salt, or personalization) as 128 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_blake2s` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its BLAKE2s digest from `hashlib.blake2s` with default parameters (32-byte digest, no key, salt, or personalization) as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_shake_128` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its SHAKE-128 output from `hashlib.shake_128` with a fixed 32-byte length as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_shake_256` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its SHAKE-256 output from `hashlib.shake_256` with a fixed 64-byte length as 128 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base64` encodes the complete greeting (not the name alone) as UTF-8 and returns its standard Base64 encoding as a `str`, using the RFC 4648 alphabet with `+` and `/`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its standard Base32 encoding from `base64.b32encode` as a `str`, using the RFC 4648 alphabet of uppercase `A`–`Z` and `2`–`7`, `=` padding, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_base85` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its Base85 encoding from `base64.b85encode` as a `str`, using the RFC 1924 alphabet with no padding, no `<~ ~>` delimiters, and no line breaks; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different results, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
