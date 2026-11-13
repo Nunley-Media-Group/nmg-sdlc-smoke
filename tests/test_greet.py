@@ -61,6 +61,7 @@ from nmg_sdlc_smoke import (
     greeting_sha384,
     greeting_sha512,
     greeting_shake_128,
+    greeting_shake_256,
     greeting_space_count,
     greeting_starts_with_hello,
     greeting_unique_char_count,
@@ -1727,4 +1728,37 @@ def test_greeting_shake_128_is_exported() -> None:
     assert (
         nmg_sdlc_smoke.greeting_shake_128("Ada")
         == "a3930308111b74c13946954b166ee4057689ba55b2b95de0cebdf8f299818774"
+    )
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "51412b094871bbe3e276da7fa1fad8bd4bfae7cfbeb88db9e732d1f32461e67c41e270771c528e629790ba47af4772e92632de0b5b8f63cf801ef7eb8d6a29a7"),
+        ("Zoë", "f1548a17e00c5729deeb887a4c5906e0dcdd3ef62f2e0b3a27a34dd94ef06c9a439d43b9dc7f31c5a71c17ea7ee5a946a4e32d2ed0981916c59d5d8a10ece632"),
+    ],
+)
+def test_greeting_shake_256_returns_hex_digest(name: str, expected: str) -> None:
+    result = greeting_shake_256(name)
+
+    assert type(result) is str
+    assert len(result) == 128
+    assert set(result) <= set("0123456789abcdef")
+    assert result == expected
+    assert result == hashlib.shake_256(greet(name).encode("utf-8")).hexdigest(64)
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_shake_256_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_shake_256(name)  # type: ignore[arg-type]
+
+
+def test_greeting_shake_256_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_shake_256" in nmg_sdlc_smoke.__all__
+    assert (
+        nmg_sdlc_smoke.greeting_shake_256("Ada")
+        == "51412b094871bbe3e276da7fa1fad8bd4bfae7cfbeb88db9e732d1f32461e67c41e270771c528e629790ba47af4772e92632de0b5b8f63cf801ef7eb8d6a29a7"
     )

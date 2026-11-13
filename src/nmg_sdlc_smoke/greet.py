@@ -137,6 +137,10 @@ def greeting_shake_128(name: str) -> str:
     return hashlib.shake_128(greet(name).encode("utf-8")).hexdigest(32)
 
 
+def greeting_shake_256(name: str) -> str:
+    return hashlib.shake_256(greet(name).encode("utf-8")).hexdigest(64)
+
+
 def greeting_base32(name: str) -> str:
     return base64.b32encode(greet(name).encode("utf-8")).decode("ascii")
 
