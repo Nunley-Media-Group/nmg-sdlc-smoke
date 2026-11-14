@@ -46,6 +46,7 @@ from nmg_sdlc_smoke import (
     greeting_html_escaped,
     greeting_is_ascii,
     greeting_is_printable,
+    greeting_is_title,
     greeting_length,
     greeting_letter_count,
     greeting_lowercase_count,
@@ -1828,3 +1829,34 @@ def test_greeting_is_printable_is_exported() -> None:
 
     assert "greeting_is_printable" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_is_printable("Ada") is True
+
+
+@pytest.mark.parametrize("name", ["Ada", "Zoë", "Ada Lovelace", "O'Neil"])
+def test_greeting_is_title_returns_true_for_title_cased_greeting(name: str) -> None:
+    result = greeting_is_title(name)
+
+    assert result is True
+    assert result == greet(name).istitle()
+
+
+@pytest.mark.parametrize("name", ["ada", "ADA", "Ada lovelace", "McAdam"])
+def test_greeting_is_title_returns_false_for_non_title_cased_greeting(
+    name: str,
+) -> None:
+    result = greeting_is_title(name)
+
+    assert result is False
+    assert result == greet(name).istitle()
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_is_title_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_is_title(name)  # type: ignore[arg-type]
+
+
+def test_greeting_is_title_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_is_title" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_is_title("Ada") is True
