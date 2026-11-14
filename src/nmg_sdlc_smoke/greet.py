@@ -34,6 +34,10 @@ def greeting_is_printable(name: str) -> bool:
     return greet(name).isprintable()
 
 
+def greeting_is_title(name: str) -> bool:
+    return greet(name).istitle()
+
+
 def greeting_starts_with_hello(name: str) -> bool:
     return greet(name).startswith("Hello, ")
 

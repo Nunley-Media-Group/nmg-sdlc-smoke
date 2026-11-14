@@ -36,6 +36,7 @@ from .greet import greeting_has_underscore as greeting_has_underscore
 from .greet import greeting_html_escaped as greeting_html_escaped
 from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_is_printable as greeting_is_printable
+from .greet import greeting_is_title as greeting_is_title
 from .greet import greeting_length as greeting_length
 from .greet import greeting_letter_count as greeting_letter_count
 from .greet import greeting_lowercase_count as greeting_lowercase_count
@@ -101,6 +102,7 @@ __all__ = [
     "greeting_html_escaped",
     "greeting_is_ascii",
     "greeting_is_printable",
+    "greeting_is_title",
     "greeting_length",
     "greeting_letter_count",
     "greeting_lowercase_count",
