@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.72.0] - 2026-11-14
+
+### Changed
+
+- Add greeting_is_printable library helper (#305)
+
 ## [3.71.0] - 2026-11-14
 
 ### Changed
