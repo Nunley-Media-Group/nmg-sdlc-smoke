@@ -1,0 +1,22 @@
+Feature: Return the quoted-printable encoding of the completed greeting
+
+  @SCN001
+  Scenario: Return the quoted-printable encoding of the greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_quoted_printable is called with Ada, Zo plus U+00EB, a=b, and Ada with one trailing space
+    Then the results are Hello, Ada and Hello, Zo=C3=AB and Hello, a=3Db and Hello, Ada=20
+    And each result equals the quopri encoding of the UTF-8 greeting decoded as ASCII
+
+  @SCN002
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_quoted_printable is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN003
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_quoted_printable of Zo plus U+00EB
+    Then it prints Hello, Zo=C3=AB and greeting_quoted_printable is listed in nmg_sdlc_smoke.__all__
+    And the README documents the quoted-printable encoding of the UTF-8 greeting and the inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0

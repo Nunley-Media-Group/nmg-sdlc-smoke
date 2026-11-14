@@ -2,6 +2,7 @@ import base64
 import codecs
 import hashlib
 import html
+import quopri
 import zlib
 from urllib.parse import unquote
 
@@ -49,6 +50,7 @@ from nmg_sdlc_smoke import (
     greeting_lowercase_count,
     greeting_md5,
     greeting_punctuation_count,
+    greeting_quoted_printable,
     greeting_reversed,
     greeting_rot13,
     greeting_sha1,
@@ -1033,6 +1035,38 @@ def test_greeting_html_escaped_is_exported() -> None:
         nmg_sdlc_smoke.greeting_html_escaped("<Ada & Bo>")
         == "Hello, &lt;Ada &amp; Bo&gt;"
     )
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "Hello, Ada"),
+        ("Zoë", "Hello, Zo=C3=AB"),
+        ("a=b", "Hello, a=3Db"),
+        ("Ada ", "Hello, Ada=20"),
+    ],
+)
+def test_greeting_quoted_printable_encodes_completed_greeting(
+    name: str, expected: str
+) -> None:
+    result = greeting_quoted_printable(name)
+
+    assert type(result) is str
+    assert result == expected
+    assert result == quopri.encodestring(greet(name).encode("utf-8")).decode("ascii")
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_quoted_printable_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_quoted_printable(name)  # type: ignore[arg-type]
+
+
+def test_greeting_quoted_printable_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_quoted_printable" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_quoted_printable("Zoë") == "Hello, Zo=C3=AB"
 
 
 @pytest.mark.parametrize(

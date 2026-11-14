@@ -58,6 +58,7 @@ from nmg_sdlc_smoke import (
     greeting_lowercase_count,
     greeting_md5,
     greeting_punctuation_count,
+    greeting_quoted_printable,
     greeting_reversed,
     greeting_rot13,
     greeting_sha1,
@@ -163,6 +164,7 @@ greeting_base85("Ada")  # "NM&qnZ!91|WMK"
 greeting_ascii85("Ada")  # "87cURD_*\"sA75"
 greeting_url_encoded("Ada")  # "Hello%2C%20Ada"
 greeting_html_escaped("<Ada & Bo>")  # "Hello, &lt;Ada &amp; Bo&gt;"
+greeting_quoted_printable("Zoë")  # "Hello, Zo=C3=AB"
 greeting_rot13("Ada")  # "Uryyb, Nqn"
 greeting_crc32("Ada")  # 2761732226
 greeting_adler32("Ada")  # 312279879
@@ -201,6 +203,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_rot13` applies ROT13 to the complete greeting (not the name alone), rotating only the ASCII letters `A`–`Z` and `a`–`z` by 13 places within their case and leaving every other character, including non-ASCII letters, unchanged; applying ROT13 again restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_url_encoded` percent-encodes the complete greeting (not the name alone) as UTF-8 with uppercase hex digits, leaving only `A`–`Z`, `a`–`z`, `0`–`9`, `-`, `.`, `_`, and `~` unencoded (so a space becomes `%20` and `/` becomes `%2F`); `urllib.parse.unquote` restores the greeting, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_html_escaped` escapes the complete greeting (not the name alone), including the `Hello, ` prefix, with `html.escape` and its default `quote=True`, so `&`, `<`, `>`, `"`, and `'` become `&amp;`, `&lt;`, `&gt;`, `&quot;`, and `&#x27;` while every other character, including non-ASCII, is unchanged; it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_quoted_printable` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its quoted-printable form from `quopri.encodestring` with default options as an ASCII `str`, so `=` and non-ASCII bytes become `=XX` escapes with uppercase hex digits and trailing whitespace is escaped while other printable ASCII is unchanged; no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_crc32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its unsigned CRC-32 checksum from `zlib.crc32` as an `int` between `0` and `4294967295`; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different checksums, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_adler32` encodes the complete greeting (not the name alone), including the `Hello, ` prefix, as UTF-8 and returns its unsigned Adler-32 checksum from `zlib.adler32` as an `int` between `0` and `4294967295`; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different checksums, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_has_semicolon` checks for a literal `;` in the complete greeting and uses the same name validation as `greet`.
