@@ -30,6 +30,10 @@ def greeting_is_ascii(name: str) -> bool:
     return greet(name).isascii()
 
 
+def greeting_is_printable(name: str) -> bool:
+    return greet(name).isprintable()
+
+
 def greeting_starts_with_hello(name: str) -> bool:
     return greet(name).startswith("Hello, ")
 

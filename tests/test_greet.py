@@ -45,6 +45,7 @@ from nmg_sdlc_smoke import (
     greeting_has_underscore,
     greeting_html_escaped,
     greeting_is_ascii,
+    greeting_is_printable,
     greeting_length,
     greeting_letter_count,
     greeting_lowercase_count,
@@ -1796,3 +1797,34 @@ def test_greeting_shake_256_is_exported() -> None:
         nmg_sdlc_smoke.greeting_shake_256("Ada")
         == "51412b094871bbe3e276da7fa1fad8bd4bfae7cfbeb88db9e732d1f32461e67c41e270771c528e629790ba47af4772e92632de0b5b8f63cf801ef7eb8d6a29a7"
     )
+
+
+@pytest.mark.parametrize("name", ["Ada", "Zoë", "Ada Lovelace"])
+def test_greeting_is_printable_returns_true_for_printable_greeting(name: str) -> None:
+    result = greeting_is_printable(name)
+
+    assert result is True
+    assert result == greet(name).isprintable()
+
+
+@pytest.mark.parametrize("name", ["Ada\tLovelace", "Ada\n"])
+def test_greeting_is_printable_returns_false_for_non_printable_greeting(
+    name: str,
+) -> None:
+    result = greeting_is_printable(name)
+
+    assert result is False
+    assert result == greet(name).isprintable()
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_is_printable_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_is_printable(name)  # type: ignore[arg-type]
+
+
+def test_greeting_is_printable_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_is_printable" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_is_printable("Ada") is True

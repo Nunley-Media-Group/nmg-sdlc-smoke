@@ -53,6 +53,7 @@ from nmg_sdlc_smoke import (
     greeting_has_underscore,
     greeting_html_escaped,
     greeting_is_ascii,
+    greeting_is_printable,
     greeting_length,
     greeting_letter_count,
     greeting_lowercase_count,
@@ -87,6 +88,8 @@ greet_many(["Ada", "Bob"])  # ["Hello, Ada", "Hello, Bob"]
 greeting_length("Ada")  # 10
 greeting_bytes("Ada")  # 10
 greeting_is_ascii("Ada")  # True
+greeting_is_printable("Ada")  # True
+greeting_is_printable("Ada\tLovelace")  # False
 greeting_casefold("Straße")  # "hello, strasse"
 greeting_reversed("Ada")  # "adA ,olleH"
 greeting_starts_with_hello("Ada")  # True
@@ -171,6 +174,7 @@ greeting_adler32("Ada")  # 312279879
 ```
 
 `greet` rejects blank, whitespace-only, and non-string names with `ValueError("name must not be blank")`.
+`greeting_is_printable` returns `str.isprintable()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so it is `True` when every character is printable (the ASCII space counts as printable) and `False` when any character, such as a tab or newline, is not; no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_casefold` applies Unicode casefolding to the complete greeting and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
