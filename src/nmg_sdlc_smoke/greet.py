@@ -2,6 +2,7 @@ import base64
 import codecs
 import hashlib
 import html
+import quopri
 import string
 import zlib
 from collections.abc import Iterable
@@ -167,6 +168,10 @@ def greeting_url_encoded(name: str) -> str:
 
 def greeting_html_escaped(name: str) -> str:
     return html.escape(greet(name))
+
+
+def greeting_quoted_printable(name: str) -> str:
+    return quopri.encodestring(greet(name).encode("utf-8")).decode("ascii")
 
 
 def greeting_crc32(name: str) -> int:
