@@ -68,6 +68,7 @@ from nmg_sdlc_smoke import (
     greeting_shake_256,
     greeting_space_count,
     greeting_starts_with_hello,
+    greeting_swapcase,
     greeting_unique_char_count,
     greeting_uppercase_count,
     greeting_url_encoded,
@@ -1860,3 +1861,32 @@ def test_greeting_is_title_is_exported() -> None:
 
     assert "greeting_is_title" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_is_title("Ada") is True
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", "hELLO, aDA"),
+        ("Zoë", "hELLO, zOË"),
+        ("O'Neil 42", "hELLO, o'nEIL 42"),
+    ],
+)
+def test_greeting_swapcase_returns_swapcased_greeting(name: str, expected: str) -> None:
+    result = greeting_swapcase(name)
+
+    assert isinstance(result, str)
+    assert result == expected
+    assert result == greet(name).swapcase()
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_swapcase_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_swapcase(name)  # type: ignore[arg-type]
+
+
+def test_greeting_swapcase_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_swapcase" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_swapcase("Ada") == "hELLO, aDA"

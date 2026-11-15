@@ -54,6 +54,10 @@ def greeting_casefold(name: str) -> str:
     return greet(name).casefold()
 
 
+def greeting_swapcase(name: str) -> str:
+    return greet(name).swapcase()
+
+
 def greeting_reversed(name: str) -> str:
     return greet(name)[::-1]
 
