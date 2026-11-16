@@ -29,6 +29,9 @@ def greeting_bytes(name: str) -> int:
 def greeting_codepoints(name: str) -> list[int]:
     return [ord(ch) for ch in greet(name)]
 
+def greeting_utf16_length(name: str) -> int:
+    return len(greet(name).encode("utf-16-le")) // 2
+
 def greeting_is_ascii(name: str) -> bool:
     return greet(name).isascii()
 

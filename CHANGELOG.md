@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.77.0] - 2026-11-16
+
+### Changed
+
+- Add greeting_utf16_length library helper (#317)
+
 ## [3.76.0] - 2026-11-16
 
 ### Changed
