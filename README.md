@@ -83,6 +83,7 @@ from nmg_sdlc_smoke import (
     greeting_uppercase_count,
     greeting_vowel_count,
     greeting_word_count,
+    greeting_words,
 )
 
 greet("Ada")  # "Hello, Ada"
@@ -146,6 +147,7 @@ greeting_has_underscore("Ada_")  # True
 greeting_has_underscore("Ada")  # False
 greeting_word_count("Ada")  # 2
 greeting_word_count("Ada Lovelace")  # 3
+greeting_words("Ada")  # ['Hello,', 'Ada']
 greeting_vowel_count("Ada")  # 4
 greeting_uppercase_count("Ada")  # 2
 greeting_lowercase_count("Ada")  # 6
@@ -188,6 +190,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_swapcase` returns `str.swapcase()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so uppercase characters become lowercase, lowercase characters become uppercase, and uncased characters are unchanged (for example `Ada` gives `hELLO, aDA`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
+`greeting_words` returns a new `list[str]` of the whitespace-separated words of the complete greeting (not the name alone), using Python's `str.split()` semantics so runs of any whitespace separate words and punctuation stays attached (for example `Ada` gives `['Hello,', 'Ada']`); its length always equals `greeting_word_count`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_vowel_count` counts the ten ASCII vowels `a e i o u A E I O U` in the complete greeting (not the name alone); `y`, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_uppercase_count` counts the 26 ASCII capitals `A`–`Z` in the complete greeting (not the name alone), including the `H` in `Hello`; lowercase, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_lowercase_count` counts the 26 ASCII lowercase letters `a`–`z` in the complete greeting (not the name alone), including the `ello` in `Hello`; uppercase, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
