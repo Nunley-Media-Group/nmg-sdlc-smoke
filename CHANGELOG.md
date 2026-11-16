@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.75.0] - 2026-11-16
+
+### Changed
+
+- Add greeting_codepoints library helper (#314)
+
 ## [3.74.0] - 2026-11-15
 
 ### Changed
