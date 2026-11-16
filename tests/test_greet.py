@@ -73,6 +73,7 @@ from nmg_sdlc_smoke import (
     greeting_unique_char_count,
     greeting_uppercase_count,
     greeting_url_encoded,
+    greeting_utf16_length,
     greeting_vowel_count,
     greeting_word_count,
     greeting_words,
@@ -1931,6 +1932,35 @@ def test_greeting_codepoints_is_exported() -> None:
     expected = [72, 101, 108, 108, 111, 44, 32, 65, 100, 97]
     assert "greeting_codepoints" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_codepoints("Ada") == expected
+
+
+@pytest.mark.parametrize("name", ["Ada", "Zoë"])
+def test_greeting_utf16_length_counts_bmp_code_units(name: str) -> None:
+    result = greeting_utf16_length(name)
+
+    assert type(result) is int
+    assert result == 10
+    assert result == len(greet(name).encode("utf-16-le")) // 2
+
+
+def test_greeting_utf16_length_counts_surrogate_pair() -> None:
+    assert greeting_utf16_length("\U0001F600") == 9
+    assert (
+        greeting_utf16_length("\U0001F600") == greeting_length("\U0001F600") + 1
+    )
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_utf16_length_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_utf16_length(name)  # type: ignore[arg-type]
+
+
+def test_greeting_utf16_length_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_utf16_length" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_utf16_length("Ada") == 10
 
 
 @pytest.mark.parametrize(

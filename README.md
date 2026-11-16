@@ -81,6 +81,7 @@ from nmg_sdlc_smoke import (
     greeting_url_encoded,
     greeting_unique_char_count,
     greeting_uppercase_count,
+    greeting_utf16_length,
     greeting_vowel_count,
     greeting_word_count,
     greeting_words,
@@ -92,6 +93,7 @@ greet_many(["Ada", "Bob"])  # ["Hello, Ada", "Hello, Bob"]
 greeting_length("Ada")  # 10
 greeting_bytes("Ada")  # 10
 greeting_codepoints("Ada")  # [72, 101, 108, 108, 111, 44, 32, 65, 100, 97]
+greeting_utf16_length("Ada")  # 10
 greeting_is_ascii("Ada")  # True
 greeting_is_printable("Ada")  # True
 greeting_is_printable("Ada\tLovelace")  # False
@@ -187,6 +189,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_is_title` returns `str.istitle()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so it is `True` when every cased word starts with an uppercase character followed only by lowercase characters (for example `Ada`, `Ada Lovelace`, or `O'Neil`) and `False` otherwise (for example `ada`, `ADA`, or `McAdam`); no case conversion or Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_casefold` applies Unicode casefolding to the complete greeting and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_codepoints` returns a new `list[int]` of `ord()` values for each character of the complete greeting (not the name alone), including the `Hello, ` prefix, so a character outside the Basic Multilingual Plane contributes exactly one code point (for example `Ada` gives `[72, 101, 108, 108, 111, 44, 32, 65, 100, 97]`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_utf16_length` returns the number of UTF-16 code units in the complete greeting (not the name alone), including the `Hello, ` prefix and excluding any byte-order mark, so a character outside the Basic Multilingual Plane counts as two units (for example `Ada` gives `10` and `😀` gives `9`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_swapcase` returns `str.swapcase()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so uppercase characters become lowercase, lowercase characters become uppercase, and uncased characters are unchanged (for example `Ada` gives `hELLO, aDA`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
