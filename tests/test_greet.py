@@ -20,6 +20,7 @@ from nmg_sdlc_smoke import (
     greeting_blake2s,
     greeting_bytes,
     greeting_casefold,
+    greeting_codepoints,
     greeting_crc32,
     greeting_digit_count,
     greeting_ends_with_exclamation,
@@ -1890,3 +1891,42 @@ def test_greeting_swapcase_is_exported() -> None:
 
     assert "greeting_swapcase" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_swapcase("Ada") == "hELLO, aDA"
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", [72, 101, 108, 108, 111, 44, 32, 65, 100, 97]),
+        ("Zoë", [72, 101, 108, 108, 111, 44, 32, 90, 111, 235]),
+    ],
+)
+def test_greeting_codepoints_returns_code_points_of_greeting(
+    name: str, expected: list[int]
+) -> None:
+    result = greeting_codepoints(name)
+
+    assert isinstance(result, list)
+    assert all(type(code_point) is int for code_point in result)
+    assert result == expected
+    assert result == [ord(ch) for ch in greet(name)]
+
+
+def test_greeting_codepoints_counts_non_bmp_character_once() -> None:
+    result = greeting_codepoints("\U0001f600")
+
+    assert result == [72, 101, 108, 108, 111, 44, 32, 128512]
+    assert len(result) == greeting_length("\U0001f600")
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_codepoints_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_codepoints(name)  # type: ignore[arg-type]
+
+
+def test_greeting_codepoints_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    expected = [72, 101, 108, 108, 111, 44, 32, 65, 100, 97]
+    assert "greeting_codepoints" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_codepoints("Ada") == expected
