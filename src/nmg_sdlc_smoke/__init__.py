@@ -65,6 +65,7 @@ from .greet import greeting_uppercase_count as greeting_uppercase_count
 from .greet import greeting_url_encoded as greeting_url_encoded
 from .greet import greeting_vowel_count as greeting_vowel_count
 from .greet import greeting_word_count as greeting_word_count
+from .greet import greeting_words as greeting_words
 
 __all__ = [
     "greet",
@@ -133,4 +134,5 @@ __all__ = [
     "greeting_url_encoded",
     "greeting_vowel_count",
     "greeting_word_count",
+    "greeting_words",
 ]

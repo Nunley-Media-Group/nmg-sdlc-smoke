@@ -75,6 +75,7 @@ from nmg_sdlc_smoke import (
     greeting_url_encoded,
     greeting_vowel_count,
     greeting_word_count,
+    greeting_words,
 )
 
 
@@ -1930,3 +1931,42 @@ def test_greeting_codepoints_is_exported() -> None:
     expected = [72, 101, 108, 108, 111, 44, 32, 65, 100, 97]
     assert "greeting_codepoints" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_codepoints("Ada") == expected
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada", ["Hello,", "Ada"]),
+        ("Zoë", ["Hello,", "Zoë"]),
+    ],
+)
+def test_greeting_words_returns_words_of_greeting(
+    name: str, expected: list[str]
+) -> None:
+    result = greeting_words(name)
+
+    assert isinstance(result, list)
+    assert all(isinstance(word, str) for word in result)
+    assert result == expected
+    assert result == greet(name).split()
+
+
+@pytest.mark.parametrize("name", ["Ada Lovelace", "Ada \t Lovelace"])
+def test_greeting_words_splits_on_any_whitespace_run(name: str) -> None:
+    result = greeting_words(name)
+
+    assert result == ["Hello,", "Ada", "Lovelace"]
+    assert len(result) == greeting_word_count(name)
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_words_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_words(name)  # type: ignore[arg-type]
+
+
+def test_greeting_words_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_words" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_words("Ada") == ["Hello,", "Ada"]

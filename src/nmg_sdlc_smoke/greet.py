@@ -69,6 +69,10 @@ def greeting_word_count(name: str) -> int:
     return len(greet(name).split())
 
 
+def greeting_words(name: str) -> list[str]:
+    return greet(name).split()
+
+
 def greeting_vowel_count(name: str) -> int:
     return sum(character in "aeiouAEIOU" for character in greet(name))
 
