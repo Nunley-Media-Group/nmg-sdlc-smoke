@@ -1,0 +1,35 @@
+Feature: Return a lowercase ASCII slug of the completed greeting
+
+  @SCN001
+  Scenario: Slug simple and multi-word names
+    Given the installed nmg_sdlc_smoke package
+    When greeting_slug is called with Ada, Ada Lovelace, Ada space-tab-space Lovelace, and Agent 007
+    Then the results are the strings hello-ada, hello-ada-lovelace, hello-ada-lovelace, and hello-agent-007
+
+  @SCN002
+  Scenario: Collapse punctuation and trim edge separators
+    Given the installed nmg_sdlc_smoke package
+    When greeting_slug is called with O'Brien, Ada!!, --Ada--, and Ada_Lovelace
+    Then the results are hello-o-brien, hello-ada, hello-ada, and hello-ada-lovelace
+    And no result contains a double hyphen or starts or ends with a hyphen
+
+  @SCN003
+  Scenario: Transliterate accents and separate non-ASCII letters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_slug is called with Zo plus U+00EB, U+00C9 plus MILE, U+FF21 plus da, and Ada plus U+674E plus Lee
+    Then the results are hello-zoe, hello-emile, hello-ada, and hello-ada-lee
+    And every result is lowercase ASCII words joined by single hyphens
+
+  @SCN004
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_slug is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN005
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_slug of Ada Lovelace
+    Then it prints hello-ada-lovelace and greeting_slug is listed in nmg_sdlc_smoke.__all__
+    And the README documents the slug rule and the inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0

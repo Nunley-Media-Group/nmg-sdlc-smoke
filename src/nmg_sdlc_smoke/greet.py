@@ -3,7 +3,9 @@ import codecs
 import hashlib
 import html
 import quopri
+import re
 import string
+import unicodedata
 import zlib
 from collections.abc import Iterable
 from urllib.parse import quote
@@ -66,6 +68,14 @@ def greeting_swapcase(name: str) -> str:
 
 def greeting_reversed(name: str) -> str:
     return greet(name)[::-1]
+
+
+def greeting_slug(name: str) -> str:
+    decomposed = unicodedata.normalize("NFKD", greet(name))
+    ascii_base = "".join(
+        char for char in decomposed if not unicodedata.combining(char)
+    )
+    return re.sub(r"[^a-z0-9]+", "-", ascii_base.lower()).strip("-")
 
 
 def greeting_word_count(name: str) -> int:
