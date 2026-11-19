@@ -45,6 +45,7 @@ from nmg_sdlc_smoke import (
     greeting_has_slash,
     greeting_has_underscore,
     greeting_html_escaped,
+    greeting_initials,
     greeting_is_ascii,
     greeting_is_printable,
     greeting_is_title,
@@ -2000,3 +2001,43 @@ def test_greeting_words_is_exported() -> None:
 
     assert "greeting_words" in nmg_sdlc_smoke.__all__
     assert nmg_sdlc_smoke.greeting_words("Ada") == ["Hello,", "Ada"]
+
+
+@pytest.mark.parametrize(("name", "expected"), [("Ada", "HA"), ("Zoë", "HZ")])
+def test_greeting_initials_returns_initials_for_single_word_names(
+    name: str, expected: str
+) -> None:
+    result = greeting_initials(name)
+
+    assert isinstance(result, str)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("Ada Lovelace", "HAL"),
+        ("Ada \t Lovelace", "HAL"),
+        ("ada lovelace", "Hal"),
+    ],
+)
+def test_greeting_initials_handles_multi_word_names_and_case(
+    name: str, expected: str
+) -> None:
+    result = greeting_initials(name)
+
+    assert result == expected
+    assert len(result) == greeting_word_count(name)
+
+
+@pytest.mark.parametrize("name", ["", " \t", None, 42])
+def test_greeting_initials_rejects_invalid_names(name: object) -> None:
+    with pytest.raises(ValueError, match="^name must not be blank$"):
+        greeting_initials(name)  # type: ignore[arg-type]
+
+
+def test_greeting_initials_is_exported() -> None:
+    import nmg_sdlc_smoke
+
+    assert "greeting_initials" in nmg_sdlc_smoke.__all__
+    assert nmg_sdlc_smoke.greeting_initials("Ada") == "HA"

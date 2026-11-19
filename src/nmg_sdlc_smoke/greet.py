@@ -76,6 +76,10 @@ def greeting_words(name: str) -> list[str]:
     return greet(name).split()
 
 
+def greeting_initials(name: str) -> str:
+    return "".join(word[0] for word in greeting_words(name))
+
+
 def greeting_vowel_count(name: str) -> int:
     return sum(character in "aeiouAEIOU" for character in greet(name))
 
