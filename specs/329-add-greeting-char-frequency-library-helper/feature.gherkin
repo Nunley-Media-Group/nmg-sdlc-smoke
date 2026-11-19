@@ -1,0 +1,49 @@
+**Issue**: #329
+**Date**: 2026-11-19
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_char_frequency_library_helper.feature
+# Generated from: specs/329-add-greeting-char-frequency-library-helper/requirements.md
+Feature: Count each character of the completed greeting
+
+  @SCN001
+  Scenario: Count characters of simple and multi-word greetings in first-seen order
+    Given the installed nmg_sdlc_smoke package
+    When greeting_char_frequency is called with Ada and Ada Lovelace
+    Then the results are the exact first-seen-order counts for Hello, Ada and Hello, Ada Lovelace
+    And each result is a plain dict
+
+  @SCN002
+  Scenario: Keep case and non-ASCII characters distinct without normalization
+    Given the installed nmg_sdlc_smoke package
+    When greeting_char_frequency is called with Zo plus U+00EB and Zoe plus U+0308
+    Then the precomposed result counts U+00EB once and e once
+    And the decomposed result counts e twice and U+0308 once with no U+00EB key
+    And both results count H once with no h key
+
+  @SCN003
+  Scenario: Agree with the existing length and unique-count helpers
+    Given the installed nmg_sdlc_smoke package
+    When greeting_char_frequency is called with Ada, Ada Lovelace, Agent 007, O'Brien, Zo plus U+00EB, and Ada plus U+674E plus Lee
+    Then each result's counts sum to greeting_length of the same name
+    And each result has as many keys as greeting_unique_char_count of the same name
+    And every count is a positive int
+
+  @SCN004
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_char_frequency is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN005
+  Scenario: Expose and document the helper without changing the CLI
+    Given the README Library section
+    When the README Library example runs and prints greeting_char_frequency of Ada
+    Then it prints the Ada counts and greeting_char_frequency is listed in nmg_sdlc_smoke.__all__
+    And the README documents the counting rule and the inherited invalid-name error
+    And nmg-smoke Ada still prints exactly Hello, Ada and exits with status 0
+
+| Issue | Date | Summary |
+|-------|------|---------|
+| #329 | 2026-11-19 | Initial feature spec |
