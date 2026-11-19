@@ -76,6 +76,7 @@ from nmg_sdlc_smoke import (
     greeting_sha512,
     greeting_shake_128,
     greeting_shake_256,
+    greeting_slug,
     greeting_space_count,
     greeting_starts_with_hello,
     greeting_swapcase,
@@ -103,6 +104,7 @@ greeting_is_title("ada")  # False
 greeting_casefold("Straße")  # "hello, strasse"
 greeting_swapcase("Ada")  # "hELLO, aDA"
 greeting_reversed("Ada")  # "adA ,olleH"
+greeting_slug("Ada Lovelace")  # "hello-ada-lovelace"
 greeting_starts_with_hello("Ada")  # True
 greeting_ends_with_name("Ada")  # True
 greeting_has_apostrophe("O'Brien")  # True
@@ -194,6 +196,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_utf16_length` returns the number of UTF-16 code units in the complete greeting (not the name alone), including the `Hello, ` prefix and excluding any byte-order mark, so a character outside the Basic Multilingual Plane counts as two units (for example `Ada` gives `10` and `😀` gives `9`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_swapcase` returns `str.swapcase()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so uppercase characters become lowercase, lowercase characters become uppercase, and uncased characters are unchanged (for example `Ada` gives `hELLO, aDA`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
+`greeting_slug` returns a lowercase ASCII slug of the complete greeting (not the name alone): it applies Unicode NFKD normalization and drops combining marks (so `Zoë` gives `hello-zoe`), lowercases, replaces every run of characters other than `a`–`z` and `0`–`9` with a single `-`, and trims leading and trailing `-` (for example `Ada Lovelace` gives `hello-ada-lovelace`); characters with no ASCII base, such as `李`, act as separators, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
 `greeting_words` returns a new `list[str]` of the whitespace-separated words of the complete greeting (not the name alone), using Python's `str.split()` semantics so runs of any whitespace separate words and punctuation stays attached (for example `Ada` gives `['Hello,', 'Ada']`); its length always equals `greeting_word_count`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_initials` returns a `str` made of the first character of each whitespace-separated word of the complete greeting (not the name alone), using the same `str.split()` words as `greeting_words` with the original case preserved and no separator (for example `Ada Lovelace` gives `HAL` and `ada lovelace` gives `Hal`); its length always equals `greeting_word_count`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
