@@ -163,13 +163,13 @@ def results_are_plain_dicts(context: dict[str, object]) -> None:
     "greeting_char_frequency is called with Zo plus U+00EB and Zoe plus U+0308"
 )
 def call_frequency_for_non_ascii_names(context: dict[str, object]) -> None:
-    frequency_all(context, ("Zoë", "Zoë"))
+    frequency_all(context, ("Zo\u00eb", "Zoe\u0308"))
 
 
 @then("the precomposed result counts U+00EB once and e once")
 def precomposed_counts(context: dict[str, object]) -> None:
     precomposed = context["results"][0]
-    assert precomposed["ë"] == 1
+    assert precomposed["\u00eb"] == 1
     assert precomposed["e"] == 1
 
 
@@ -177,8 +177,8 @@ def precomposed_counts(context: dict[str, object]) -> None:
 def decomposed_counts(context: dict[str, object]) -> None:
     decomposed = context["results"][1]
     assert decomposed["e"] == 2
-    assert decomposed["̈"] == 1
-    assert "ë" not in decomposed
+    assert decomposed["\u0308"] == 1
+    assert "\u00eb" not in decomposed
 
 
 @then("both results count H once with no h key")
@@ -195,7 +195,7 @@ def case_sensitive_counts(context: dict[str, object]) -> None:
 def call_frequency_for_consistency_names(context: dict[str, object]) -> None:
     frequency_all(
         context,
-        ("Ada", "Ada Lovelace", "Agent 007", "O'Brien", "Zoë", "Ada李Lee"),
+        ("Ada", "Ada Lovelace", "Agent 007", "O'Brien", "Zo\u00eb", "Ada\u674eLee"),
     )
 
 
