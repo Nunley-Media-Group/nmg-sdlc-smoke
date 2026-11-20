@@ -69,6 +69,7 @@ from .greet import greeting_url_encoded as greeting_url_encoded
 from .greet import greeting_utf16_length as greeting_utf16_length
 from .greet import greeting_vowel_count as greeting_vowel_count
 from .greet import greeting_word_count as greeting_word_count
+from .greet import greeting_word_lengths as greeting_word_lengths
 from .greet import greeting_words as greeting_words
 
 __all__ = [
@@ -142,5 +143,6 @@ __all__ = [
     "greeting_utf16_length",
     "greeting_vowel_count",
     "greeting_word_count",
+    "greeting_word_lengths",
     "greeting_words",
 ]
