@@ -86,6 +86,10 @@ def greeting_words(name: str) -> list[str]:
     return greet(name).split()
 
 
+def greeting_word_lengths(name: str) -> list[int]:
+    return [len(word) for word in greeting_words(name)]
+
+
 def greeting_initials(name: str) -> str:
     return "".join(word[0] for word in greeting_words(name))
 
