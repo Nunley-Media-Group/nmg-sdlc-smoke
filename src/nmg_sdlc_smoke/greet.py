@@ -118,6 +118,13 @@ def greeting_unique_char_count(name: str) -> int:
     return len(set(greet(name)))
 
 
+def greeting_char_frequency(name: str) -> dict[str, int]:
+    frequency: dict[str, int] = {}
+    for character in greet(name):
+        frequency[character] = frequency.get(character, 0) + 1
+    return frequency
+
+
 def greeting_letter_count(name: str) -> int:
     return sum(character.isalpha() for character in greet(name))
 
