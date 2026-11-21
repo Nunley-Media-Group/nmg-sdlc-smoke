@@ -94,6 +94,10 @@ def greeting_longest_word(name: str) -> str:
     return max(greeting_words(name), key=len)
 
 
+def greeting_shortest_word(name: str) -> str:
+    return min(greeting_words(name), key=len)
+
+
 def greeting_initials(name: str) -> str:
     return "".join(word[0] for word in greeting_words(name))
 
