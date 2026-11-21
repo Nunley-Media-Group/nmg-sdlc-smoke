@@ -60,6 +60,7 @@ from .greet import greeting_sha384 as greeting_sha384
 from .greet import greeting_sha512 as greeting_sha512
 from .greet import greeting_shake_128 as greeting_shake_128
 from .greet import greeting_shake_256 as greeting_shake_256
+from .greet import greeting_shortest_word as greeting_shortest_word
 from .greet import greeting_slug as greeting_slug
 from .greet import greeting_space_count as greeting_space_count
 from .greet import greeting_starts_with_hello as greeting_starts_with_hello
@@ -135,6 +136,7 @@ __all__ = [
     "greeting_sha512",
     "greeting_shake_128",
     "greeting_shake_256",
+    "greeting_shortest_word",
     "greeting_slug",
     "greeting_space_count",
     "greeting_starts_with_hello",
