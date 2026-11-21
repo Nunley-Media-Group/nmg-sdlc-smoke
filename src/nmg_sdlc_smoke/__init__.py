@@ -42,6 +42,7 @@ from .greet import greeting_is_printable as greeting_is_printable
 from .greet import greeting_is_title as greeting_is_title
 from .greet import greeting_length as greeting_length
 from .greet import greeting_letter_count as greeting_letter_count
+from .greet import greeting_longest_word as greeting_longest_word
 from .greet import greeting_lowercase_count as greeting_lowercase_count
 from .greet import greeting_md5 as greeting_md5
 from .greet import greeting_punctuation_count as greeting_punctuation_count
@@ -116,6 +117,7 @@ __all__ = [
     "greeting_is_title",
     "greeting_length",
     "greeting_letter_count",
+    "greeting_longest_word",
     "greeting_lowercase_count",
     "greeting_md5",
     "greeting_punctuation_count",
