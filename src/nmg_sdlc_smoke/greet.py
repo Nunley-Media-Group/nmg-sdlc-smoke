@@ -90,6 +90,10 @@ def greeting_word_lengths(name: str) -> list[int]:
     return [len(word) for word in greeting_words(name)]
 
 
+def greeting_longest_word(name: str) -> str:
+    return max(greeting_words(name), key=len)
+
+
 def greeting_initials(name: str) -> str:
     return "".join(word[0] for word in greeting_words(name))
 
