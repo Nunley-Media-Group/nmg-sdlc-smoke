@@ -8,7 +8,7 @@
 
 ## Overview
 
-Replace the copied nmg-sdlc Oh My Pi plugin working tree with a minimal installable Python 3.12+ distribution named `nmg-sdlc-smoke-python`. The only runtime behavior is `greet` plus console script `nmg-smoke`. Verification is pytest, pytest-bdd under `tests/features/`, Ruff, and GitHub Actions Python CI. Managed SDLC host contracts (LICENSE, 3.x VERSION, CHANGELOG history, contribution gate, issue form, AGENTS spec-context markers) stay. Copied plugin runtime is deleted; Git history remains the archive.
+Replace the copied nmg-sdlc Oh My Pi plugin working tree with a minimal installable Python 3.12+ distribution named `nmg-sdlc-smoke-python`. The only runtime behavior is `greet` plus console script `nmg-smoke`. Verification is pytest, pytest-bdd under `tests/features/`, Ruff, and GitHub Actions Python CI. Managed SDLC host contracts (LICENSE, 3.x VERSION, CHANGELOG history, contribution gate, issue form, CLAUDE.md spec-context markers) stay. Copied plugin runtime is deleted; Git history remains the archive.
 
 This is an owner-approved working-tree rewrite. The implementation PR uses the managed repository-rewrite exception because pre-cutover plugin files predate this host's singular issue/spec workflow. Delivery remains a 3.x minor (`VERSION` `3.14.0`). Requirements spec: `specs/35-convert-smoke-repository-to-a-python-sdlc-host/requirements.md`.
 
@@ -232,10 +232,10 @@ Preserve:
 - `CHANGELOG.md` history (do not wipe released headings)
 - `.github/workflows/nmg-sdlc-contribution-gate.yml` version-7 evaluator; keep its rewrite-required paths and steering-file predicates; add only the comment `# This repository is a Python SDLC smoke consumer.` immediately after `# nmg-sdlc-managed-version: 7` so the path changes
 - `.github/ISSUE_TEMPLATE/nmg-sdlc-ready-issue.yml`
-- AGENTS.md `<!-- nmg-sdlc-managed: spec-context -->` … `<!-- /nmg-sdlc-managed -->` markers and the spec-context rules inside them
+- CLAUDE.md `<!-- nmg-sdlc-managed: spec-context -->` … `<!-- /nmg-sdlc-managed -->` markers and the spec-context rules inside them
 - CONTRIBUTING.md managed contribution-workflow contract (issue/spec evidence, docs-only, repository-rewrite, spec-only write-spec table)
 
-Rewrite current-product prose in `README.md`, `CONTRIBUTING.md` project context, and `AGENTS.md` overview/structure/version sections. Replace plugin markdown steering with:
+Rewrite current-product prose in `README.md`, `CONTRIBUTING.md` project context, and `CLAUDE.md` overview/structure/version sections. Replace plugin markdown steering with:
 
 - `steering/manifest.json`
 - `steering/modules/product.mjs`

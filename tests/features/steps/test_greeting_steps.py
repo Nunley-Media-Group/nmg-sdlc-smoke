@@ -192,7 +192,7 @@ def plugin_runtime_absent() -> None:
     assert legacy_plugin_specs.isdisjoint(current_specs)
 
 
-@then("LICENSE, 3.x VERSION synced to pyproject.toml, CHANGELOG history, the managed contribution gate, the managed issue form, and the AGENTS.md spec-context markers remain")
+@then("LICENSE, 3.x VERSION synced to pyproject.toml, CHANGELOG history, the managed contribution gate, the managed issue form, and the CLAUDE.md spec-context markers remain")
 def delivery_contracts_remain() -> None:
     version = (ROOT / "VERSION").read_text().strip()
     assert version.startswith("3.")
@@ -201,17 +201,17 @@ def delivery_contracts_remain() -> None:
     assert "## [" in (ROOT / "CHANGELOG.md").read_text()
     assert (ROOT / ".github/workflows/nmg-sdlc-contribution-gate.yml").is_file()
     assert (ROOT / ".github/ISSUE_TEMPLATE/nmg-sdlc-ready-issue.yml").is_file()
-    agents = (ROOT / "AGENTS.md").read_text()
-    assert "<!-- nmg-sdlc-managed: spec-context -->" in agents
-    assert "<!-- /nmg-sdlc-managed -->" in agents
+    guide = (ROOT / "CLAUDE.md").read_text()
+    assert "<!-- nmg-sdlc-managed: spec-context -->" in guide
+    assert "<!-- /nmg-sdlc-managed -->" in guide
 
 
-@given("a contributor opening README, CONTRIBUTING, AGENTS, and steering")
+@given("a contributor opening README, CONTRIBUTING, CLAUDE, and steering")
 def contributor_docs(context: dict[str, object]) -> None:
     paths = [
         ROOT / "README.md",
         ROOT / "CONTRIBUTING.md",
-        ROOT / "AGENTS.md",
+        ROOT / "CLAUDE.md",
         ROOT / "steering/manifest.json",
         ROOT / "steering/snippets/project-product.md",
         ROOT / "steering/snippets/project-tech.md",

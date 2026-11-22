@@ -39,11 +39,11 @@ Feature: Convert smoke repository to a Python SDLC host
     Given the converted working tree
     When it is inspected
     Then copied plugin runtime workflows/, agents/, commands/, Node scripts/, OMP package.json, src/extension.ts, and other plugin specs/ are gone
-    And LICENSE, 3.x VERSION synced to pyproject.toml, CHANGELOG history, the managed contribution gate, the managed issue form, and the AGENTS.md spec-context markers remain
+    And LICENSE, 3.x VERSION synced to pyproject.toml, CHANGELOG history, the managed contribution gate, the managed issue form, and the CLAUDE.md spec-context markers remain
 
   @SCN007
   Scenario: Python-focused steering and contribution guidance
-    Given a contributor opening README, CONTRIBUTING, AGENTS, and steering
+    Given a contributor opening README, CONTRIBUTING, CLAUDE, and steering
     When they read current guidance
     Then the documents describe this Python SDLC smoke host with src layout, pytest, pytest-bdd, Ruff, and VERSION synchronized with pyproject.toml
     And they do not describe an Oh My Pi plugin as the current product

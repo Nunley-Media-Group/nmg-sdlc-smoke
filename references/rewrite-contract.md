@@ -32,4 +32,4 @@ Verification: `python -m pytest`, `python -m pytest tests/features`, `python -m 
 
 ## Preserved delivery contracts
 
-The rewrite preserves LICENSE, released CHANGELOG history, 3.x VERSION authority, the managed contribution gate and issue form, CONTRIBUTING evidence rules, AGENTS spec-context markers, and the singular approved spec for issue #35.
+The rewrite preserves LICENSE, released CHANGELOG history, 3.x VERSION authority, the managed contribution gate and issue form, CONTRIBUTING evidence rules, CLAUDE.md spec-context markers, and the singular approved spec for issue #35.

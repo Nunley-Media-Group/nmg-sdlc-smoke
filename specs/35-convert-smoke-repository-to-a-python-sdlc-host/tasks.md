@@ -115,14 +115,14 @@
 
 ### T009: Rewrite current-product docs and steering
 
-**File(s)**: `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `steering/manifest.json`, `steering/modules/product.mjs`, `steering/modules/tech.mjs`, `steering/modules/structure.mjs`, `steering/modules/verification.mjs`, `steering/snippets/project-product.md`, `steering/snippets/project-tech.md`, `steering/snippets/project-structure.md`, `steering/retrospective.md`, `steering/retrospective-state.json`; delete `steering/product.md`, `steering/tech.md`, `steering/structure.md`
+**File(s)**: `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `steering/manifest.json`, `steering/modules/product.mjs`, `steering/modules/tech.mjs`, `steering/modules/structure.mjs`, `steering/modules/verification.mjs`, `steering/snippets/project-product.md`, `steering/snippets/project-tech.md`, `steering/snippets/project-structure.md`, `steering/retrospective.md`, `steering/retrospective-state.json`; delete `steering/product.md`, `steering/tech.md`, `steering/structure.md`
 **Type**: Create | Modify | Delete
 **Depends**: T008
 **Acceptance**:
-- [ ] README, CONTRIBUTING, AGENTS, and steering snippets describe this Python SDLC smoke host (src layout, pytest, pytest-bdd, Ruff, VERSION synchronized with pyproject.toml)
+- [ ] README, CONTRIBUTING, CLAUDE, and steering snippets describe this Python SDLC smoke host (src layout, pytest, pytest-bdd, Ruff, VERSION synchronized with pyproject.toml)
 - [ ] They do not describe an Oh My Pi plugin as the current product
 - [ ] CONTRIBUTING keeps the managed contribution-workflow contract (evidence graph and exception table)
-- [ ] AGENTS.md keeps `<!-- nmg-sdlc-managed: spec-context -->` / `<!-- /nmg-sdlc-managed -->` and the spec-context rules
+- [ ] CLAUDE.md keeps `<!-- nmg-sdlc-managed: spec-context -->` / `<!-- /nmg-sdlc-managed -->` and the spec-context rules
 - [ ] `steering/manifest.json` registers product, tech, structure, and verification modules plus the three project snippets
 - [ ] `steering/product.md`, `steering/tech.md`, and `steering/structure.md` are absent
 - [ ] `steering/retrospective-state.json` is `{"version": 1, "specs": {}}`

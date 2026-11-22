@@ -67,11 +67,11 @@ Each criterion becomes a Gherkin scenario.
 
 **Given** the converted working tree
 **When** it is inspected
-**Then** copied plugin runtime (`workflows/`, `agents/`, `commands/`, Node `scripts/`, OMP `package.json` / `src/extension.ts`, plugin `specs/` other than `specs/35-convert-smoke-repository-to-a-python-sdlc-host/`, live smoke marker files) is gone, and LICENSE, 3.x `VERSION` (synced to `pyproject.toml`), CHANGELOG history, the managed contribution gate, the managed issue form, and the AGENTS.md spec-context markers remain
+**Then** copied plugin runtime (`workflows/`, `agents/`, `commands/`, Node `scripts/`, OMP `package.json` / `src/extension.ts`, plugin `specs/` other than `specs/35-convert-smoke-repository-to-a-python-sdlc-host/`, live smoke marker files) is gone, and LICENSE, 3.x `VERSION` (synced to `pyproject.toml`), CHANGELOG history, the managed contribution gate, the managed issue form, and the CLAUDE.md spec-context markers remain
 
 ### AC7: Python-focused steering and contribution guidance
 
-**Given** a contributor opening README, CONTRIBUTING, AGENTS, and steering
+**Given** a contributor opening README, CONTRIBUTING, CLAUDE, and steering
 **When** they read current guidance
 **Then** the documents describe this Python SDLC smoke host (src layout, pytest, pytest-bdd, Ruff, VERSION synchronized with pyproject.toml) and do not describe an Oh My Pi plugin as the current product
 
@@ -88,8 +88,8 @@ Each criterion becomes a Gherkin scenario.
 | FR5 | Gate the tree with Ruff and with GitHub Actions Python CI on pull requests and `main` | Must | Python 3.12 |
 | FR6 | Keep `VERSION` as the 3.x source of truth, set it to `3.14.0`, and synchronize `pyproject.toml` from it | Must | enhancement → minor; not 0.x or 1.0.0 |
 | FR7 | Remove copied plugin/runtime artifacts from the working tree; keep Git history as the archive | Must | Retain only `specs/35-convert-smoke-repository-to-a-python-sdlc-host/` under `specs/` |
-| FR8 | Preserve LICENSE, CHANGELOG history, managed contribution gate, managed issue form, and AGENTS.md spec-context markers | Must | Contribution gate evaluator stays version 7 with manifest/module steering predicates |
-| FR9 | Rewrite steering, README, CONTRIBUTING (keeping the managed contribution-workflow contract), and AGENTS project overview for the Python host | Must | Steering is `steering/manifest.json`, modules, and project snippets |
+| FR8 | Preserve LICENSE, CHANGELOG history, managed contribution gate, managed issue form, and CLAUDE.md spec-context markers | Must | Contribution gate evaluator stays version 7 with manifest/module steering predicates |
+| FR9 | Rewrite steering, README, CONTRIBUTING (keeping the managed contribution-workflow contract), and CLAUDE.md project overview for the Python host | Must | Steering is `steering/manifest.json`, modules, and project snippets |
 | FR10 | Use UTF-8 text and path-agnostic commands so verification is cross-platform | Should | |
 | FR11 | Satisfy the managed `SDLC-Exception: repository-rewrite` path on the implementation PR | Must | `feat!:` title; all version-7 rewrite-required paths changed |
 

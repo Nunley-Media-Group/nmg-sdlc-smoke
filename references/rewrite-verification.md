@@ -19,7 +19,7 @@ The working tree is an installable Python 3.12+ distribution with `greet`, the `
 
 - Packaging and runtime: `package.json` removal, `VERSION`, `pyproject.toml`, `src/`.
 - Verification: `tests/`, `.github/workflows/python-ci.yml`, removal of the three Node plugin workflows.
-- Current product guidance: `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `steering/`.
+- Current product guidance: `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`, `steering/`.
 - Rewrite evidence: `.github/workflows/nmg-sdlc-contribution-gate.yml`, `references/rewrite-contract.json`, `references/rewrite-contract.md`, `references/rewrite-verification.md`.
 - Current executable contract: `specs/35-convert-smoke-repository-to-a-python-sdlc-host/`.
 
