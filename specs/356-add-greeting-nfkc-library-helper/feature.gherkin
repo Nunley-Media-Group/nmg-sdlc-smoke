@@ -1,0 +1,47 @@
+**Issue**: #356
+**Date**: 2026-11-23
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_nfkc_library_helper.feature
+# Generated from: specs/356-add-greeting-nfkc-library-helper/requirements.md
+Feature: Return the completed greeting in Unicode NFKC
+
+  @SCN001
+  Scenario: Replace compatibility characters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkc is called with U+FB01 ona, full-width Ada, and Ada no-break-space Lovelace
+    Then the results are Hello, fiona with 12 code points, then Hello, Ada with 10 code points, then Hello, Ada Lovelace with 19 code points
+    And each result is a str
+
+  @SCN002
+  Scenario: Compose decomposed characters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkc is called with Chloe plus U+0301
+    Then the result is Hello, precomposed Chloé with 12 code points
+
+  @SCN003
+  Scenario: Leave already-normalized text unchanged
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkc is called with Ada, Ada two-spaces Lovelace, and O'Brien-Smith
+    Then each result equals greet of the same name
+
+  @SCN004
+  Scenario: Agree with unicodedata NFKC
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkc is called with Ada, Chloe plus U+0301, U+FB01 ona, and O'Brien-Smith
+    Then each result equals unicodedata NFKC normalization of greet of the same name
+    And each result is NFKC-normalized
+
+  @SCN005
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_nfkc is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN006
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_nfkc of U+FB01 ona
+    Then it prints Hello, fiona and greeting_nfkc is listed in nmg_sdlc_smoke.__all__
+    And the README documents the NFKC rule and the inherited invalid-name error
