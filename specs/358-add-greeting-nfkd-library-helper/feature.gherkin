@@ -1,0 +1,47 @@
+**Issue**: #358
+**Date**: 2026-11-23
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_nfkd_library_helper.feature
+# Generated from: specs/358-add-greeting-nfkd-library-helper/requirements.md
+Feature: Return the completed greeting in Unicode NFKD
+
+  @SCN001
+  Scenario: Fold compatibility characters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkd is called with U+FB01 ona, fullwidth A da, and Ada superscript two
+    Then the results are Hello, fiona with 12 code points, Hello, Ada with 10 code points, and Hello, Ada2 with 11 code points
+    And each result is a str
+
+  @SCN002
+  Scenario: Decompose precomposed characters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkd is called with precomposed Chloé
+    Then the result is Hello, Chloe plus U+0301 with 13 code points
+
+  @SCN003
+  Scenario: Leave already-normalized text unchanged
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkd is called with Ada, Ada two-spaces Lovelace, and Chloe plus U+0301
+    Then each result equals greet of the same name
+
+  @SCN004
+  Scenario: Agree with unicodedata NFKD
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfkd is called with Ada, precomposed Chloé, U+FB01 ona, and O'Brien-Smith
+    Then each result equals unicodedata NFKD normalization of greet of the same name
+    And each result is NFKD-normalized
+
+  @SCN005
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_nfkd is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN006
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_nfkd of U+FB01 ona
+    Then it prints Hello, fiona and greeting_nfkd is listed in nmg_sdlc_smoke.__all__
+    And the README documents the NFKD rule and the inherited invalid-name error
