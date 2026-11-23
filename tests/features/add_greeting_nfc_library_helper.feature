@@ -1,0 +1,40 @@
+Feature: Return the completed greeting in Unicode NFC
+
+  @SCN001
+  Scenario: Compose decomposed characters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfc is called with Chloe plus U+0301 and A plus U+030A ngstro plus U+0308 m
+    Then the results are Hello, Chloé with 12 code points, then Hello, Ångström with 15 code points
+    And each result is a str
+
+  @SCN002
+  Scenario: Leave already-composed text unchanged
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfc is called with Ada, Ada Lovelace, and precomposed Chloé
+    Then each result equals greet of the same name
+
+  @SCN003
+  Scenario: Apply canonical, not compatibility, normalization
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfc is called with U+FB01 ona and Ada two-spaces Lovelace
+    Then the results are Hello, U+FB01 ona with 11 code points, then Hello, Ada two-spaces Lovelace
+
+  @SCN004
+  Scenario: Agree with unicodedata NFC
+    Given the installed nmg_sdlc_smoke package
+    When greeting_nfc is called with Ada, Chloe plus U+0301, U+FB01 ona, and O'Brien-Smith
+    Then each result equals unicodedata NFC normalization of greet of the same name
+    And each result is NFC-normalized
+
+  @SCN005
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_nfc is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN006
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_nfc of Chloe plus U+0301
+    Then it prints Hello, Chloé and greeting_nfc is listed in nmg_sdlc_smoke.__all__
+    And the README documents the NFC rule and the inherited invalid-name error
