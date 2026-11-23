@@ -8,6 +8,7 @@ from .greet import greeting_base85 as greeting_base85
 from .greet import greeting_blake2b as greeting_blake2b
 from .greet import greeting_blake2s as greeting_blake2s
 from .greet import greeting_bytes as greeting_bytes
+from .greet import greeting_capitalize as greeting_capitalize
 from .greet import greeting_casefold as greeting_casefold
 from .greet import greeting_char_frequency as greeting_char_frequency
 from .greet import greeting_codepoints as greeting_codepoints
@@ -94,6 +95,7 @@ __all__ = [
     "greeting_blake2b",
     "greeting_blake2s",
     "greeting_bytes",
+    "greeting_capitalize",
     "greeting_casefold",
     "greeting_char_frequency",
     "greeting_codepoints",

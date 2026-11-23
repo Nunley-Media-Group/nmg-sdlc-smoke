@@ -1,0 +1,28 @@
+Feature: Capitalize the completed greeting
+
+  @SCN001
+  Scenario: Lowercase everything after the first character
+    Given the installed nmg_sdlc_smoke package
+    When greeting_capitalize is called with Ada, Ada Lovelace, ADA, and ada lovelace
+    Then the results are Hello, ada, then Hello, ada lovelace, then Hello, ada, then Hello, ada lovelace
+    And each result is a str
+
+  @SCN002
+  Scenario: Leave uncased characters and non-ASCII letters to str.capitalize
+    Given the installed nmg_sdlc_smoke package
+    When greeting_capitalize is called with O'BRIEN-SMITH, Ada 42, U+00C9 MILE, and space Ada space
+    Then the results are Hello, o'brien-smith, then Hello, ada 42, then Hello, U+00E9 mile, then Hello, two-spaces ada space
+    And each result equals greet of the same name capitalized
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_capitalize is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_capitalize of Ada Lovelace
+    Then it prints Hello, ada lovelace and greeting_capitalize is listed in nmg_sdlc_smoke.__all__
+    And the README documents the capitalize rule and the inherited invalid-name error
