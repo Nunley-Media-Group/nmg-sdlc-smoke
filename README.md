@@ -65,6 +65,7 @@ from nmg_sdlc_smoke import (
     greeting_longest_word,
     greeting_lowercase_count,
     greeting_md5,
+    greeting_nfc,
     greeting_punctuation_count,
     greeting_quoted_printable,
     greeting_reversed,
@@ -110,6 +111,7 @@ greeting_is_title("Ada")  # True
 greeting_is_title("ada")  # False
 greeting_casefold("Straße")  # "hello, strasse"
 greeting_swapcase("Ada")  # "hELLO, aDA"
+greeting_nfc("Chloé")  # "Hello, Chloé"
 greeting_reversed("Ada")  # "adA ,olleH"
 greeting_slug("Ada Lovelace")  # "hello-ada-lovelace"
 greeting_starts_with_hello("Ada")  # True
@@ -208,6 +210,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_char_frequency` returns a new plain `dict[str, int]` mapping each character (Unicode code point) of the complete greeting (not the name alone), including the `Hello, ` prefix, comma, and spaces, to the number of times it occurs; keys are case-sensitive and appear in the order each character first occurs (for example `Ada` gives `{"H": 1, "e": 1, "l": 2, "o": 1, ",": 1, " ": 1, "A": 1, "d": 1, "a": 1}`), no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_utf16_length` returns the number of UTF-16 code units in the complete greeting (not the name alone), including the `Hello, ` prefix and excluding any byte-order mark, so a character outside the Basic Multilingual Plane counts as two units (for example `Ada` gives `10` and `😀` gives `9`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_swapcase` returns `str.swapcase()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so uppercase characters become lowercase, lowercase characters become uppercase, and uncased characters are unchanged (for example `Ada` gives `hELLO, aDA`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_nfc` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form C using `unicodedata.normalize("NFC", ...)`, so a base character followed by combining marks is composed into its precomposed form where one exists (for example `Chloe` plus U+0301 gives `Hello, Chloé`) and already-composed text is unchanged; only canonical composition is applied, so compatibility characters such as `ﬁ` are kept and no case, whitespace, or accent stripping change is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_slug` returns a lowercase ASCII slug of the complete greeting (not the name alone): it applies Unicode NFKD normalization and drops combining marks (so `Zoë` gives `hello-zoe`), lowercases, replaces every run of characters other than `a`–`z` and `0`–`9` with a single `-`, and trims leading and trailing `-` (for example `Ada Lovelace` gives `hello-ada-lovelace`); characters with no ASCII base, such as `李`, act as separators, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
