@@ -66,6 +66,10 @@ def greeting_swapcase(name: str) -> str:
     return greet(name).swapcase()
 
 
+def greeting_titlecase(name: str) -> str:
+    return greet(name).title()
+
+
 def greeting_nfc(name: str) -> str:
     return unicodedata.normalize("NFC", greet(name))
 
