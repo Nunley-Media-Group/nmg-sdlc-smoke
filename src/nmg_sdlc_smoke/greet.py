@@ -82,6 +82,10 @@ def greeting_nfkc(name: str) -> str:
     return unicodedata.normalize("NFKC", greet(name))
 
 
+def greeting_nfkd(name: str) -> str:
+    return unicodedata.normalize("NFKD", greet(name))
+
+
 def greeting_reversed(name: str) -> str:
     return greet(name)[::-1]
 
