@@ -102,6 +102,10 @@ def greeting_average_word_length(name: str) -> float:
     return sum(greeting_word_lengths(name)) / len(greeting_words(name))
 
 
+def greeting_last_word(name: str) -> str:
+    return greeting_words(name)[-1]
+
+
 def greeting_initials(name: str) -> str:
     return "".join(word[0] for word in greeting_words(name))
 
