@@ -87,6 +87,7 @@ from nmg_sdlc_smoke import (
     greeting_space_count,
     greeting_starts_with_hello,
     greeting_swapcase,
+    greeting_titlecase,
     greeting_url_encoded,
     greeting_unique_char_count,
     greeting_uppercase_count,
@@ -112,6 +113,7 @@ greeting_is_title("Ada")  # True
 greeting_is_title("ada")  # False
 greeting_casefold("Straße")  # "hello, strasse"
 greeting_swapcase("Ada")  # "hELLO, aDA"
+greeting_titlecase("ada lovelace")  # "Hello, Ada Lovelace"
 greeting_nfc("Chloe\u0301")  # "Hello, Chloé"
 len(greeting_nfd("Chlo\u00e9"))  # 13
 greeting_reversed("Ada")  # "adA ,olleH"
@@ -212,6 +214,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_char_frequency` returns a new plain `dict[str, int]` mapping each character (Unicode code point) of the complete greeting (not the name alone), including the `Hello, ` prefix, comma, and spaces, to the number of times it occurs; keys are case-sensitive and appear in the order each character first occurs (for example `Ada` gives `{"H": 1, "e": 1, "l": 2, "o": 1, ",": 1, " ": 1, "A": 1, "d": 1, "a": 1}`), no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_utf16_length` returns the number of UTF-16 code units in the complete greeting (not the name alone), including the `Hello, ` prefix and excluding any byte-order mark, so a character outside the Basic Multilingual Plane counts as two units (for example `Ada` gives `10` and `😀` gives `9`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_swapcase` returns `str.swapcase()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so uppercase characters become lowercase, lowercase characters become uppercase, and uncased characters are unchanged (for example `Ada` gives `hELLO, aDA`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_titlecase` returns `str.title()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so each run of letters starts with an uppercase character followed by lowercase characters, and a letter after a digit or apostrophe also starts a new run (for example `ada lovelace` gives `Hello, Ada Lovelace` and `o'brien` gives `Hello, O'Brien`); it matches `nmg-smoke --titlecase` output without the trailing newline, applies no Unicode normalization, and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_nfc` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form C using `unicodedata.normalize("NFC", ...)`, so a base character followed by combining marks is composed into its precomposed form where one exists (for example `Chloe` plus U+0301 gives `Hello, Chloé`) and already-composed text is unchanged; only canonical composition is applied, so compatibility characters such as `ﬁ` are kept and no case, whitespace, or accent stripping change is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_nfd` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form D using `unicodedata.normalize("NFD", ...)`, so a precomposed character is decomposed into its base character followed by combining marks (for example `Chloé` gives `Hello, Chloe` plus U+0301, 13 code points) and text with no decomposable characters is unchanged; only canonical decomposition is applied, so compatibility characters such as `ﬁ` are kept and no case, whitespace, or accent stripping change is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
