@@ -2,6 +2,7 @@ import base64
 import codecs
 import hashlib
 import html
+import json
 import quopri
 import re
 import string
@@ -262,6 +263,10 @@ def greeting_url_encoded(name: str) -> str:
 
 def greeting_html_escaped(name: str) -> str:
     return html.escape(greet(name))
+
+
+def greeting_json(name: str) -> str:
+    return json.dumps(greet(name))
 
 
 def greeting_quoted_printable(name: str) -> str:
