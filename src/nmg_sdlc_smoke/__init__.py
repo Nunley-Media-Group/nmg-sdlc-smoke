@@ -42,6 +42,7 @@ from .greet import greeting_initials as greeting_initials
 from .greet import greeting_is_ascii as greeting_is_ascii
 from .greet import greeting_is_printable as greeting_is_printable
 from .greet import greeting_is_title as greeting_is_title
+from .greet import greeting_json as greeting_json
 from .greet import greeting_last_word as greeting_last_word
 from .greet import greeting_length as greeting_length
 from .greet import greeting_letter_count as greeting_letter_count
@@ -127,6 +128,7 @@ __all__ = [
     "greeting_is_ascii",
     "greeting_is_printable",
     "greeting_is_title",
+    "greeting_json",
     "greeting_last_word",
     "greeting_length",
     "greeting_letter_count",

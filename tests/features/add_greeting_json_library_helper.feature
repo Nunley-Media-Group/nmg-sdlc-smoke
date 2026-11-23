@@ -1,0 +1,28 @@
+Feature: Encode the completed greeting as a JSON string literal
+
+  @SCN001
+  Scenario: Encode a plain greeting as a JSON string literal
+    Given the installed nmg_sdlc_smoke package
+    When greeting_json is called with Ada and Ada Lovelace
+    Then the results are the quoted JSON strings Hello, Ada and Hello, Ada Lovelace
+    And each result is a str
+
+  @SCN002
+  Scenario: Escape quotes, backslashes, control characters, and non-ASCII
+    Given the installed nmg_sdlc_smoke package
+    When greeting_json is called with a quoted name, a backslash name, a tab name, and U+00C9 mile
+    Then each result is the expected escaped JSON string literal
+    And each result equals json.dumps of greet of the same name, is ASCII-only, and decodes back to the greeting
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_json is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_json of Ada
+    Then it prints the quoted JSON string Hello, Ada and greeting_json is listed in nmg_sdlc_smoke.__all__
+    And the README documents the JSON encoding rule and the inherited invalid-name error
