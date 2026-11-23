@@ -67,6 +67,7 @@ from nmg_sdlc_smoke import (
     greeting_md5,
     greeting_nfc,
     greeting_nfd,
+    greeting_nfkc,
     greeting_punctuation_count,
     greeting_quoted_printable,
     greeting_reversed,
@@ -116,6 +117,7 @@ greeting_swapcase("Ada")  # "hELLO, aDA"
 greeting_titlecase("ada lovelace")  # "Hello, Ada Lovelace"
 greeting_nfc("Chloe\u0301")  # "Hello, Chloé"
 len(greeting_nfd("Chlo\u00e9"))  # 13
+greeting_nfkc("\ufb01ona")  # "Hello, fiona"
 greeting_reversed("Ada")  # "adA ,olleH"
 greeting_slug("Ada Lovelace")  # "hello-ada-lovelace"
 greeting_starts_with_hello("Ada")  # True
@@ -217,6 +219,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_titlecase` returns `str.title()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so each run of letters starts with an uppercase character followed by lowercase characters, and a letter after a digit or apostrophe also starts a new run (for example `ada lovelace` gives `Hello, Ada Lovelace` and `o'brien` gives `Hello, O'Brien`); it matches `nmg-smoke --titlecase` output without the trailing newline, applies no Unicode normalization, and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_nfc` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form C using `unicodedata.normalize("NFC", ...)`, so a base character followed by combining marks is composed into its precomposed form where one exists (for example `Chloe` plus U+0301 gives `Hello, Chloé`) and already-composed text is unchanged; only canonical composition is applied, so compatibility characters such as `ﬁ` are kept and no case, whitespace, or accent stripping change is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_nfd` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form D using `unicodedata.normalize("NFD", ...)`, so a precomposed character is decomposed into its base character followed by combining marks (for example `Chloé` gives `Hello, Chloe` plus U+0301, 13 code points) and text with no decomposable characters is unchanged; only canonical decomposition is applied, so compatibility characters such as `ﬁ` are kept and no case, whitespace, or accent stripping change is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_nfkc` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form KC using `unicodedata.normalize("NFKC", ...)`, so compatibility characters are replaced by their standard equivalents (for example `ﬁona` gives `Hello, fiona`, full-width `Ａｄａ` gives `Hello, Ada`, and a no-break space becomes a regular space) and the result is canonically composed (for example `Chloe` plus U+0301 gives `Hello, Chloé`); already-normalized text is unchanged, no case change, whitespace collapsing, or accent stripping is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_reversed` reverses the complete greeting by Unicode code point (not by grapheme cluster) and uses the same validation as `greet`; it does not change `greet` or CLI output.
 `greeting_slug` returns a lowercase ASCII slug of the complete greeting (not the name alone): it applies Unicode NFKD normalization and drops combining marks (so `Zoë` gives `hello-zoe`), lowercases, replaces every run of characters other than `a`–`z` and `0`–`9` with a single `-`, and trims leading and trailing `-` (for example `Ada Lovelace` gives `hello-ada-lovelace`); characters with no ASCII base, such as `李`, act as separators, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_word_count` counts whitespace-separated words in the complete greeting using Python's `str.split()` semantics and the same validation as `greet`.
