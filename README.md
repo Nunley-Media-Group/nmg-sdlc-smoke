@@ -21,6 +21,7 @@ from nmg_sdlc_smoke import (
     greet_many,
     greeting_adler32,
     greeting_ascii85,
+    greeting_average_word_length,
     greeting_base32,
     greeting_base64,
     greeting_base85,
@@ -161,6 +162,7 @@ greeting_words("Ada")  # ['Hello,', 'Ada']
 greeting_word_lengths("Ada")  # [6, 3]
 greeting_longest_word("Ada")  # 'Hello,'
 greeting_shortest_word("Ada")  # 'Ada'
+greeting_average_word_length("Ada")  # 4.5
 greeting_initials("Ada Lovelace")  # "HAL"
 greeting_vowel_count("Ada")  # 4
 greeting_uppercase_count("Ada")  # 2
@@ -211,6 +213,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_word_lengths` returns a new `list[int]` with the length in Unicode code points of each whitespace-separated word of the complete greeting (not the name alone), in order, using the same `str.split()` words as `greeting_words` so runs of any whitespace separate words, no empty words appear, and punctuation stays attached (for example `Ada` gives `[6, 3]`); no Unicode normalization is applied, its length always equals `greeting_word_count`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_longest_word` returns the longest whitespace-separated word of the complete greeting (not the name alone) as a `str`, using the same `str.split()` words as `greeting_words` with punctuation attached and length measured in Unicode code points with no normalization; when several words share the greatest length the first one wins (for example `Ada` gives `Hello,` and `Ada Lovelace` gives `Lovelace`), and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_shortest_word` returns the shortest whitespace-separated word of the complete greeting (not the name alone) as a `str`, using the same `str.split()` words as `greeting_words` with punctuation attached and length measured in Unicode code points with no normalization; when several words share the smallest length the first one wins (for example `Ada` gives `Ada` and `Bertha` gives `Hello,`), and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_average_word_length` returns the mean length of the whitespace-separated words of the complete greeting (not the name alone) as an unrounded `float`, using the same `str.split()` words as `greeting_words` with punctuation attached and length measured in Unicode code points with no normalization (for example `Ada` gives `4.5` and `Bertha` gives `6.0`), and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_initials` returns a `str` made of the first character of each whitespace-separated word of the complete greeting (not the name alone), using the same `str.split()` words as `greeting_words` with the original case preserved and no separator (for example `Ada Lovelace` gives `HAL` and `ada lovelace` gives `Hal`); its length always equals `greeting_word_count`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_vowel_count` counts the ten ASCII vowels `a e i o u A E I O U` in the complete greeting (not the name alone); `y`, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_uppercase_count` counts the 26 ASCII capitals `A`–`Z` in the complete greeting (not the name alone), including the `H` in `Hello`; lowercase, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
