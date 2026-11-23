@@ -70,6 +70,10 @@ def greeting_nfc(name: str) -> str:
     return unicodedata.normalize("NFC", greet(name))
 
 
+def greeting_nfd(name: str) -> str:
+    return unicodedata.normalize("NFD", greet(name))
+
+
 def greeting_reversed(name: str) -> str:
     return greet(name)[::-1]
 
