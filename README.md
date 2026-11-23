@@ -111,7 +111,7 @@ greeting_is_title("Ada")  # True
 greeting_is_title("ada")  # False
 greeting_casefold("Straße")  # "hello, strasse"
 greeting_swapcase("Ada")  # "hELLO, aDA"
-greeting_nfc("Chloé")  # "Hello, Chloé"
+greeting_nfc("Chloe\u0301")  # "Hello, Chloé"
 greeting_reversed("Ada")  # "adA ,olleH"
 greeting_slug("Ada Lovelace")  # "hello-ada-lovelace"
 greeting_starts_with_hello("Ada")  # True
