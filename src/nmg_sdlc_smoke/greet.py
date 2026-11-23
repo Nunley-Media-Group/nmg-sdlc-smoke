@@ -126,6 +126,13 @@ def greeting_last_word(name: str) -> str:
     return greeting_words(name)[-1]
 
 
+def greeting_word_frequency(name: str) -> dict[str, int]:
+    frequency: dict[str, int] = {}
+    for word in greeting_words(name):
+        frequency[word] = frequency.get(word, 0) + 1
+    return frequency
+
+
 def greeting_initials(name: str) -> str:
     return "".join(word[0] for word in greeting_words(name))
 
