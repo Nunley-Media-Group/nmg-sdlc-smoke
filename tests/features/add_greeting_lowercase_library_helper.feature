@@ -1,0 +1,28 @@
+Feature: Lower-case the completed greeting
+
+  @SCN001
+  Scenario: Lower-case a plain greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_lowercase is called with Ada, ADA LOVELACE, and Agent 007
+    Then the results are hello, ada, then hello, ada lovelace, then hello, agent 007
+    And each result is a str
+
+  @SCN002
+  Scenario: Apply str.lower() rather than case folding and keep uncased characters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_lowercase is called with Stra U+00DF e, U+00C9 MILE, and Ada tab Bo
+    Then the results are hello, stra U+00DF e, then hello, U+00E9 mile, then hello, ada tab bo
+    And each result equals greet of the same name lower-cased
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_lowercase is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_lowercase of Ada
+    Then it prints hello, ada and greeting_lowercase is listed in nmg_sdlc_smoke.__all__
+    And the README documents the lower-case rule and the inherited invalid-name error

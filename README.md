@@ -65,6 +65,7 @@ from nmg_sdlc_smoke import (
     greeting_length,
     greeting_letter_count,
     greeting_longest_word,
+    greeting_lowercase,
     greeting_lowercase_count,
     greeting_md5,
     greeting_nfc,
@@ -122,6 +123,7 @@ greeting_swapcase("Ada")  # "hELLO, aDA"
 greeting_titlecase("ada lovelace")  # "Hello, Ada Lovelace"
 greeting_capitalize("Ada Lovelace")  # "Hello, ada lovelace"
 greeting_uppercase("Ada")  # "HELLO, ADA"
+greeting_lowercase("Ada")  # "hello, ada"
 greeting_nfc("Chloe\u0301")  # "Hello, Chloé"
 len(greeting_nfd("Chlo\u00e9"))  # 13
 greeting_nfkc("\ufb01ona")  # "Hello, fiona"
@@ -229,6 +231,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_titlecase` returns `str.title()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so each run of letters starts with an uppercase character followed by lowercase characters, and a letter after a digit or apostrophe also starts a new run (for example `ada lovelace` gives `Hello, Ada Lovelace` and `o'brien` gives `Hello, O'Brien`); it matches `nmg-smoke --titlecase` output without the trailing newline, applies no Unicode normalization, and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_capitalize` returns `str.capitalize()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so the first character stays uppercase and every other cased character becomes lowercase while uncased characters are unchanged (for example `Ada Lovelace` gives `Hello, ada lovelace`); no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_uppercase` returns `str.upper()` of the complete greeting (not the name alone), including the `Hello, ` prefix, using full Unicode upper-casing so a character such as `ß` expands to `SS` while uncased characters are unchanged (for example `Ada` gives `HELLO, ADA`); it matches `nmg-smoke --uppercase` output without the trailing newline, applies no Unicode normalization, and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_lowercase` returns `str.lower()` of the complete greeting (not the name alone), including the `Hello, ` prefix, so cased characters become lowercase without case folding (for example `Ada` gives `hello, ada` and `Straße` keeps its `ß` as `hello, straße`) while uncased characters are unchanged; it matches `nmg-smoke --lowercase` output without the trailing newline, applies no Unicode normalization, and inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_nfc` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form C using `unicodedata.normalize("NFC", ...)`, so a base character followed by combining marks is composed into its precomposed form where one exists (for example `Chloe` plus U+0301 gives `Hello, Chloé`) and already-composed text is unchanged; only canonical composition is applied, so compatibility characters such as `ﬁ` are kept and no case, whitespace, or accent stripping change is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_nfd` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form D using `unicodedata.normalize("NFD", ...)`, so a precomposed character is decomposed into its base character followed by combining marks (for example `Chloé` gives `Hello, Chloe` plus U+0301, 13 code points) and text with no decomposable characters is unchanged; only canonical decomposition is applied, so compatibility characters such as `ﬁ` are kept and no case, whitespace, or accent stripping change is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_nfkc` returns the complete greeting (not the name alone), including the `Hello, ` prefix, in Unicode Normalization Form KC using `unicodedata.normalize("NFKC", ...)`, so compatibility characters are replaced by their standard equivalents (for example `ﬁona` gives `Hello, fiona`, full-width `Ａｄａ` gives `Hello, Ada`, and a no-break space becomes a regular space) and the result is canonically composed (for example `Chloe` plus U+0301 gives `Hello, Chloé`); already-normalized text is unchanged, no case change, whitespace collapsing, or accent stripping is made, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.

@@ -47,6 +47,7 @@ from .greet import greeting_last_word as greeting_last_word
 from .greet import greeting_length as greeting_length
 from .greet import greeting_letter_count as greeting_letter_count
 from .greet import greeting_longest_word as greeting_longest_word
+from .greet import greeting_lowercase as greeting_lowercase
 from .greet import greeting_lowercase_count as greeting_lowercase_count
 from .greet import greeting_md5 as greeting_md5
 from .greet import greeting_nfc as greeting_nfc
@@ -134,6 +135,7 @@ __all__ = [
     "greeting_length",
     "greeting_letter_count",
     "greeting_longest_word",
+    "greeting_lowercase",
     "greeting_lowercase_count",
     "greeting_md5",
     "greeting_nfc",
