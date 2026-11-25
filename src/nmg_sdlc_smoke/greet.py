@@ -75,6 +75,10 @@ def greeting_capitalize(name: str) -> str:
     return greet(name).capitalize()
 
 
+def greeting_uppercase(name: str) -> str:
+    return greet(name).upper()
+
+
 def greeting_nfc(name: str) -> str:
     return unicodedata.normalize("NFC", greet(name))
 

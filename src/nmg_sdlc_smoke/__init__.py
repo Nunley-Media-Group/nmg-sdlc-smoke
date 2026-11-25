@@ -75,6 +75,7 @@ from .greet import greeting_starts_with_hello as greeting_starts_with_hello
 from .greet import greeting_swapcase as greeting_swapcase
 from .greet import greeting_titlecase as greeting_titlecase
 from .greet import greeting_unique_char_count as greeting_unique_char_count
+from .greet import greeting_uppercase as greeting_uppercase
 from .greet import greeting_uppercase_count as greeting_uppercase_count
 from .greet import greeting_url_encoded as greeting_url_encoded
 from .greet import greeting_utf16_length as greeting_utf16_length
@@ -161,6 +162,7 @@ __all__ = [
     "greeting_swapcase",
     "greeting_titlecase",
     "greeting_unique_char_count",
+    "greeting_uppercase",
     "greeting_uppercase_count",
     "greeting_url_encoded",
     "greeting_utf16_length",
