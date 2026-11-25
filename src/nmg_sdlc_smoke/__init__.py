@@ -16,6 +16,7 @@ from .greet import greeting_crc32 as greeting_crc32
 from .greet import greeting_digit_count as greeting_digit_count
 from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamation
 from .greet import greeting_ends_with_name as greeting_ends_with_name
+from .greet import greeting_first_word as greeting_first_word
 from .greet import greeting_has_apostrophe as greeting_has_apostrophe
 from .greet import greeting_has_ascii_asterisk as greeting_has_ascii_asterisk
 from .greet import greeting_has_asterisk as greeting_has_asterisk
@@ -106,6 +107,7 @@ __all__ = [
     "greeting_digit_count",
     "greeting_ends_with_exclamation",
     "greeting_ends_with_name",
+    "greeting_first_word",
     "greeting_has_apostrophe",
     "greeting_has_ascii_asterisk",
     "greeting_has_asterisk",
