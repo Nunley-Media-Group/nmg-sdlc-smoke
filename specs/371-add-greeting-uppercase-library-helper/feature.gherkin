@@ -1,0 +1,35 @@
+**Issue**: #371
+**Date**: 2026-11-25
+**Status**: Approved
+**Author**: NMG
+
+# File: tests/features/add_greeting_uppercase_library_helper.feature
+# Generated from: specs/371-add-greeting-uppercase-library-helper/requirements.md
+Feature: Upper-case the completed greeting
+
+  @SCN001
+  Scenario: Upper-case a plain greeting
+    Given the installed nmg_sdlc_smoke package
+    When greeting_uppercase is called with Ada, ada lovelace, and Agent 007
+    Then the results are HELLO, ADA, then HELLO, ADA LOVELACE, then HELLO, AGENT 007
+    And each result is a str
+
+  @SCN002
+  Scenario: Apply full Unicode upper-casing and keep uncased characters
+    Given the installed nmg_sdlc_smoke package
+    When greeting_uppercase is called with stra U+00DF e, U+00E9 mile, and Ada tab Bo
+    Then the results are HELLO, STRASSE, then HELLO, U+00C9 MILE, then HELLO, ADA tab BO
+    And each result equals greet of the same name upper-cased
+
+  @SCN003
+  Scenario: Preserve invalid-name behavior
+    Given the invalid names empty, space-tab, None, and 42
+    When greeting_uppercase is called with each invalid name
+    Then each call raises ValueError with message name must not be blank
+
+  @SCN004
+  Scenario: Expose and document the helper
+    Given the README Library section
+    When the README Library example runs and prints greeting_uppercase of Ada
+    Then it prints HELLO, ADA and greeting_uppercase is listed in nmg_sdlc_smoke.__all__
+    And the README documents the upper-case rule and the inherited invalid-name error
