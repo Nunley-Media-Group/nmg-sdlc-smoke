@@ -197,6 +197,10 @@ def greeting_non_ascii_count(name: str) -> int:
     return sum(ord(character) > 127 for character in greet(name))
 
 
+def greeting_ascii_count(name: str) -> int:
+    return sum(ord(character) <= 127 for character in greet(name))
+
+
 def greeting_sha256(name: str) -> str:
     return hashlib.sha256(greet(name).encode("utf-8")).hexdigest()
 
