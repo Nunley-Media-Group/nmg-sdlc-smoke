@@ -55,6 +55,7 @@ from .greet import greeting_nfc as greeting_nfc
 from .greet import greeting_nfd as greeting_nfd
 from .greet import greeting_nfkc as greeting_nfkc
 from .greet import greeting_nfkd as greeting_nfkd
+from .greet import greeting_non_ascii_count as greeting_non_ascii_count
 from .greet import greeting_punctuation_count as greeting_punctuation_count
 from .greet import greeting_quoted_printable as greeting_quoted_printable
 from .greet import greeting_reversed as greeting_reversed
@@ -144,6 +145,7 @@ __all__ = [
     "greeting_nfd",
     "greeting_nfkc",
     "greeting_nfkd",
+    "greeting_non_ascii_count",
     "greeting_punctuation_count",
     "greeting_quoted_printable",
     "greeting_reversed",
