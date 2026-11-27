@@ -20,6 +20,7 @@ from nmg_sdlc_smoke import (
     greet,
     greet_many,
     greeting_adler32,
+    greeting_alnum_count,
     greeting_ascii85,
     greeting_ascii_count,
     greeting_average_word_length,
@@ -197,6 +198,7 @@ greeting_space_count("Ada Lovelace")  # 2
 greeting_punctuation_count("O'Brien")  # 2
 greeting_unique_char_count("Ada")  # 9
 greeting_letter_count("Ada")  # 8
+greeting_alnum_count("R2-D2")  # 9
 greeting_non_ascii_count("Zoë")  # 1
 greeting_ascii_count("Zoë")  # 9
 greeting_sha256("Ada")  # "7da4681c4837bb56185adc6967f0c6847c33148afb0ba4aefac709465da75f66"
@@ -262,6 +264,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_punctuation_count` counts the 32 ASCII punctuation characters in Python's `string.punctuation` in the complete greeting (not the name alone), including the comma after `Hello`; non-ASCII punctuation and look-alikes such as `！`, `’`, and `、` are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_unique_char_count` counts the distinct Unicode code points in the complete greeting (not the name alone), including the characters of `Hello, `; the count is case-sensitive and applies no Unicode normalization, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_letter_count` counts the characters in the complete greeting (not the name alone) for which `str.isalpha()` is true, including the five letters of `Hello`; non-ASCII letters such as `ë` are counted, while digits, spaces, and punctuation are not, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_alnum_count` counts the characters in the complete greeting (not the name alone) for which `str.isalnum()` is true, including the five letters of `Hello`, so `Ada` gives `8` and `R2-D2` gives `9`; non-ASCII letters such as `ë` and Unicode digits such as U+0663 are counted, while spaces, punctuation, combining marks, and emoji are not, no Unicode normalization is applied, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_non_ascii_count` counts the Unicode code points above U+007F in the complete greeting (not the name alone), so `Ada` gives `0` and `Zoë` gives `1`; it counts code points rather than UTF-8 bytes or grapheme clusters and applies no Unicode normalization, so `Zoe` plus U+0308 also gives `1`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_ascii_count` counts the Unicode code points at or below U+007F in the complete greeting (not the name alone), so `Ada` gives `10` and `Zoë` gives `9`; it counts code points rather than UTF-8 bytes or grapheme clusters and applies no Unicode normalization, so `Zoe` plus U+0308 gives `10`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_sha256` encodes the complete greeting (not the name alone) as UTF-8 and returns its SHA-256 digest as 64 lowercase hexadecimal characters; no Unicode normalization is applied, so precomposed and decomposed spellings of a name produce different digests, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
