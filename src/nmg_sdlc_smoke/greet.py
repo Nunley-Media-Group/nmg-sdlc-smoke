@@ -193,6 +193,10 @@ def greeting_letter_count(name: str) -> int:
     return sum(character.isalpha() for character in greet(name))
 
 
+def greeting_alnum_count(name: str) -> int:
+    return sum(character.isalnum() for character in greet(name))
+
+
 def greeting_non_ascii_count(name: str) -> int:
     return sum(ord(character) > 127 for character in greet(name))
 

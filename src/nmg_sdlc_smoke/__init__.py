@@ -1,5 +1,6 @@
 from .greet import greet, greet_many
 from .greet import greeting_adler32 as greeting_adler32
+from .greet import greeting_alnum_count as greeting_alnum_count
 from .greet import greeting_ascii85 as greeting_ascii85
 from .greet import greeting_ascii_count as greeting_ascii_count
 from .greet import greeting_average_word_length as greeting_average_word_length
@@ -93,6 +94,7 @@ __all__ = [
     "greet",
     "greet_many",
     "greeting_adler32",
+    "greeting_alnum_count",
     "greeting_ascii85",
     "greeting_ascii_count",
     "greeting_average_word_length",
