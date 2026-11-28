@@ -14,6 +14,7 @@ from .greet import greeting_capitalize as greeting_capitalize
 from .greet import greeting_casefold as greeting_casefold
 from .greet import greeting_char_frequency as greeting_char_frequency
 from .greet import greeting_codepoints as greeting_codepoints
+from .greet import greeting_consonant_count as greeting_consonant_count
 from .greet import greeting_crc32 as greeting_crc32
 from .greet import greeting_digit_count as greeting_digit_count
 from .greet import greeting_ends_with_exclamation as greeting_ends_with_exclamation
@@ -108,6 +109,7 @@ __all__ = [
     "greeting_casefold",
     "greeting_char_frequency",
     "greeting_codepoints",
+    "greeting_consonant_count",
     "greeting_crc32",
     "greeting_digit_count",
     "greeting_ends_with_exclamation",
