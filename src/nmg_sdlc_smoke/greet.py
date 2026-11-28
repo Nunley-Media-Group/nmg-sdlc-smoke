@@ -158,6 +158,13 @@ def greeting_vowel_count(name: str) -> int:
     return sum(character in "aeiouAEIOU" for character in greet(name))
 
 
+def greeting_consonant_count(name: str) -> int:
+    return sum(
+        character in "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
+        for character in greet(name)
+    )
+
+
 def greeting_uppercase_count(name: str) -> int:
     return sum("A" <= character <= "Z" for character in greet(name))
 

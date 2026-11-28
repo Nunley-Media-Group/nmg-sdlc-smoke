@@ -10,6 +10,12 @@ Major-version bumps are reserved for an approved spec line matching `**Version b
 
 ## [Unreleased]
 
+## [3.100.0] - 2026-11-28
+
+### Changed
+
+- Add greeting_consonant_count library helper (#213)
+
 ## [3.99.0] - 2026-11-27
 
 ### Changed

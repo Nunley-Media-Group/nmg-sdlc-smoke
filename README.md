@@ -34,6 +34,7 @@ from nmg_sdlc_smoke import (
     greeting_casefold,
     greeting_char_frequency,
     greeting_codepoints,
+    greeting_consonant_count,
     greeting_crc32,
     greeting_digit_count,
     greeting_ends_with_exclamation,
@@ -191,6 +192,7 @@ greeting_last_word("Ada Lovelace")  # 'Lovelace'
 greeting_word_frequency("Bo Bo")  # {"Hello,": 1, "Bo": 2}
 greeting_initials("Ada Lovelace")  # "HAL"
 greeting_vowel_count("Ada")  # 4
+greeting_consonant_count("Ada")  # 4
 greeting_uppercase_count("Ada")  # 2
 greeting_lowercase_count("Ada")  # 6
 greeting_digit_count("R2D2")  # 2
@@ -257,6 +259,7 @@ greeting_adler32("Ada")  # 312279879
 `greeting_word_frequency` returns a new plain `dict[str, int]` mapping each whitespace-separated word of the complete greeting (not the name alone) to the number of times it occurs, using the same `str.split()` words as `greeting_words`; keys are the words unchanged and case-sensitive, with punctuation attached and no Unicode normalization, and appear in the order each word first occurs (for example `Bo Bo` gives `{"Hello,": 1, "Bo": 2}`), so the values always sum to `greeting_word_count(name)`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_initials` returns a `str` made of the first character of each whitespace-separated word of the complete greeting (not the name alone), using the same `str.split()` words as `greeting_words` with the original case preserved and no separator (for example `Ada Lovelace` gives `HAL` and `ada lovelace` gives `Hal`); its length always equals `greeting_word_count`, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_vowel_count` counts the ten ASCII vowels `a e i o u A E I O U` in the complete greeting (not the name alone); `y`, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
+`greeting_consonant_count` counts the 42 ASCII consonant letters (every letter `A`–`Z` and `a`–`z` except `a e i o u A E I O U`, so `y` and `Y` count) in the complete greeting (not the name alone); vowels, digits, spaces, punctuation, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_uppercase_count` counts the 26 ASCII capitals `A`–`Z` in the complete greeting (not the name alone), including the `H` in `Hello`; lowercase, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_lowercase_count` counts the 26 ASCII lowercase letters `a`–`z` in the complete greeting (not the name alone), including the `ello` in `Hello`; uppercase, accented, and fullwidth letters are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
 `greeting_digit_count` counts the ten ASCII digits `0`–`9` in the complete greeting (not the name alone); fullwidth, other-script, and superscript digits are not counted, and it inherits `greet`'s `ValueError("name must not be blank")` for empty, whitespace-only, and non-string names.
